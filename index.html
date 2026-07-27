@@ -5,8 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>X.Luminance | 10 L SMAN 2 Majalengka</title>
     <meta name="description" content="Website Resmi Kelas X L (10 L) SMA Negeri 2 Majalengka. Brand X.Luminance.">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             /* Light Theme (Premium Warm Glow) */
@@ -16,18 +24,19 @@
             --text-primary: #1E293B;
             --text-secondary: #64748B;
             --color-primary: #D97706; /* Amber 600 */
-            --color-primary-glow: rgba(217, 119, 6, 0.2);
+            --color-primary-glow: rgba(217, 119, 6, 0.15);
             --color-accent: #F59E0B; /* Amber 500 */
-            --border-color: rgba(0, 0, 0, 0.06);
+            --border-color: rgba(0, 0, 0, 0.08);
             --shadow-subtle: 0 10px 40px -10px rgba(0,0,0,0.05);
             --shadow-glow: 0 0 20px var(--color-primary-glow);
             --glass-border: inset 0 1px 0 rgba(255,255,255,0.9);
+            --glass-blur: blur(20px);
         }
 
         .dark-mode {
             /* Dark Theme (Elegant Night Glow) */
             --bg-body: #09090B;
-            --bg-surface: rgba(24, 24, 27, 0.7);
+            --bg-surface: rgba(24, 24, 27, 0.75);
             --bg-surface-solid: #18181B;
             --text-primary: #F8FAFC;
             --text-secondary: #94A3B8;
@@ -35,9 +44,17 @@
             --color-primary-glow: rgba(251, 191, 36, 0.15);
             --color-accent: #F59E0B;
             --border-color: rgba(255, 255, 255, 0.08);
-            --shadow-subtle: 0 10px 40px -10px rgba(0,0,0,0.3);
+            --shadow-subtle: 0 10px 40px -10px rgba(0,0,0,0.4);
             --shadow-glow: 0 0 25px var(--color-primary-glow);
             --glass-border: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+
+        /* Performance Mode overrides */
+        .perf-mode {
+            --glass-blur: blur(0px);
+            --bg-surface: var(--bg-surface-solid);
+            --shadow-subtle: none;
+            --shadow-glow: none;
         }
 
         body {
@@ -52,7 +69,7 @@
         /* Ambient Glow Background */
         .ambient-bg {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
-            background: radial-gradient(circle at 50% 0%, var(--color-primary-glow) 0%, transparent 60%);
+            background: radial-gradient(circle at 50% -10%, var(--color-primary-glow) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -61,11 +78,11 @@
         /* Glass & Card Components */
         .glass-panel {
             background: var(--bg-surface);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--border-color);
             box-shadow: var(--glass-border), var(--shadow-subtle);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .card-hover:hover {
@@ -75,120 +92,123 @@
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
         .hide-scroll::-webkit-scrollbar { display: none; }
         
         /* Interactive Elements */
-        .btn-tap { transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-tap:active { transform: scale(0.95); }
+        .btn-tap { transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-tap:active { transform: scale(0.94); }
         
         .nav-item {
-            color: var(--text-secondary); fill: var(--text-secondary);
+            color: var(--text-secondary);
             transition: all 0.3s ease;
         }
         .nav-item.active {
-            color: var(--color-primary); fill: var(--color-primary);
+            color: var(--color-primary);
             font-weight: 700;
         }
-        .nav-item.active svg { transform: translateY(-2px); filter: drop-shadow(0 4px 6px var(--color-primary-glow)); }
+        .nav-item.active i { transform: translateY(-3px); filter: drop-shadow(0 4px 6px var(--color-primary-glow)); }
+        .nav-item i { transition: transform 0.3s ease; }
 
         /* Navigation Pills */
         .pill-nav {
-            padding: 0.5rem 1rem; border-radius: 99px; font-weight: 600; font-size: 0.875rem;
+            padding: 0.5rem 1.25rem; border-radius: 99px; font-weight: 700; font-size: 0.8rem;
             border: 1px solid var(--border-color); color: var(--text-secondary);
-            background: var(--bg-surface-solid); transition: all 0.2s; white-space: nowrap;
+            background: var(--bg-surface-solid); transition: all 0.25s; white-space: nowrap;
+            display: inline-flex; items-center; gap: 0.5rem;
         }
         .pill-nav.active, .pill-nav:hover {
             background: var(--color-primary); color: white; border-color: var(--color-primary);
-            box-shadow: 0 4px 12px var(--color-primary-glow);
+            box-shadow: 0 6px 16px var(--color-primary-glow); transform: translateY(-2px);
         }
 
         /* Animations */
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-up { animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .delay-100 { animation-delay: 100ms; }
-        .delay-200 { animation-delay: 200ms; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-up { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         
-        @keyframes ping-slow { 75%, 100% { transform: scale(1.5); opacity: 0; } }
-        .animate-ping-slow { animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite; }
+        @keyframes ping-slow { 75%, 100% { transform: scale(1.8); opacity: 0; } }
+        .animate-ping-slow { animation: ping-slow 2.5s cubic-bezier(0, 0, 0.2, 1) infinite; }
 
         /* Modals & Overlays */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
             z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-            display: flex; align-items: center; justify-content: center; padding: 1rem;
+            display: flex; align-items: flex-end; justify-content: center;
         }
+        @media (min-width: 640px) { .modal-overlay { align-items: center; padding: 1rem; } }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
         .modal-content {
             background: var(--bg-surface-solid); border: 1px solid var(--border-color);
-            border-radius: 1.5rem; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto;
-            transform: scale(0.95) translateY(20px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            width: 100%; max-width: 450px; max-height: 90vh; overflow-y: auto;
+            border-top-left-radius: 1.5rem; border-top-right-radius: 1.5rem;
+            transform: translateY(100%); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+        }
+        @media (min-width: 640px) {
+            .modal-content { border-radius: 1.5rem; transform: scale(0.95) translateY(20px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); }
         }
         .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
 
         /* ID Card Flip */
-        .id-card-container { perspective: 1000px; width: 100%; aspect-ratio: 9/16; max-width: 320px; margin: 0 auto; }
+        .id-card-container { perspective: 1400px; width: 100%; aspect-ratio: 9/16; max-width: 320px; margin: 0 auto; }
         .id-card-inner {
             position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d;
         }
         .id-card-container.flipped .id-card-inner { transform: rotateY(180deg); }
         .id-card-front, .id-card-back {
             position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-            border-radius: 1.5rem; border: 1px solid var(--border-color); overflow: hidden;
+            border-radius: 1.75rem; border: 1px solid var(--border-color); overflow: hidden;
         }
         .id-card-back { transform: rotateY(180deg); }
         
         /* Utility Classes */
-        .text-gradient {
-            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-        .svg-icon { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .svg-icon-sm { width: 18px; height: 18px; }
-        .svg-icon-lg { width: 32px; height: 32px; }
+        .text-gradient { background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
         /* Command Palette */
-        #cmd-palette { align-items: flex-start; padding-top: 10vh; }
-        #cmd-palette .modal-content { max-width: 500px; }
-        .cmd-item { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 0.75rem; cursor: pointer; transition: 0.2s; }
-        .cmd-item:hover, .cmd-item.selected { background: var(--color-primary-glow); color: var(--color-primary); padding-left: 1.25rem; }
+        #cmd-palette { align-items: flex-start; padding-top: 8vh; }
+        #cmd-palette .modal-content { max-width: 550px; border-radius: 1.5rem; transform: scale(0.95) translateY(-20px); }
+        .cmd-item { padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: 0.2s; }
+        .cmd-item:hover, .cmd-item.selected { background: var(--color-primary-glow); color: var(--color-primary); padding-left: 1.75rem; }
 
-        /* Grid specific */
-        .grid-masonry { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+        /* IG Gallery */
+        .ig-story-ring { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); padding: 2.5px; border-radius: 50%; }
+        
+        /* Shop */
+        .coin-badge { background: linear-gradient(135deg, #F59E0B, #D97706); color: white; padding: 2px 8px; border-radius: 99px; font-weight: 800; font-size: 0.75rem; display: inline-flex; items-center; gap: 4px; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
     </style>
 </head>
-<body class="pb-24 lg:pb-8">
+<body class="pb-24 lg:pb-8 selection:bg-amber-500 selection:text-white">
 
     <div class="ambient-bg"></div>
 
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-t-0 border-x-0 px-4 py-3 flex justify-between items-center">
+    <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-t-0 border-x-0 px-4 py-3 flex justify-between items-center h-16">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-amber-500 shadow-lg cursor-pointer btn-tap" onclick="UI.showModal('modal-id')">
+            <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-amber-500 shadow-md shadow-amber-500/20 cursor-pointer btn-tap" onclick="UI.showModal('modal-id')">
                 <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20kelas%20.jpg?raw=true" alt="X.Luminance" class="w-full h-full object-cover">
             </div>
             <div>
-                <h1 class="font-serif-custom font-bold text-lg leading-tight tracking-wide">X.Luminance</h1>
-                <p class="text-[0.65rem] font-bold text-amber-500 uppercase tracking-widest flex items-center gap-1">
-                    <span class="relative flex h-2 w-2"><span class="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span></span>
+                <h1 class="font-serif-custom font-bold text-lg leading-tight tracking-wide text-gradient">X.Luminance</h1>
+                <p class="text-[0.6rem] font-bold text-amber-500 uppercase tracking-widest flex items-center gap-1.5">
+                    <span class="relative flex h-1.5 w-1.5"><span class="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span></span>
                     10 L SMAN 2 MJL
                 </p>
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--bg-surface-solid)] border border-[var(--border-color)] hover:border-amber-500 text-[var(--text-secondary)] hover:text-amber-500 transition-colors btn-tap shadow-sm" onclick="App.toggleTheme()" aria-label="Toggle Theme">
-                <svg class="svg-icon svg-icon-sm" id="icon-theme" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            </button>
+            <div class="coin-badge mr-2 cursor-pointer btn-tap" onclick="UI.showModal('modal-shop')">
+                <i data-lucide="coins" class="w-3.5 h-3.5"></i> <span id="header-coins">0</span>
+            </div>
             <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--bg-surface-solid)] border border-[var(--border-color)] hover:border-amber-500 text-[var(--text-secondary)] hover:text-amber-500 transition-colors btn-tap shadow-sm" onclick="UI.showModal('cmd-palette')" aria-label="Search">
-                <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <i data-lucide="search" class="w-4 h-4"></i>
             </button>
-            <button class="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-tr from-amber-600 to-amber-400 text-white shadow-md shadow-amber-500/30 btn-tap hidden md:flex" onclick="UI.showModal('modal-settings')" aria-label="Settings">
-                <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <button class="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-tr from-amber-600 to-amber-400 text-white shadow-md shadow-amber-500/30 btn-tap" onclick="UI.switchTab('settings')" aria-label="Settings">
+                <i data-lucide="settings" class="w-4 h-4"></i>
             </button>
         </div>
     </header>
@@ -196,406 +216,591 @@
     <!-- Main Content Container -->
     <main class="max-w-5xl mx-auto px-4 pt-24 min-h-screen">
         
-        <!-- Hero Section (Visible only on Home) -->
+        <!-- ================= HOME SECTION ================= -->
         <section id="sec-home" class="view-section animate-fade-up">
-            <div class="glass-panel rounded-3xl p-6 sm:p-8 mb-8 relative overflow-hidden text-center">
-                <div class="absolute inset-0 bg-gradient-to-b from-amber-500/10 to-transparent pointer-events-none"></div>
-                <h2 class="font-serif-custom text-3xl sm:text-4xl md:text-5xl font-bold mb-3 text-gradient">Luminance.</h2>
-                <p class="text-sm sm:text-base font-medium opacity-80 max-w-lg mx-auto mb-6">Bersinar dalam kebersamaan, unggul dalam prestasi. Selamat datang di portal resmi 10 L SMA Negeri 2 Majalengka.</p>
+            <div class="glass-panel rounded-3xl p-6 sm:p-10 mb-8 relative overflow-hidden text-center shadow-lg">
+                <div class="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-transparent pointer-events-none"></div>
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-amber-500/20 blur-3xl rounded-full pointer-events-none"></div>
                 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <div class="bg-[var(--bg-surface-solid)] border border-[var(--border-color)] p-4 rounded-2xl">
-                        <div class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-1">Tanggal</div>
+                <h2 class="font-serif-custom text-4xl sm:text-5xl font-extrabold mb-3 text-gradient relative z-10">Luminance.</h2>
+                <p class="text-sm sm:text-base font-medium opacity-80 max-w-lg mx-auto mb-8 relative z-10">Bersinar dalam kebersamaan, unggul dalam prestasi. Selamat datang di portal resmi kelas 10 L.</p>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+                    <div class="bg-[var(--bg-surface-solid)] border border-[var(--border-color)] p-4 rounded-2xl shadow-sm">
+                        <div class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-1 flex items-center justify-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> Tanggal</div>
                         <div class="font-bold text-lg text-[var(--color-primary)]" id="live-date">--</div>
                     </div>
-                    <div class="bg-[var(--bg-surface-solid)] border border-[var(--border-color)] p-4 rounded-2xl">
-                        <div class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-1">Jam</div>
+                    <div class="bg-[var(--bg-surface-solid)] border border-[var(--border-color)] p-4 rounded-2xl shadow-sm">
+                        <div class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-1 flex items-center justify-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Jam</div>
                         <div class="font-bold text-lg text-[var(--color-primary)]" id="live-time">--:--</div>
                     </div>
-                    <div class="bg-[var(--bg-surface-solid)] border border-[var(--border-color)] p-4 rounded-2xl col-span-2 md:col-span-2 flex flex-col justify-center items-center relative overflow-hidden card-hover cursor-pointer btn-tap" onclick="UI.switchTab('schedule')">
-                        <div class="absolute inset-0 bg-amber-500/5"></div>
-                        <div class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-1">Pelajaran Saat Ini</div>
+                    <div class="bg-[var(--bg-surface-solid)] border border-[var(--border-color)] p-4 rounded-2xl col-span-2 md:col-span-2 flex flex-col justify-center items-center relative overflow-hidden card-hover cursor-pointer btn-tap shadow-sm" onclick="UI.switchTab('schedule')">
+                        <div class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-1 flex items-center justify-center gap-1"><i data-lucide="book-open" class="w-3 h-3"></i> Pelajaran Saat Ini</div>
                         <div class="font-bold text-lg w-full truncate px-2" id="live-subject">Mengecek...</div>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Access / Summary -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
                 <!-- Info Kelas -->
-                <div class="glass-panel rounded-2xl p-5 card-hover btn-tap cursor-pointer" onclick="UI.showModal('modal-org')">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="p-3 bg-amber-500/10 rounded-xl text-amber-600">
-                            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <div class="glass-panel rounded-3xl p-6 card-hover btn-tap cursor-pointer" onclick="UI.showModal('modal-org')">
+                    <div class="flex items-start justify-between mb-5">
+                        <div class="p-3.5 bg-amber-500/10 rounded-2xl text-amber-600 border border-amber-500/20">
+                            <i data-lucide="users" class="w-6 h-6"></i>
                         </div>
-                        <span class="text-xs font-bold px-2 py-1 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-md">46 Siswa</span>
+                        <span class="text-xs font-bold px-2.5 py-1 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-lg">46 Siswa</span>
                     </div>
-                    <h3 class="font-bold text-lg mb-1">Struktur Organisasi</h3>
-                    <p class="text-xs opacity-70">Wali Kelas, Pengurus & Koordinator</p>
+                    <h3 class="font-bold text-xl mb-1.5">Struktur Organisasi</h3>
+                    <p class="text-xs opacity-70">Wali Kelas, Pengurus & Seksi Bidang</p>
                 </div>
                 
                 <!-- Piket Hari Ini -->
-                <div class="glass-panel rounded-2xl p-5 card-hover btn-tap cursor-pointer" onclick="UI.switchTab('piket')">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="p-3 bg-emerald-500/10 rounded-xl text-emerald-600">
-                            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                <div class="glass-panel rounded-3xl p-6 card-hover btn-tap cursor-pointer" onclick="UI.showModal('modal-piket')">
+                    <div class="flex items-start justify-between mb-5">
+                        <div class="p-3.5 bg-emerald-500/10 rounded-2xl text-emerald-600 border border-emerald-500/20">
+                            <i data-lucide="sparkles" class="w-6 h-6"></i>
                         </div>
-                        <span class="text-xs font-bold px-2 py-1 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded-md" id="piket-today-label">Hari Ini</span>
+                        <span class="text-xs font-bold px-2.5 py-1 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded-lg" id="piket-today-label">Hari Ini</span>
                     </div>
-                    <h3 class="font-bold text-lg mb-1">Piket Kebersihan</h3>
+                    <h3 class="font-bold text-xl mb-1.5">Piket Kebersihan</h3>
                     <p class="text-xs opacity-70 truncate" id="piket-today-names">Mengecek jadwal...</p>
                 </div>
 
                 <!-- Seragam -->
-                <div class="glass-panel rounded-2xl p-5 card-hover btn-tap cursor-pointer" onclick="UI.showModal('modal-uniform')">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="p-3 bg-blue-500/10 rounded-xl text-blue-600">
-                            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>
+                <div class="glass-panel rounded-3xl p-6 card-hover btn-tap cursor-pointer sm:col-span-2 lg:col-span-1" onclick="UI.showModal('modal-uniform')">
+                    <div class="flex items-start justify-between mb-5">
+                        <div class="p-3.5 bg-blue-500/10 rounded-2xl text-blue-600 border border-blue-500/20">
+                            <i data-lucide="shirt" class="w-6 h-6"></i>
                         </div>
-                        <span class="text-xs font-bold px-2 py-1 bg-blue-500/10 text-blue-600 border border-blue-500/20 rounded-md">Dresscode</span>
+                        <span class="text-xs font-bold px-2.5 py-1 bg-blue-500/10 text-blue-600 border border-blue-500/20 rounded-lg">Dresscode</span>
                     </div>
-                    <h3 class="font-bold text-lg mb-1">Seragam Hari Ini</h3>
+                    <h3 class="font-bold text-xl mb-1.5">Seragam Hari Ini</h3>
                     <p class="text-xs opacity-70" id="uniform-today-name">Mengecek...</p>
                 </div>
             </div>
 
             <!-- Dashboard Utils -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <button class="glass-panel rounded-2xl p-4 text-center btn-tap card-hover flex flex-col items-center justify-center gap-2" onclick="UI.showModal('modal-todo')">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    <span class="font-semibold text-sm">Catatan</span>
+            <h3 class="font-serif-custom font-bold text-xl mb-4 ml-2">Akses Cepat</h3>
+            <div class="grid grid-cols-4 gap-3 sm:gap-4 mb-8">
+                <button class="glass-panel rounded-2xl p-4 text-center btn-tap card-hover flex flex-col items-center justify-center gap-2.5" onclick="UI.showModal('modal-todo')">
+                    <div class="p-3 bg-[var(--bg-surface-solid)] rounded-xl border border-[var(--border-color)] text-[var(--text-secondary)]"><i data-lucide="clipboard-list" class="w-5 h-5"></i></div>
+                    <span class="font-semibold text-[0.7rem] uppercase tracking-wider">Catatan</span>
                 </button>
-                <a href="https://www.instagram.com/x.luminance4us" target="_blank" class="glass-panel rounded-2xl p-4 text-center btn-tap card-hover flex flex-col items-center justify-center gap-2 text-pink-600 border-pink-500/20">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                    <span class="font-semibold text-sm">Instagram</span>
+                <button class="glass-panel rounded-2xl p-4 text-center btn-tap card-hover flex flex-col items-center justify-center gap-2.5 text-amber-600 border-amber-500/20 bg-amber-500/5" onclick="UI.switchTab('games')">
+                    <div class="p-3 bg-amber-500/10 rounded-xl border border-amber-500/20"><i data-lucide="gamepad-2" class="w-5 h-5"></i></div>
+                    <span class="font-semibold text-[0.7rem] uppercase tracking-wider">Arcade</span>
+                </button>
+                <button class="glass-panel rounded-2xl p-4 text-center btn-tap card-hover flex flex-col items-center justify-center gap-2.5" onclick="UI.showModal('modal-shop')">
+                    <div class="p-3 bg-[var(--bg-surface-solid)] rounded-xl border border-[var(--border-color)] text-[var(--color-primary)]"><i data-lucide="store" class="w-5 h-5"></i></div>
+                    <span class="font-semibold text-[0.7rem] uppercase tracking-wider">Toko</span>
+                </button>
+                <a href="https://www.instagram.com/x.luminance4us" target="_blank" class="glass-panel rounded-2xl p-4 text-center btn-tap card-hover flex flex-col items-center justify-center gap-2.5 text-pink-600 border-pink-500/20 bg-pink-500/5">
+                    <div class="p-3 bg-pink-500/10 rounded-xl border border-pink-500/20"><i data-lucide="instagram" class="w-5 h-5"></i></div>
+                    <span class="font-semibold text-[0.7rem] uppercase tracking-wider">Sosmed</span>
                 </a>
-                <button class="glass-panel rounded-2xl p-4 text-center btn-tap card-hover flex flex-col items-center justify-center gap-2 text-amber-600 border-amber-500/20" onclick="UI.switchTab('games')">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 12h4"></path><path d="M8 10v4"></path><path d="M15 13h.01"></path><path d="M18 11h.01"></path></svg>
-                    <span class="font-semibold text-sm">Arcade</span>
-                </button>
-                <button class="glass-panel rounded-2xl p-4 text-center btn-tap card-hover flex flex-col items-center justify-center gap-2" onclick="UI.switchTab('students')">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    <span class="font-semibold text-sm">Data Siswa</span>
-                </button>
             </div>
         </section>
 
-        <!-- Students Section -->
+        <!-- ================= STUDENTS SECTION ================= -->
         <section id="sec-students" class="view-section hidden animate-fade-up">
-            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-                <h2 class="font-serif-custom text-2xl font-bold">Direktori Siswa</h2>
-                <div class="flex gap-2 w-full sm:w-auto overflow-x-auto hide-scroll pb-1">
-                    <button class="pill-nav active" data-filter="all" onclick="DataModule.filterStudents('all', this)">Semua (46)</button>
-                    <button class="pill-nav" data-filter="L" onclick="DataModule.filterStudents('L', this)">Laki-laki (19)</button>
-                    <button class="pill-nav" data-filter="P" onclick="DataModule.filterStudents('P', this)">Perempuan (27)</button>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 class="font-serif-custom text-3xl font-bold">Direktori Siswa</h2>
+                <div class="flex gap-2 w-full sm:w-auto overflow-x-auto hide-scroll pb-2">
+                    <button class="pill-nav active" data-filter="all" onclick="DataModule.filterStudents('all', this)"><i data-lucide="users" class="w-4 h-4"></i> Semua</button>
+                    <button class="pill-nav" data-filter="L" onclick="DataModule.filterStudents('L', this)"><i data-lucide="user" class="w-4 h-4"></i> Laki-laki</button>
+                    <button class="pill-nav" data-filter="P" onclick="DataModule.filterStudents('P', this)"><i data-lucide="user" class="w-4 h-4"></i> Perempuan</button>
                 </div>
             </div>
             
             <div class="relative mb-6">
-                <input type="text" id="search-student" placeholder="Cari nama atau absen..." class="w-full bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-[var(--color-primary)] transition-colors shadow-sm" onkeyup="DataModule.searchStudent(this.value)">
-                <svg class="svg-icon absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] opacity-50" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="search-student" placeholder="Cari nama atau absen siswa..." class="w-full bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-2xl py-3.5 pl-12 pr-4 focus:outline-none focus:border-[var(--color-primary)] transition-colors shadow-sm font-medium" onkeyup="DataModule.searchStudent(this.value)">
+                <i data-lucide="search" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] opacity-60"></i>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="students-grid">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6" id="students-grid">
                 <!-- Rendered by JS -->
             </div>
         </section>
 
-        <!-- Schedule Section -->
-        <section id="sec-schedule" class="view-section hidden animate-fade-up">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <h2 class="font-serif-custom text-2xl font-bold">Jadwal Pelajaran</h2>
-                <div class="flex gap-2 overflow-x-auto hide-scroll w-full md:w-auto pb-1" id="schedule-tabs">
-                    <button class="pill-nav active" onclick="DataModule.renderSchedule('Senin', this)">Senin</button>
-                    <button class="pill-nav" onclick="DataModule.renderSchedule('Selasa', this)">Selasa</button>
-                    <button class="pill-nav" onclick="DataModule.renderSchedule('Rabu', this)">Rabu</button>
-                    <button class="pill-nav" onclick="DataModule.renderSchedule('Kamis', this)">Kamis</button>
-                    <button class="pill-nav" onclick="DataModule.renderSchedule('Jumat', this)">Jumat</button>
-                </div>
+        <!-- ================= SCHEDULE SECTION ================= -->
+        <section id="sec-schedule" class="view-section hidden animate-fade-up max-w-3xl mx-auto">
+            <div class="text-center mb-6">
+                <h2 class="font-serif-custom text-3xl font-bold mb-2">Jadwal Pelajaran</h2>
+                <p class="text-sm opacity-70">Tahun Ajaran 2025/2026</p>
             </div>
-            <div class="glass-panel rounded-3xl p-4 sm:p-6">
-                <h3 class="font-bold text-lg mb-4 text-[var(--color-primary)] border-b border-[var(--border-color)] pb-2 flex justify-between items-center" id="schedule-day-title">
+            
+            <div class="flex gap-2 overflow-x-auto hide-scroll w-full justify-start sm:justify-center pb-4 mb-2" id="schedule-tabs">
+                <button class="pill-nav active" onclick="DataModule.renderSchedule('Senin', this)">Senin</button>
+                <button class="pill-nav" onclick="DataModule.renderSchedule('Selasa', this)">Selasa</button>
+                <button class="pill-nav" onclick="DataModule.renderSchedule('Rabu', this)">Rabu</button>
+                <button class="pill-nav" onclick="DataModule.renderSchedule('Kamis', this)">Kamis</button>
+                <button class="pill-nav" onclick="DataModule.renderSchedule('Jumat', this)">Jumat</button>
+            </div>
+            
+            <div class="glass-panel rounded-3xl p-5 sm:p-8">
+                <h3 class="font-bold text-xl mb-6 text-[var(--color-primary)] border-b border-[var(--border-color)] pb-3 flex justify-between items-center" id="schedule-day-title">
                     <span>Senin</span>
-                    <span class="text-xs px-2 py-1 bg-amber-500/10 rounded-md font-semibold text-amber-600 hidden" id="schedule-badge-today">HARI INI</span>
+                    <span class="text-xs px-2.5 py-1 bg-amber-500 text-white rounded-md font-bold tracking-wider hidden shadow-md shadow-amber-500/30" id="schedule-badge-today">HARI INI</span>
                 </h3>
-                <div class="relative pl-4 border-l-2 border-[var(--border-color)] space-y-6" id="schedule-timeline">
+                <div class="relative pl-5 border-l-2 border-[var(--border-color)] space-y-6" id="schedule-timeline">
                     <!-- Rendered by JS -->
                 </div>
             </div>
         </section>
 
-        <!-- Piket Section -->
-        <section id="sec-piket" class="view-section hidden animate-fade-up">
-             <div class="flex justify-between items-center mb-6">
-                <h2 class="font-serif-custom text-2xl font-bold">Jadwal Piket</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="piket-grid">
-                <!-- Rendered by JS -->
-            </div>
-        </section>
-
-        <!-- Games / Arcade Section -->
-        <section id="sec-games" class="view-section hidden animate-fade-up">
-             <div class="text-center mb-8">
-                <h2 class="font-serif-custom text-3xl font-bold mb-2">Arcade Luminance</h2>
-                <p class="text-[var(--text-secondary)] text-sm">Mainkan game ringan untuk mengisi waktu luang.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Game 1: Reaction -->
-                <div class="glass-panel rounded-2xl p-5 flex flex-col items-center text-center">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white mb-4 shadow-lg shadow-emerald-500/30">
-                        <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                    </div>
-                    <h3 class="font-bold text-lg mb-1">Refleks Kilat</h3>
-                    <p class="text-xs text-[var(--text-secondary)] mb-4 h-8">Ketuk secepat mungkin saat warna berubah menjadi hijau!</p>
-                    <button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl font-bold text-sm hover:border-amber-500 transition-colors btn-tap" onclick="GameModule.initReaction()">Mainkan</button>
-                </div>
-
-                <!-- Game 2: Tic Tac Toe -->
-                <div class="glass-panel rounded-2xl p-5 flex flex-col items-center text-center">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white mb-4 shadow-lg shadow-indigo-500/30">
-                        <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </div>
-                    <h3 class="font-bold text-lg mb-1">Tic Tac Toe</h3>
-                    <p class="text-xs text-[var(--text-secondary)] mb-4 h-8">Mainkan game klasik Tic Tac Toe melawan AI lokal.</p>
-                    <button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl font-bold text-sm hover:border-amber-500 transition-colors btn-tap" onclick="GameModule.initTTT()">Mainkan</button>
+        <!-- ================= GALLERY SECTION (IG CLONE) ================= -->
+        <section id="sec-gallery" class="view-section hidden animate-fade-up max-w-2xl mx-auto">
+            <div class="glass-panel rounded-3xl overflow-hidden shadow-xl mb-8 p-0 bg-[var(--bg-surface-solid)]">
+                <!-- Header IG -->
+                <div class="p-4 flex items-center justify-between border-b border-[var(--border-color)]">
+                    <div class="font-bold flex items-center gap-1.5 text-lg"><i data-lucide="lock" class="w-4 h-4"></i> x.luminance4us</div>
+                    <div class="flex gap-4"><i data-lucide="plus-square" class="w-6 h-6"></i><i data-lucide="menu" class="w-6 h-6"></i></div>
                 </div>
                 
-                <!-- Game 3: Tebak Angka -->
-                <div class="glass-panel rounded-2xl p-5 flex flex-col items-center text-center sm:col-span-2 lg:col-span-1">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-400 to-fuchsia-600 flex items-center justify-center text-white mb-4 shadow-lg shadow-fuchsia-500/30">
-                        <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <!-- Profile Info -->
+                <div class="p-5 flex items-center gap-6 sm:gap-10">
+                    <div class="ig-story-ring shrink-0 btn-tap cursor-pointer">
+                        <div class="w-20 h-20 rounded-full bg-[var(--bg-surface-solid)] border-2 border-[var(--bg-surface-solid)] flex items-center justify-center overflow-hidden">
+                            <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20kelas%20.jpg?raw=true" class="w-full h-full object-cover">
+                        </div>
                     </div>
-                    <h3 class="font-bold text-lg mb-1">Tebak Angka</h3>
-                    <p class="text-xs text-[var(--text-secondary)] mb-4 h-8">Tebak angka rahasia 1-100 dengan petunjuk lebih besar/kecil.</p>
-                    <button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl font-bold text-sm hover:border-amber-500 transition-colors btn-tap" onclick="GameModule.initGuess()">Mainkan</button>
+                    <div class="flex-grow flex justify-between text-center max-w-xs">
+                        <div><div class="font-bold text-lg leading-tight" id="gal-post-count">6</div><div class="text-xs opacity-80">Posts</div></div>
+                        <div><div class="font-bold text-lg leading-tight">46</div><div class="text-xs opacity-80">Followers</div></div>
+                        <div><div class="font-bold text-lg leading-tight">1</div><div class="text-xs opacity-80">Following</div></div>
+                    </div>
+                </div>
+                
+                <!-- Bio -->
+                <div class="px-5 mb-5">
+                    <div class="font-bold text-sm">X.Luminance ✨</div>
+                    <div class="text-sm mt-0.5 leading-snug">Official Gallery of 10 L<br>SMA Negeri 2 Majalengka.<br>Shine bright together! 🌟</div>
+                    <div class="text-sm text-blue-500 font-medium mt-1 cursor-pointer">linktr.ee/xluminance</div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="px-5 flex gap-2 mb-6">
+                    <button class="flex-1 py-1.5 bg-[var(--border-color)] font-bold text-sm rounded-lg btn-tap">Edit Profile</button>
+                    <button class="flex-1 py-1.5 bg-[var(--border-color)] font-bold text-sm rounded-lg btn-tap">Share Profile</button>
+                </div>
+                
+                <!-- Highlights -->
+                <div class="px-5 flex gap-4 overflow-x-auto hide-scroll mb-4 pb-2" id="gal-highlights">
+                    <!-- Rendered by JS -->
+                </div>
+                
+                <!-- Tabs -->
+                <div class="flex border-t border-[var(--border-color)]">
+                    <div class="flex-1 py-3 flex justify-center border-b-2 border-[var(--text-primary)] text-[var(--text-primary)] cursor-pointer"><i data-lucide="grid" class="w-6 h-6"></i></div>
+                    <div class="flex-1 py-3 flex justify-center opacity-40 cursor-pointer hover:opacity-100 transition-opacity"><i data-lucide="film" class="w-6 h-6"></i></div>
+                    <div class="flex-1 py-3 flex justify-center opacity-40 cursor-pointer hover:opacity-100 transition-opacity"><i data-lucide="user-square-2" class="w-6 h-6"></i></div>
+                </div>
+                
+                <!-- Grid -->
+                <div class="grid grid-cols-3 gap-0.5" id="gal-grid">
+                    <!-- Rendered by JS -->
                 </div>
             </div>
         </section>
 
-        <!-- Settings Section -->
-        <section id="sec-settings" class="view-section hidden animate-fade-up max-w-2xl mx-auto">
-            <h2 class="font-serif-custom text-2xl font-bold mb-6">Pengaturan & Profil</h2>
+        <!-- ================= GAMES / ARCADE SECTION ================= -->
+        <section id="sec-games" class="view-section hidden animate-fade-up">
+            <div class="glass-panel rounded-3xl p-6 sm:p-10 text-center mb-8 bg-gradient-to-br from-[var(--bg-surface-solid)] to-amber-500/5">
+                <div class="w-16 h-16 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-4 border border-amber-500/20">
+                    <i data-lucide="gamepad-2" class="w-8 h-8"></i>
+                </div>
+                <h2 class="font-serif-custom text-3xl md:text-4xl font-bold mb-3">Arcade Luminance</h2>
+                <p class="text-[var(--text-secondary)] text-sm max-w-md mx-auto mb-6">Mainkan minigame seru, kumpulkan skor, dan dapatkan Koin (Ⓛ) untuk berbelanja di Toko!</p>
+                
+                <div class="inline-flex items-center gap-3 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] px-5 py-2.5 rounded-full shadow-sm font-bold cursor-pointer btn-tap" onclick="UI.showModal('modal-shop')">
+                    <span class="text-xs uppercase tracking-wider opacity-70">Koin Anda:</span>
+                    <span class="text-amber-500 flex items-center gap-1.5 text-lg"><i data-lucide="coins" class="w-5 h-5"></i> <span id="arcade-coins-display">0</span></span>
+                </div>
+            </div>
             
-            <div class="glass-panel rounded-3xl p-6 mb-6">
-                <h3 class="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-4">Tampilan</h3>
-                <div class="flex items-center justify-between py-3 border-b border-[var(--border-color)]">
-                    <div>
-                        <div class="font-semibold">Tema Gelap (Dark Mode)</div>
-                        <div class="text-xs opacity-70">Ubah tampilan menjadi gelap</div>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="toggle-dark" class="sr-only peer" onchange="App.toggleThemeSwitch(this)">
-                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6">
+                <!-- Game Cards -->
+                <div class="glass-panel rounded-2xl p-6 flex flex-col items-center text-center card-hover cursor-pointer btn-tap" onclick="GameEngine.openGame('reaction')">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center mb-4"><i data-lucide="zap" class="w-7 h-7"></i></div>
+                    <h3 class="font-bold text-lg mb-1.5">Refleks Kilat</h3>
+                    <p class="text-xs text-[var(--text-secondary)] mb-4">Uji kecepatan reaksimu saat warna berubah hijau.</p>
+                    <button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl font-bold text-xs uppercase tracking-wider mt-auto">Mainkan</button>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-6 flex flex-col items-center text-center card-hover cursor-pointer btn-tap" onclick="GameEngine.openGame('guess')">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-500 border border-blue-500/20 flex items-center justify-center mb-4"><i data-lucide="help-circle" class="w-7 h-7"></i></div>
+                    <h3 class="font-bold text-lg mb-1.5">Tebak Angka</h3>
+                    <p class="text-xs text-[var(--text-secondary)] mb-4">Gunakan logika untuk menebak angka rahasia 1-100.</p>
+                    <button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl font-bold text-xs uppercase tracking-wider mt-auto">Mainkan</button>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-6 flex flex-col items-center text-center card-hover cursor-pointer btn-tap" onclick="GameEngine.openGame('memory')">
+                    <div class="w-14 h-14 rounded-2xl bg-purple-500/10 text-purple-500 border border-purple-500/20 flex items-center justify-center mb-4"><i data-lucide="grid-3x3" class="w-7 h-7"></i></div>
+                    <h3 class="font-bold text-lg mb-1.5">Memory Match</h3>
+                    <p class="text-xs text-[var(--text-secondary)] mb-4">Hafalkan dan cocokkan pasangan ikon tersembunyi.</p>
+                    <button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl font-bold text-xs uppercase tracking-wider mt-auto">Mainkan</button>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-6 flex flex-col items-center text-center card-hover cursor-pointer btn-tap" onclick="GameEngine.openGame('mash')">
+                    <div class="w-14 h-14 rounded-2xl bg-pink-500/10 text-pink-500 border border-pink-500/20 flex items-center justify-center mb-4"><i data-lucide="mouse-pointer-click" class="w-7 h-7"></i></div>
+                    <h3 class="font-bold text-lg mb-1.5">Speed Tap</h3>
+                    <p class="text-xs text-[var(--text-secondary)] mb-4">Ketuk tombol sebanyak-banyaknya dalam 10 detik!</p>
+                    <button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl font-bold text-xs uppercase tracking-wider mt-auto">Mainkan</button>
+                </div>
+                
+                <div class="glass-panel rounded-2xl p-6 flex flex-col items-center text-center card-hover cursor-pointer btn-tap" onclick="GameEngine.openGame('math')">
+                    <div class="w-14 h-14 rounded-2xl bg-red-500/10 text-red-500 border border-red-500/20 flex items-center justify-center mb-4"><i data-lucide="calculator" class="w-7 h-7"></i></div>
+                    <h3 class="font-bold text-lg mb-1.5">Math Genius</h3>
+                    <p class="text-xs text-[var(--text-secondary)] mb-4">Selesaikan soal matematika dasar dengan cepat.</p>
+                    <button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl font-bold text-xs uppercase tracking-wider mt-auto">Mainkan</button>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-6 flex flex-col items-center text-center card-hover cursor-pointer btn-tap" onclick="GameEngine.openGame('ttt')">
+                    <div class="w-14 h-14 rounded-2xl bg-orange-500/10 text-orange-500 border border-orange-500/20 flex items-center justify-center mb-4"><i data-lucide="hash" class="w-7 h-7"></i></div>
+                    <h3 class="font-bold text-lg mb-1.5">Tic Tac Toe</h3>
+                    <p class="text-xs text-[var(--text-secondary)] mb-4">Lawan bot dalam game klasik Tic Tac Toe.</p>
+                    <button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl font-bold text-xs uppercase tracking-wider mt-auto">Mainkan</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SETTINGS SECTION ================= -->
+        <section id="sec-settings" class="view-section hidden animate-fade-up max-w-2xl mx-auto">
+            <h2 class="font-serif-custom text-3xl font-bold mb-6 text-center">Pengaturan Sistem</h2>
+            
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 mb-6">
+                <h3 class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-4">Tampilan & Tema</h3>
+                
+                <div class="space-y-2">
+                    <label class="flex items-center justify-between p-4 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-2xl cursor-pointer btn-tap">
+                        <div class="flex items-center gap-4">
+                            <div class="p-2.5 bg-gray-100 dark:bg-zinc-800 rounded-xl"><i data-lucide="moon" class="w-5 h-5"></i></div>
+                            <div>
+                                <div class="font-bold text-sm">Mode Gelap (Dark Mode)</div>
+                                <div class="text-xs opacity-70 mt-0.5">Ubah antarmuka menjadi gelap</div>
+                            </div>
+                        </div>
+                        <input type="checkbox" id="set-theme" class="w-5 h-5 accent-amber-500" onchange="App.toggleThemeSwitch(this)">
+                    </label>
+
+                    <label class="flex items-center justify-between p-4 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-2xl cursor-pointer btn-tap">
+                        <div class="flex items-center gap-4">
+                            <div class="p-2.5 bg-blue-100 text-blue-600 dark:bg-blue-900/30 rounded-xl"><i data-lucide="zap" class="w-5 h-5"></i></div>
+                            <div>
+                                <div class="font-bold text-sm">Mode Ringan (Performa)</div>
+                                <div class="text-xs opacity-70 mt-0.5">Matikan efek blur untuk HP kentang</div>
+                            </div>
+                        </div>
+                        <input type="checkbox" id="set-perf" class="w-5 h-5 accent-blue-500" onchange="App.togglePerfMode(this)">
                     </label>
                 </div>
                 
-                <h3 class="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-wider mt-6 mb-4">Sistem</h3>
-                <div class="flex items-center justify-between py-3 border-b border-[var(--border-color)] cursor-pointer btn-tap hover:text-amber-500" onclick="UI.showModal('modal-shop')">
-                    <div>
-                        <div class="font-semibold">Toko & Reward</div>
-                        <div class="text-xs opacity-70">Gunakan koin dari game</div>
-                    </div>
-                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg>
+                <h3 class="text-xs font-bold text-amber-500 uppercase tracking-widest mt-8 mb-4">Interaksi & Audio</h3>
+                <div class="space-y-2">
+                    <label class="flex items-center justify-between p-4 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-2xl cursor-pointer btn-tap">
+                        <div class="flex items-center gap-4">
+                            <div class="p-2.5 bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 rounded-xl"><i data-lucide="volume-2" class="w-5 h-5"></i></div>
+                            <div>
+                                <div class="font-bold text-sm">Efek Suara</div>
+                                <div class="text-xs opacity-70 mt-0.5">Suara saat tap dan main game</div>
+                            </div>
+                        </div>
+                        <input type="checkbox" id="set-sound" class="w-5 h-5 accent-emerald-500" onchange="App.toggleSetting('sound', this)">
+                    </label>
+
+                    <label class="flex items-center justify-between p-4 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-2xl cursor-pointer btn-tap">
+                        <div class="flex items-center gap-4">
+                            <div class="p-2.5 bg-purple-100 text-purple-600 dark:bg-purple-900/30 rounded-xl"><i data-lucide="vibrate" class="w-5 h-5"></i></div>
+                            <div>
+                                <div class="font-bold text-sm">Getaran Haptic</div>
+                                <div class="text-xs opacity-70 mt-0.5">Getar lembut saat berinteraksi</div>
+                            </div>
+                        </div>
+                        <input type="checkbox" id="set-haptic" class="w-5 h-5 accent-purple-500" onchange="App.toggleSetting('haptic', this)">
+                    </label>
                 </div>
-                <div class="flex items-center justify-between py-3 cursor-pointer btn-tap hover:text-red-500" onclick="App.clearData()">
-                    <div>
-                        <div class="font-semibold">Reset Data Lokal</div>
-                        <div class="text-xs opacity-70">Hapus catatan, skor, dan pengaturan</div>
+
+                <h3 class="text-xs font-bold text-amber-500 uppercase tracking-widest mt-8 mb-4">Data & Privasi</h3>
+                <div class="flex items-center justify-between p-4 bg-red-500/10 border border-red-500/20 rounded-2xl cursor-pointer btn-tap hover:bg-red-500/20 transition-colors" onclick="App.clearData()">
+                    <div class="flex items-center gap-4 text-red-600 dark:text-red-400">
+                        <div class="p-2.5 bg-red-500/20 rounded-xl"><i data-lucide="trash-2" class="w-5 h-5"></i></div>
+                        <div>
+                            <div class="font-bold text-sm">Reset Data Lokal</div>
+                            <div class="text-xs opacity-80 mt-0.5">Hapus koin, catatan, dan setting</div>
+                        </div>
                     </div>
-                    <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </div>
             </div>
             
-            <div class="text-center opacity-50 text-xs mt-8">
+            <div class="text-center opacity-50 text-[0.65rem] mt-8 font-bold uppercase tracking-wider">
                 <p>Website Resmi Kelas 10 L</p>
-                <p>SMA Negeri 2 Majalengka v2.0</p>
-                <p>Brand: X.Luminance</p>
+                <p class="my-1">SMA Negeri 2 Majalengka</p>
+                <p>X.Luminance Edition v3.0</p>
             </div>
         </section>
 
     </main>
 
-    <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 glass-panel border-b-0 border-x-0 z-40 pb-safe">
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="fixed bottom-0 left-0 right-0 glass-panel border-b-0 border-x-0 z-40 pb-safe md:hidden block rounded-t-3xl">
         <div class="flex justify-around items-center h-16 max-w-md mx-auto px-2">
-            <button class="nav-item active flex flex-col items-center gap-1 w-16 btn-tap" data-target="home" onclick="UI.switchTab('home')">
-                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span class="text-[0.6rem] font-medium">Home</span>
+            <button class="nav-item active flex flex-col items-center gap-1 w-[4.5rem] btn-tap" data-target="home" onclick="UI.switchTab('home')">
+                <i data-lucide="home" class="w-[1.15rem] h-[1.15rem]"></i>
+                <span class="text-[0.6rem] font-bold">Home</span>
             </button>
-            <button class="nav-item flex flex-col items-center gap-1 w-16 btn-tap" data-target="schedule" onclick="UI.switchTab('schedule')">
-                <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                <span class="text-[0.6rem] font-medium">Jadwal</span>
+            <button class="nav-item flex flex-col items-center gap-1 w-[4.5rem] btn-tap" data-target="schedule" onclick="UI.switchTab('schedule')">
+                <i data-lucide="calendar-clock" class="w-[1.15rem] h-[1.15rem]"></i>
+                <span class="text-[0.6rem] font-bold">Jadwal</span>
             </button>
-            <button class="nav-item flex flex-col items-center gap-1 w-16 btn-tap" data-target="students" onclick="UI.switchTab('students')">
-                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                <span class="text-[0.6rem] font-medium">Siswa</span>
+            <button class="nav-item flex flex-col items-center gap-1 w-[4.5rem] btn-tap" data-target="students" onclick="UI.switchTab('students')">
+                <i data-lucide="users-round" class="w-[1.15rem] h-[1.15rem]"></i>
+                <span class="text-[0.6rem] font-bold">Siswa</span>
             </button>
-            <button class="nav-item flex flex-col items-center gap-1 w-16 btn-tap" data-target="games" onclick="UI.switchTab('games')">
-                <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 12h4"></path><path d="M8 10v4"></path><path d="M15 13h.01"></path><path d="M18 11h.01"></path></svg>
-                <span class="text-[0.6rem] font-medium">Arcade</span>
+            <button class="nav-item flex flex-col items-center gap-1 w-[4.5rem] btn-tap" data-target="gallery" onclick="UI.switchTab('gallery')">
+                <i data-lucide="instagram" class="w-[1.15rem] h-[1.15rem]"></i>
+                <span class="text-[0.6rem] font-bold">Galeri</span>
             </button>
-            <button class="nav-item flex flex-col items-center gap-1 w-16 btn-tap" data-target="settings" onclick="UI.switchTab('settings')">
-                <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span class="text-[0.6rem] font-medium">Profil</span>
+            <button class="nav-item flex flex-col items-center gap-1 w-[4.5rem] btn-tap" data-target="games" onclick="UI.switchTab('games')">
+                <i data-lucide="gamepad-2" class="w-[1.15rem] h-[1.15rem]"></i>
+                <span class="text-[0.6rem] font-bold">Arcade</span>
             </button>
         </div>
     </nav>
 
-    <!-- Floating Action Button (Back to top) -->
-    <button id="fab" class="fixed bottom-20 right-4 z-40 w-12 h-12 bg-amber-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-amber-500/40 btn-tap opacity-0 pointer-events-none transition-opacity" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 19V5"></path><polyline points="5 12 12 5 19 12"></polyline></svg>
-    </button>
-
-    <!-- Modals -->
-    <!-- ID Card Modal -->
-    <div id="modal-id" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-id')">
-        <div class="modal-content bg-transparent border-none shadow-none overflow-visible">
-            <div class="flex justify-center mb-4 gap-2">
-                <button class="px-4 py-1.5 rounded-full bg-[var(--bg-surface-solid)] border border-[var(--border-color)] text-xs font-bold btn-tap shadow-sm" onclick="document.getElementById('id-card').classList.remove('flipped')">Kartu Kelas</button>
-                <button class="px-4 py-1.5 rounded-full bg-[var(--bg-surface-solid)] border border-[var(--border-color)] text-xs font-bold btn-tap shadow-sm" onclick="document.getElementById('id-card').classList.add('flipped')">Kartu Sekolah</button>
-            </div>
-            <div class="id-card-container" id="id-card">
-                <div class="id-card-inner">
-                    <!-- Class ID -->
-                    <div class="id-card-front glass-panel bg-opacity-90 flex flex-col relative overflow-hidden" style="background: linear-gradient(135deg, var(--bg-surface-solid), var(--bg-surface));">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/20 rounded-full blur-2xl -mr-10 -mt-10"></div>
-                        <div class="p-5 pb-2 flex justify-between items-start">
-                            <h3 class="font-serif-custom font-bold text-xl leading-none">X.Luminance</h3>
-                            <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20kelas%20.jpg?raw=true" alt="Logo" class="w-10 h-10 rounded-lg shadow-sm border border-[var(--border-color)]">
-                        </div>
-                        <div class="flex-grow flex flex-col items-center justify-center p-4">
-                            <div class="w-24 h-24 rounded-full bg-gray-200 mb-3 border-4 border-amber-500/30 overflow-hidden shadow-lg" id="modal-id-photo">
-                                <!-- Init by JS -->
+    <!-- Modals Container -->
+    <div id="modals-container">
+        
+        <!-- ID Card Modal -->
+        <div id="modal-id" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-id')">
+            <div class="modal-content bg-transparent border-none shadow-none overflow-visible p-2">
+                <div class="flex justify-center mb-6 gap-3">
+                    <button class="px-5 py-2 rounded-full bg-[var(--bg-surface-solid)] border border-[var(--border-color)] text-xs font-bold btn-tap shadow-lg" onclick="document.getElementById('id-card').classList.remove('flipped')">ID Kelas</button>
+                    <button class="px-5 py-2 rounded-full bg-[var(--bg-surface-solid)] border border-[var(--border-color)] text-xs font-bold btn-tap shadow-lg" onclick="document.getElementById('id-card').classList.add('flipped')">ID Sekolah</button>
+                </div>
+                
+                <div class="id-card-container" id="id-card">
+                    <div class="id-card-inner">
+                        <!-- Class ID -->
+                        <div class="id-card-front glass-panel flex flex-col relative overflow-hidden bg-opacity-95" style="background: linear-gradient(145deg, var(--bg-surface-solid) 0%, var(--bg-surface) 100%);">
+                            <div class="absolute inset-0 bg-amber-500/10 pointer-events-none"></div>
+                            <div class="absolute top-0 right-0 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+                            
+                            <div class="p-6 pb-2 flex justify-between items-start relative z-10">
+                                <div>
+                                    <h3 class="font-serif-custom font-bold text-2xl leading-none text-gradient">X.Luminance</h3>
+                                    <p class="text-[0.55rem] font-bold uppercase tracking-widest mt-1 opacity-70">Official Member ID</p>
+                                </div>
+                                <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20kelas%20.jpg?raw=true" alt="Logo" class="w-10 h-10 rounded-xl shadow-md border border-[var(--border-color)]">
                             </div>
-                            <h2 class="font-bold text-xl uppercase tracking-wide w-full truncate px-2" id="modal-id-name">Nama Siswa</h2>
-                            <p class="text-xs font-bold text-amber-500 tracking-widest uppercase mb-1" id="modal-id-role">Siswa</p>
-                            <p class="text-[0.65rem] opacity-60">NIS: <span id="modal-id-nis">10203040</span></p>
-                        </div>
-                        <div class="bg-[var(--text-primary)] text-[var(--bg-body)] p-3 flex justify-between items-center text-xs">
-                            <span class="font-mono">10 L / 2026</span>
-                            <span class="font-bold">MEMBER</span>
-                        </div>
-                    </div>
-                    <!-- School ID -->
-                    <div class="id-card-back bg-white text-gray-900 border-gray-200 flex flex-col relative overflow-hidden shadow-2xl">
-                         <div class="bg-blue-800 text-white p-4 flex items-center gap-3">
-                            <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" alt="SMAN 2" class="w-12 h-12 bg-white rounded-full p-0.5">
-                            <div class="text-left">
-                                <h4 class="font-bold text-sm uppercase leading-tight">Kartu Pelajar</h4>
-                                <p class="text-[0.55rem] uppercase opacity-90">SMA Negeri 2 Majalengka</p>
+                            
+                            <div class="flex-grow flex flex-col items-center justify-center p-5 relative z-10">
+                                <div class="w-28 h-28 rounded-full bg-gray-200 mb-4 border-4 border-amber-500/40 overflow-hidden shadow-xl" id="modal-id-photo">
+                                    <!-- Init by JS -->
+                                </div>
+                                <h2 class="font-bold text-2xl uppercase tracking-tight w-full truncate px-2 text-center" id="modal-id-name">Nama Siswa</h2>
+                                <p class="text-sm font-bold text-amber-500 tracking-widest uppercase mt-1 mb-2" id="modal-id-role">Siswa</p>
+                                
+                                <!-- Active Badge Display -->
+                                <div id="modal-id-badge" class="hidden mt-1 px-3 py-1 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 rounded-full flex items-center gap-1.5 text-xs font-bold text-amber-600">
+                                    <!-- Injected -->
+                                </div>
+                            </div>
+                            
+                            <div class="bg-[var(--text-primary)] text-[var(--bg-body)] p-4 flex justify-between items-center text-xs relative z-10 border-t-4 border-amber-500">
+                                <div>
+                                    <span class="font-bold block text-[0.6rem] opacity-60 uppercase mb-0.5">Absen</span>
+                                    <span class="font-mono text-sm" id="modal-id-nis">00</span>
+                                </div>
+                                <i data-lucide="qr-code" class="w-8 h-8 opacity-50"></i>
                             </div>
                         </div>
-                        <div class="flex-grow p-5 flex flex-col items-center justify-center">
-                            <div class="w-20 h-24 bg-gray-200 mb-4 border border-gray-300 shadow-sm" id="modal-id-photo-school"></div>
-                            <h2 class="font-bold text-lg uppercase text-center w-full truncate" id="modal-id-name-school">Nama</h2>
-                            <p class="text-xs text-gray-500 uppercase mt-1">Kelas X L</p>
-                        </div>
-                        <div class="bg-gray-100 p-2 text-center text-[0.6rem] text-gray-500 border-t border-gray-200">
-                            Berlaku selama menjadi siswa SMAN 2 Majalengka
+                        
+                        <!-- School ID -->
+                        <div class="id-card-back bg-white text-gray-900 border-gray-200 flex flex-col relative overflow-hidden shadow-2xl">
+                             <div class="bg-blue-800 text-white p-5 flex items-center gap-4 relative z-10">
+                                <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" alt="SMAN 2" class="w-12 h-12 bg-white rounded-full p-1 shadow-md">
+                                <div class="text-left">
+                                    <h4 class="font-bold text-base uppercase leading-tight tracking-wide">Kartu Pelajar</h4>
+                                    <p class="text-[0.6rem] font-semibold uppercase opacity-90 tracking-wider">SMA Negeri 2 Majalengka</p>
+                                </div>
+                            </div>
+                            <div class="flex-grow p-6 flex flex-col items-center justify-center relative z-10">
+                                <div class="w-24 h-32 bg-gray-200 mb-5 border-2 border-gray-300 shadow-md rounded-md overflow-hidden" id="modal-id-photo-school"></div>
+                                <h2 class="font-bold text-xl uppercase text-center w-full truncate" id="modal-id-name-school">Nama</h2>
+                                <p class="text-sm font-bold text-blue-800 uppercase mt-1">Kelas X L / 10 L</p>
+                            </div>
+                            <div class="bg-gray-100 p-3 text-center text-[0.65rem] font-medium text-gray-500 border-t border-gray-200">
+                                Berlaku selama menjadi siswa aktif
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <button class="mt-6 w-12 h-12 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-full mx-auto flex items-center justify-center btn-tap shadow-sm" onclick="UI.closeModal('modal-id')">
-                <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-        </div>
-    </div>
-
-    <!-- Org Structure Modal -->
-    <div id="modal-org" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-org')">
-        <div class="modal-content p-0">
-            <div class="p-4 border-b border-[var(--border-color)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10 rounded-t-3xl">
-                <h3 class="font-bold text-lg">Struktur Organisasi</h3>
-                <button onclick="UI.closeModal('modal-org')" class="p-2 btn-tap"><svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-            </div>
-            <div class="p-5" id="org-content">
-                <!-- Rendered by JS -->
+                
+                <button class="mt-8 w-12 h-12 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-full mx-auto flex items-center justify-center btn-tap shadow-lg" onclick="UI.closeModal('modal-id')">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
             </div>
         </div>
-    </div>
 
-    <!-- Uniform Modal -->
-    <div id="modal-uniform" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-uniform')">
-        <div class="modal-content p-0">
-            <div class="p-4 border-b border-[var(--border-color)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10 rounded-t-3xl">
-                <h3 class="font-bold text-lg">Aturan Seragam</h3>
-                <button onclick="UI.closeModal('modal-uniform')" class="p-2 btn-tap"><svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-            </div>
-            <div class="p-5 space-y-3" id="uniform-content">
-                <!-- Rendered by JS -->
-            </div>
-        </div>
-    </div>
-
-    <!-- To-Do / Notes Modal -->
-    <div id="modal-todo" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-todo')">
-        <div class="modal-content p-0">
-            <div class="p-4 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--bg-surface-solid)] rounded-t-3xl">
-                <h3 class="font-bold text-lg">Catatan & Tugas</h3>
-                <button onclick="UI.closeModal('modal-todo')" class="p-2 btn-tap"><svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-            </div>
-            <div class="p-5">
-                <div class="flex gap-2 mb-4">
-                    <input type="text" id="todo-input" placeholder="Tulis tugas baru..." class="flex-grow bg-[var(--bg-body)] border border-[var(--border-color)] rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') App.addTodo()">
-                    <button class="bg-amber-500 text-white px-4 rounded-xl font-bold btn-tap text-sm shadow-sm" onclick="App.addTodo()">Tambah</button>
+        <!-- Org, Uniform, Piket Modals (Re-used basic structure) -->
+        <div id="modal-org" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-org')">
+            <div class="modal-content">
+                <div class="p-5 border-b border-[var(--border-color)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
+                    <h3 class="font-bold text-lg font-serif-custom">Struktur Organisasi</h3>
+                    <button onclick="UI.closeModal('modal-org')" class="p-2 btn-tap bg-[var(--border-color)] rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
-                <div id="todo-list" class="space-y-2 max-h-60 overflow-y-auto pr-2">
+                <div class="p-5" id="org-content"></div>
+            </div>
+        </div>
+
+        <div id="modal-piket" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-piket')">
+            <div class="modal-content">
+                <div class="p-5 border-b border-[var(--border-color)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
+                    <h3 class="font-bold text-lg font-serif-custom">Jadwal Piket</h3>
+                    <button onclick="UI.closeModal('modal-piket')" class="p-2 btn-tap bg-[var(--border-color)] rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button>
+                </div>
+                <div class="p-5 space-y-4" id="piket-content"></div>
+            </div>
+        </div>
+
+        <div id="modal-uniform" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-uniform')">
+            <div class="modal-content">
+                <div class="p-5 border-b border-[var(--border-color)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
+                    <h3 class="font-bold text-lg font-serif-custom">Aturan Seragam</h3>
+                    <button onclick="UI.closeModal('modal-uniform')" class="p-2 btn-tap bg-[var(--border-color)] rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button>
+                </div>
+                <div class="p-5 space-y-3" id="uniform-content"></div>
+            </div>
+        </div>
+
+        <!-- To-Do / Notes Modal -->
+        <div id="modal-todo" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-todo')">
+            <div class="modal-content">
+                <div class="p-5 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--bg-surface-solid)] sticky top-0 z-10">
+                    <h3 class="font-bold text-lg font-serif-custom">Buku Catatan</h3>
+                    <button onclick="UI.closeModal('modal-todo')" class="p-2 btn-tap bg-[var(--border-color)] rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button>
+                </div>
+                <div class="p-5 bg-[var(--bg-body)]">
+                    <div class="flex gap-2 mb-5">
+                        <input type="text" id="todo-input" placeholder="Tulis tugas/catatan..." class="flex-grow bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-amber-500 shadow-sm" onkeypress="if(event.key==='Enter') App.addTodo()">
+                        <button class="bg-amber-500 text-white px-5 rounded-xl font-bold btn-tap text-sm shadow-md shadow-amber-500/20" onclick="App.addTodo()">Tambah</button>
+                    </div>
+                    <div id="todo-list" class="space-y-2.5 max-h-[50vh] overflow-y-auto">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shop Modal -->
+        <div id="modal-shop" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-shop')">
+             <div class="modal-content !max-w-2xl">
+                <div class="p-5 border-b border-[var(--border-color)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-20">
+                    <h3 class="font-bold text-lg font-serif-custom flex items-center gap-2"><i data-lucide="store" class="w-5 h-5 text-amber-500"></i> Toko Luminance</h3>
+                    <div class="flex items-center gap-4">
+                        <div class="coin-badge text-sm py-1 px-3">
+                            <i data-lucide="coins" class="w-4 h-4"></i> <span id="shop-coins-display">0</span>
+                        </div>
+                        <button onclick="UI.closeModal('modal-shop')" class="p-2 btn-tap bg-[var(--border-color)] rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+                
+                <div class="p-5 bg-[var(--bg-body)]">
+                    <div class="flex gap-2 overflow-x-auto hide-scroll pb-4 mb-2">
+                        <button class="pill-nav active" onclick="ShopModule.renderShop('badge', this)"><i data-lucide="shield" class="w-4 h-4"></i> Badge Profil</button>
+                        <button class="pill-nav" onclick="ShopModule.renderShop('title', this)"><i data-lucide="award" class="w-4 h-4"></i> Title Kehormatan</button>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="shop-grid">
+                        <!-- Items rendered here -->
+                    </div>
+                </div>
+             </div>
+        </div>
+
+        <!-- Gallery Post Detail Modal -->
+        <div id="modal-post" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-post')">
+             <div class="modal-content !p-0 !max-w-md bg-black text-white border-none !rounded-none sm:!rounded-3xl overflow-hidden shadow-2xl h-full sm:h-auto max-h-[100vh]">
+                 <!-- Header -->
+                 <div class="p-3 flex items-center justify-between absolute top-0 w-full z-10 bg-gradient-to-b from-black/80 to-transparent">
+                     <div class="flex items-center gap-2">
+                         <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20kelas%20.jpg?raw=true" class="w-8 h-8 rounded-full border border-white/20">
+                         <span class="font-bold text-sm tracking-wide">x.luminance4us</span>
+                     </div>
+                     <button onclick="UI.closeModal('modal-post')" class="p-1"><i data-lucide="x" class="w-6 h-6 drop-shadow-md"></i></button>
+                 </div>
+                 
+                 <!-- Image -->
+                 <div class="w-full aspect-[4/5] bg-gray-900 flex items-center justify-center" id="gal-post-img"></div>
+                 
+                 <!-- Footer -->
+                 <div class="p-4 bg-[var(--bg-surface-solid)] text-[var(--text-primary)]">
+                     <div class="flex gap-4 mb-3">
+                         <button class="btn-tap hover:text-red-500 transition-colors" onclick="this.classList.toggle('text-red-500'); this.querySelector('i').classList.toggle('fill-current'); App.haptic()"><i data-lucide="heart" class="w-6 h-6"></i></button>
+                         <button class="btn-tap hover:text-blue-500 transition-colors"><i data-lucide="message-circle" class="w-6 h-6"></i></button>
+                         <button class="btn-tap hover:text-emerald-500 transition-colors"><i data-lucide="send" class="w-6 h-6"></i></button>
+                         <button class="btn-tap ml-auto hover:text-amber-500 transition-colors" onclick="this.querySelector('i').classList.toggle('fill-current')"><i data-lucide="bookmark" class="w-6 h-6"></i></button>
+                     </div>
+                     <div class="font-bold text-sm mb-1.5" id="gal-post-likes">0 likes</div>
+                     <div class="text-sm line-clamp-3 mb-2 leading-relaxed"><span class="font-bold mr-1.5">x.luminance4us</span><span id="gal-post-caption">Caption</span></div>
+                     <div class="text-[0.65rem] text-[var(--text-secondary)] uppercase tracking-widest font-bold" id="gal-post-date">DATE</div>
+                 </div>
+             </div>
+        </div>
+
+        <!-- Command Palette -->
+        <div id="cmd-palette" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('cmd-palette')">
+            <div class="modal-content p-0">
+                <div class="p-4 border-b border-[var(--border-color)] flex items-center gap-3 bg-[var(--bg-surface-solid)] sticky top-0">
+                    <i data-lucide="search" class="w-5 h-5 text-[var(--text-secondary)]"></i>
+                    <input type="text" id="cmd-input" placeholder="Cari menu, fitur, atau setting..." class="flex-grow bg-transparent border-none outline-none text-base font-medium" onkeyup="UI.filterCmd(this.value)">
+                    <span class="text-[0.65rem] font-mono bg-[var(--border-color)] px-2.5 py-1 rounded-md font-bold text-[var(--text-secondary)]">ESC</span>
+                </div>
+                <div class="max-h-[50vh] overflow-y-auto pb-2" id="cmd-list">
                     <!-- Rendered by JS -->
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Shop Modal (Mini) -->
-    <div id="modal-shop" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-shop')">
-         <div class="modal-content p-6 text-center">
-             <div class="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                 <svg class="svg-icon svg-icon-lg" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
-             </div>
-             <h3 class="font-bold text-xl mb-2">Toko Luminance</h3>
-             <p class="text-sm text-[var(--text-secondary)] mb-6">Kumpulkan koin dengan bermain game untuk menukar badge profil dan tema eksklusif! (Fitur segera hadir secara penuh)</p>
-             <button class="w-full py-3 bg-amber-500 text-white rounded-xl font-bold btn-tap shadow-md shadow-amber-500/30" onclick="UI.closeModal('modal-shop')">Kembali</button>
-         </div>
-    </div>
-
-    <!-- Command Palette (Ctrl+K) -->
-    <div id="cmd-palette" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('cmd-palette')">
-        <div class="modal-content p-0 rounded-2xl overflow-hidden flex flex-col">
-            <div class="p-3 border-b border-[var(--border-color)] flex items-center gap-3">
-                <svg class="svg-icon text-[var(--text-secondary)]" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="cmd-input" placeholder="Cari aksi (cth: jadwal, siswa, tema...)" class="flex-grow bg-transparent border-none outline-none text-base" onkeyup="UI.filterCmd(this.value)">
-                <span class="text-[0.6rem] font-mono bg-[var(--border-color)] px-2 py-1 rounded">ESC</span>
-            </div>
-            <div class="max-h-64 overflow-y-auto" id="cmd-list">
-                <!-- Rendered by JS -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Game Modals -->
-    <div id="modal-game" class="modal-overlay" onclick="if(event.target===this) GameModule.closeGame()">
-        <div class="modal-content p-0 w-[95%] max-w-md h-[80vh] flex flex-col bg-[var(--bg-surface-solid)]">
-            <div class="p-4 border-b border-[var(--border-color)] flex justify-between items-center">
-                <h3 class="font-bold text-lg" id="game-title">Game</h3>
-                <div class="flex gap-3 items-center">
-                    <span class="text-xs font-bold text-amber-500" id="game-score">Skor: 0</span>
-                    <button onclick="GameModule.closeGame()" class="p-1 btn-tap bg-[var(--border-color)] rounded-full"><svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <!-- Arcade Game Engine Modal -->
+        <div id="modal-game" class="modal-overlay" onclick="if(event.target===this) GameEngine.closeGame()">
+            <div class="modal-content !max-w-md w-[95%] h-[85vh] flex flex-col p-0 overflow-hidden bg-[var(--bg-surface-solid)] shadow-2xl">
+                <div class="p-3 border-b border-[var(--border-color)] flex justify-between items-center bg-gray-50 dark:bg-zinc-900 z-10">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center border border-amber-500/20" id="game-icon-container">
+                            <i id="game-icon" data-lucide="gamepad-2" class="w-4 h-4"></i>
+                        </div>
+                        <h3 class="font-bold text-base" id="game-title">Game Title</h3>
+                    </div>
+                    <button onclick="GameEngine.closeGame()" class="p-2 btn-tap bg-[var(--border-color)] rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button>
+                </div>
+                
+                <!-- HUD -->
+                <div class="px-4 py-2.5 bg-[var(--border-color)] flex justify-between text-xs font-bold tracking-widest uppercase border-b border-[var(--border-color)]">
+                    <span>Skor: <span id="game-score" class="text-amber-600 dark:text-amber-400 font-black text-sm ml-1">0</span></span>
+                    <span id="game-timer" class="text-blue-600 dark:text-blue-400 font-black text-sm hidden">20s</span>
+                </div>
+                
+                <!-- Canvas Area -->
+                <div class="flex-grow relative overflow-hidden flex flex-col p-4 bg-[var(--bg-body)]" id="game-canvas">
+                    <!-- DOM injected here -->
                 </div>
             </div>
-            <div class="flex-grow relative overflow-hidden flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-zinc-900" id="game-container">
-                <!-- Game Canvas/DOM appended here -->
-            </div>
         </div>
+
     </div>
 
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 pointer-events-none"></div>
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 pointer-events-none w-max"></div>
 
+    <!-- Core Application Logic -->
     <script>
-        // --- 1. DATA MODULE ---
+        /**
+         * X.LUMINANCE CORE ENGINE
+         * Architected for performance, reusability, and aesthetics.
+         */
+
+        // --- 1. DATA STORE ---
         const DataModule = (function() {
             const rawStudents = [
                 "ADE ROHMAT - L", "AJENG PRATIWI - P", "ALBIAN REVAN FAUZAN - L", "APRILIANI NUR SABRINA - P",
@@ -618,10 +823,7 @@
             });
 
             const roles = {
-                "TUTI TURSILAH, S.Pd.I.": "Wali Kelas",
-                "TRESNA FUJIE LATIFAH, S.Pd.": "Konselor/BK",
-                "FAHMI ARIZAL NUR FACHRUDIN, S.Pd.": "Koor. Projek",
-                "PRINCE EZHAD ALVARO SYAHPUTRA": "Ketua Murid",
+                "PRINCE EZHAD ALVARO SYAHPUTRA": "Ketua Kelas",
                 "CINTA AMELA NURCAHAYA": "Wakil KM",
                 "JENISA LUTHFIAH": "Sekretaris 1", "DEWI MUTIA": "Sekretaris 2",
                 "NAILA LAILATUL RAMADHANI": "Bendahara 1", "KANDISA": "Bendahara 2", "UFAIRAH ZAHRA": "Bendahara 3"
@@ -635,12 +837,6 @@
                 "Budi Pekerti": ["ZAHWA ANNISA SETIAWAN", "SAFIRA NAILA TABINA"]
             };
 
-            const koorMapel = {
-                "PAI": "Hana", "PPKN": "Tri", "Matematika": "Renita", "Bahasa Inggris": "Albian", "Bahasa Indonesia": "Ajeng",
-                "Bahasa Sunda": "April", "Kimia": "Azri", "Fisika": "Ade R", "Sejarah": "Fadli", "Geografi": "Stefany",
-                "Sosiologi": "Meisya", "Ekonomi": "Shintia", "Biologi": "Ratu", "PJOK": "Windya", "Informatika": "Irham Dzaki"
-            };
-
             const piket = {
                 "Senin": ["ADE ROHMAT", "AJENG PRATIWI", "ALBIAN REVAN FAUZAN", "APRILIANI NUR SABRINA", "AYU WURININGSIH", "AZRI KAUTHAR ANSHAR", "CINTA AMELA NURCAHAYA", "DEWI MUTIA", "DIDAN AGUNG FIRMANSYAH"],
                 "Selasa": ["ELISA FITRIYANI", "EVANDHER RAYHAN KURNICOVA", "FAREL MUHAMAD HISYAM", "FEYZHA RANU SALSABITHA", "FITROH DWI SUKMA", "HANA SYAKIRA ANINDYTA", "IRHAMNA DZAKI", "JENISA LUTHFIAH", "KANDISA"],
@@ -650,793 +846,828 @@
             };
 
             const seragam = {
-                "Senin": "PSAS (Pakaian Seragam Anak Sekolah)", "Selasa": "PSAS (Pakaian Seragam Anak Sekolah)",
-                "Rabu": "Pramuka", "Kamis": "Baju Muslim", "Jumat": "Pramuka"
+                "Senin": "PSAS Nasional (Putih Abu)", "Selasa": "PSAS Khas Sekolah",
+                "Rabu": "Pramuka Lengkap", "Kamis": "Baju Muslim / Koko", "Jumat": "Pramuka Lengkap"
             };
 
             const schedule = {
                 "Senin": [
-                    { t: "06.30-07.15", m: "Upacara / Perwalian", g: "TUTI TURSILAH, S.Pd.I." },
-                    { t: "07.15-09.15", m: "Pend. Agama Islam", g: "TUTI TURSILAH, S.Pd.I." },
+                    { t: "06.30-07.15", m: "Upacara / Perwalian", g: "Wali Kelas" },
+                    { t: "07.15-09.15", m: "Pend. Agama Islam", g: "Guru Agama" },
                     { t: "09.15-09.45", m: "Istirahat", g: "", br: true },
-                    { t: "09.45-11.05", m: "Seni Rupa", g: "ADE FATURRACHMAN, S. Pd." },
-                    { t: "11.05-11.45", m: "BK/B. Indonesia", g: "TRESNA FUJIE LATIFAH, S. Pd." },
+                    { t: "09.45-11.05", m: "Seni Rupa", g: "Guru Seni" },
+                    { t: "11.05-11.45", m: "BK / B. Indonesia", g: "Guru Mapel" },
                     { t: "11.45-12.20", m: "Istirahat", g: "", br: true },
-                    { t: "12.20-13.00", m: "BK/B. Indonesia", g: "TRESNA FUJIE LATIFAH, S. Pd." },
-                    { t: "13.00-15.00", m: "Sosiologi", g: "ADE LINA SUGIARTI, M.Pd." }
+                    { t: "12.20-13.00", m: "BK / B. Indonesia", g: "Guru Mapel" },
+                    { t: "13.00-15.00", m: "Sosiologi", g: "Guru Sosiologi" }
                 ],
                 "Selasa": [
-                    { t: "06.30-08.30", m: "Sejarah", g: "H. AGUS HERMAWAN, S.Pd., M.Si" },
-                    { t: "08.30-09.10", m: "Informatika", g: "CRISTY SRI OCTINA, S.Pd" },
+                    { t: "06.30-08.30", m: "Sejarah", g: "Guru Sejarah" },
+                    { t: "08.30-09.10", m: "Informatika", g: "Guru TIK" },
                     { t: "09.10-09.40", m: "Istirahat", g: "", br: true },
-                    { t: "09.40-10.20", m: "Informatika", g: "CRISTY SRI OCTINA, S.Pd" },
-                    { t: "10.20-11.40", m: "Biologi", g: "Hj. YUYUN YULIAWATI, S.Pd." },
+                    { t: "09.40-10.20", m: "Informatika", g: "Guru TIK" },
+                    { t: "10.20-11.40", m: "Biologi", g: "Guru Biologi" },
                     { t: "11.40-12.20", m: "Istirahat", g: "", br: true },
-                    { t: "12.20-13.00", m: "Biologi", g: "Hj. YUYUN YULIAWATI, S.Pd." },
-                    { t: "13.00-15.00", m: "BK/B. Indonesia", g: "TRESNA FUJIE LATIFAH, S. Pd." }
+                    { t: "12.20-13.00", m: "Biologi", g: "Guru Biologi" },
+                    { t: "13.00-15.00", m: "B. Indonesia", g: "Guru B. Indo" }
                 ],
                 "Rabu": [
-                    { t: "06.30-08.45", m: "Kimia", g: "WULAN KAROLINA PANDORA, S.Pd" },
-                    { t: "08.45-09.30", m: "Geografi", g: "ANITA DEWI, S.Pd." },
+                    { t: "06.30-08.45", m: "Kimia", g: "Guru Kimia" },
+                    { t: "08.45-09.30", m: "Geografi", g: "Guru Geo" },
                     { t: "09.30-09.50", m: "Istirahat", g: "", br: true },
-                    { t: "09.50-11.20", m: "Geografi", g: "ANITA DEWI, S.Pd." },
-                    { t: "11.20-12.05", m: "Matematika", g: "ARDI ARIYANTO, S.pd" },
+                    { t: "09.50-11.20", m: "Geografi", g: "Guru Geo" },
+                    { t: "11.20-12.05", m: "Matematika", g: "Guru MTK" },
                     { t: "12.05-12.45", m: "Istirahat", g: "", br: true },
-                    { t: "12.45-13.30", m: "Matematika", g: "ARDI ARIYANTO, S.pd" },
-                    { t: "13.30-15.00", m: "Koding & KA", g: "DEFI WULANDANI DEWI, S. Pd." }
+                    { t: "12.45-13.30", m: "Matematika", g: "Guru MTK" },
+                    { t: "13.30-15.00", m: "Koding & KA", g: "Guru TIK" }
                 ],
                 "Kamis": [
-                    { t: "06.30-07.50", m: "Matematika", g: "ARDI ARIYANTO, S.pd" },
-                    { t: "07.50-09.10", m: "Pend. Pancasila / B.Indo", g: "FAHMI ARIZAL NUR F, S. Pd." },
+                    { t: "06.30-07.50", m: "Matematika", g: "Guru MTK" },
+                    { t: "07.50-09.10", m: "Pend. Pancasila", g: "Guru PPKN" },
                     { t: "09.10-09.40", m: "Istirahat", g: "", br: true },
-                    { t: "09.40-10.20", m: "Bahasa Sunda", g: "AEF SAEPUL ISLAM, S.Pd." },
-                    { t: "10.20-11.40", m: "Fisika", g: "Drs. AHMAD IBROHIM" },
+                    { t: "09.40-10.20", m: "Bahasa Sunda", g: "Guru B. Sunda" },
+                    { t: "10.20-11.40", m: "Fisika", g: "Guru Fisika" },
                     { t: "11.40-12.20", m: "Istirahat", g: "", br: true },
-                    { t: "12.20-13.00", m: "Fisika", g: "Drs. AHMAD IBROHIM" },
-                    { t: "13.00-15.00", m: "Bahasa Inggris", g: "ENDAH RETNO HERDIYANTI, S.Pd." }
+                    { t: "12.20-13.00", m: "Fisika", g: "Guru Fisika" },
+                    { t: "13.00-15.00", m: "Bahasa Inggris", g: "Guru B. Inggris" }
                 ],
                 "Jumat": [
-                    { t: "06.30-07.10", m: "Keg. Keagamaan", g: "Guru Agama" },
-                    { t: "07.10-09.10", m: "Ekonomi/PKWU", g: "TENNY SUKMARA ATMAJA, SE" },
+                    { t: "06.30-07.10", m: "Keagamaan", g: "Wali Kelas" },
+                    { t: "07.10-09.10", m: "Ekonomi/PKWU", g: "Guru PKWU" },
                     { t: "09.10-09.30", m: "Istirahat", g: "", br: true },
-                    { t: "09.30-11.30", m: "PJOK", g: "NANTO KURNIANTO, M.Pd." },
-                    { t: "13.00-15.30", m: "Pramuka (Mg 1&2)", g: "Pembina Pramuka" }
+                    { t: "09.30-11.30", m: "PJOK", g: "Guru Olahraga" },
+                    { t: "13.00-15.30", m: "Pramuka", g: "Pembina" }
                 ]
             };
 
-            const getDayName = () => {
-                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-                return days[new Date().getDay()];
-            };
+            const igPosts = [
+                { id: 1, img: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=500&q=80', likes: 124, cap: "Kebersamaan di SMAN 2 Majalengka ✨ #Luminance #10L", date: "2 HARI YANG LALU" },
+                { id: 2, img: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?w=500&q=80', likes: 89, cap: "Semangat pramuka! ⛺🔥", date: "4 HARI YANG LALU" },
+                { id: 3, img: 'https://images.unsplash.com/photo-1511629091441-ee46146481b6?w=500&q=80', likes: 210, cap: "Jam istirahat adalah waktu terbaik 🍕", date: "1 MINGGU YANG LALU" },
+                { id: 4, img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&q=80', likes: 156, cap: "Fokus koding! 💻 #Informatika", date: "2 MINGGU YANG LALU" },
+                { id: 5, img: 'https://images.unsplash.com/photo-1588072432836-e10032774350?w=500&q=80', likes: 302, cap: "Sekolah tercinta. Majalengka pride! 🏫", date: "3 MINGGU YANG LALU" },
+                { id: 6, img: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?w=500&q=80', likes: 112, cap: "Kerja kelompok sosiologi sukses! 📚", date: "1 BULAN YANG LALU" }
+            ];
 
-            // Parse time string "06.30-07.15" to minutes since midnight
-            const parseTime = (timeStr) => {
-                let parts = timeStr.split('-');
-                if(parts.length!==2) return [0,0];
-                let start = parts[0].trim().split('.');
-                let end = parts[1].trim().split('.');
-                return [
-                    parseInt(start[0])*60 + parseInt(start[1]),
-                    parseInt(end[0])*60 + parseInt(end[1])
-                ];
+            return { 
+                students, roles, sections, piket, seragam, schedule, igPosts,
+                getDayName: () => ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][new Date().getDay()],
+                parseTime: (t) => { let p=t.split('-'); return [(parseInt(p[0].split('.')[0])||0)*60+(parseInt(p[0].split('.')[1])||0), (parseInt(p[1].split('.')[0])||0)*60+(parseInt(p[1].split('.')[1])||0)]; }
             };
-
-            return { students, roles, sections, piket, seragam, schedule, koorMapel, getDayName, parseTime };
         })();
 
-
-        // --- 2. UI MODULE & LOGIC ---
-        const UI = (function() {
-            let currentFilter = 'all';
-            let currentSearch = '';
-
-            const init = () => {
-                updateDateTime();
-                setInterval(updateDateTime, 10000); // Every 10s
+        // --- 2. AUDIO & HAPTIC SYSTEM ---
+        const HW = {
+            ctx: null,
+            init() { if(!this.ctx && App.settings.sound) { try{ this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} } },
+            play(type) {
+                if(!App.settings.sound) return;
+                this.init();
+                if(!this.ctx) return;
+                if(this.ctx.state === 'suspended') this.ctx.resume();
                 
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                const t = this.ctx.currentTime;
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                if(type === 'tap') { osc.type='sine'; osc.frequency.setValueAtTime(800,t); gain.gain.setValueAtTime(0.1,t); gain.gain.exponentialRampToValueAtTime(0.01,t+0.05); osc.start(t); osc.stop(t+0.05); }
+                else if(type === 'success') { osc.type='square'; osc.frequency.setValueAtTime(400,t); osc.frequency.setValueAtTime(600,t+0.1); gain.gain.setValueAtTime(0.1,t); gain.gain.linearRampToValueAtTime(0,t+0.3); osc.start(t); osc.stop(t+0.3); }
+                else if(type === 'err') { osc.type='sawtooth'; osc.frequency.setValueAtTime(200,t); osc.frequency.linearRampToValueAtTime(100,t+0.2); gain.gain.setValueAtTime(0.1,t); gain.gain.linearRampToValueAtTime(0,t+0.2); osc.start(t); osc.stop(t+0.2); }
+                else if(type === 'coin') { osc.type='sine'; osc.frequency.setValueAtTime(1200,t); osc.frequency.setValueAtTime(1600,t+0.05); gain.gain.setValueAtTime(0.1,t); gain.gain.exponentialRampToValueAtTime(0.01,t+0.2); osc.start(t); osc.stop(t+0.2); }
+            },
+            vibrate(pattern) { if(App.settings.haptic && navigator.vibrate) navigator.vibrate(pattern); }
+        };
+
+        // --- 3. UI RENDERING MODULE ---
+        const UI = (function() {
+            const init = () => {
+                updateTimeLoop();
                 renderStudents();
                 renderOrg();
                 renderUniform();
                 renderPiket();
+                renderSchedule(DataModule.getDayName() === 'Sabtu' || DataModule.getDayName() === 'Minggu' ? 'Senin' : DataModule.getDayName());
+                renderGallery();
+                ShopModule.renderShop('badge');
                 
-                // Init Schedule based on today
-                let day = DataModule.getDayName();
-                if(['Sabtu','Minggu'].includes(day)) day = 'Senin';
-                
-                // Select pill
-                const tabs = document.getElementById('schedule-tabs').children;
-                for(let t of tabs) {
-                    if(t.innerText.trim() === day) {
-                        t.click(); break;
-                    }
-                }
-
-                // Render Cmd Palette items
-                renderCmdList();
-
-                // Setup FAB scroll listener
-                window.addEventListener('scroll', () => {
-                    const fab = document.getElementById('fab');
-                    if(window.scrollY > 300) { fab.classList.remove('opacity-0', 'pointer-events-none'); }
-                    else { fab.classList.add('opacity-0', 'pointer-events-none'); }
+                lucide.createIcons();
+                document.addEventListener('click', (e) => {
+                    if(e.target.closest('.btn-tap') || e.target.closest('button')) { HW.play('tap'); HW.vibrate(10); }
                 });
             };
 
-            const updateDateTime = () => {
-                const now = new Date();
-                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-                const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                
-                document.getElementById('live-date').innerText = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
-                document.getElementById('live-time').innerText = now.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
-                
-                // Determine current subject
-                const dayName = days[now.getDay()];
-                const currentMins = now.getHours() * 60 + now.getMinutes();
-                let currentSubj = "Luar Jam Sekolah";
-                let badgeClass = "bg-gray-100 text-gray-500";
-
-                if (DataModule.schedule[dayName]) {
-                    const scheds = DataModule.schedule[dayName];
-                    for(let s of scheds) {
-                        let [start, end] = DataModule.parseTime(s.t);
-                        if (currentMins >= start && currentMins < end) {
-                            currentSubj = s.m;
-                            break;
+            const updateTimeLoop = () => {
+                const update = () => {
+                    const now = new Date();
+                    const d = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                    const m = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+                    
+                    if(document.getElementById('live-date')) document.getElementById('live-date').innerText = `${d[now.getDay()]}, ${now.getDate()} ${m[now.getMonth()]}`;
+                    if(document.getElementById('live-time')) document.getElementById('live-time').innerText = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+                    
+                    let cur = "Luar Jam Sekolah", day = d[now.getDay()], mins = now.getHours()*60 + now.getMinutes();
+                    if(DataModule.schedule[day]) {
+                        for(let s of DataModule.schedule[day]) {
+                            let [st, en] = DataModule.parseTime(s.t);
+                            if(mins >= st && mins < en) { cur = s.m; break; }
                         }
                     }
-                    if(currentSubj === "Luar Jam Sekolah" && currentMins > 400 && currentMins < 900) {
-                        currentSubj = "Pergantian Jam / Bebas";
+                    if(document.getElementById('live-subject')) document.getElementById('live-subject').innerText = cur;
+                    
+                    if(document.getElementById('piket-today-label')) {
+                        document.getElementById('piket-today-label').innerText = day;
+                        document.getElementById('piket-today-names').innerText = DataModule.piket[day] ? DataModule.piket[day].map(n=>n.split(' ')[0]).join(', ') : "Libur";
                     }
-                }
-                
-                document.getElementById('live-subject').innerText = currentSubj;
-                
-                // Update Dashboard summary
-                if(DataModule.piket[dayName]) {
-                    let names = DataModule.piket[dayName].map(n => n.split(' ')[0]).join(', ');
-                    document.getElementById('piket-today-names').innerText = names;
-                    document.getElementById('piket-today-label').innerText = dayName;
-                } else {
-                    document.getElementById('piket-today-names').innerText = "Libur Piket";
-                    document.getElementById('piket-today-label').innerText = "Libur";
-                }
-
-                if(DataModule.seragam[dayName]) {
-                    document.getElementById('uniform-today-name').innerText = DataModule.seragam[dayName];
-                } else {
-                    document.getElementById('uniform-today-name').innerText = "Bebas/Libur";
-                }
+                    if(document.getElementById('uniform-today-name')) document.getElementById('uniform-today-name').innerText = DataModule.seragam[day] || "Bebas / Libur";
+                };
+                update(); setInterval(update, 10000);
             };
 
-            const switchTab = (tabId) => {
-                // Update Nav UI
+            const switchTab = (tab) => {
                 document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-                const navBtn = document.querySelector(`.nav-item[data-target="${tabId}"]`);
-                if(navBtn) navBtn.classList.add('active');
-
-                // Hide all, show target
+                const btn = document.querySelector(`.nav-item[data-target="${tab}"]`);
+                if(btn) btn.classList.add('active');
+                
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-                const target = document.getElementById(`sec-${tabId}`);
-                if(target) {
-                    target.classList.remove('hidden');
-                    // Reset animation
-                    target.classList.remove('animate-fade-up');
-                    void target.offsetWidth; // trigger reflow
-                    target.classList.add('animate-fade-up');
-                    window.scrollTo(0,0);
+                const t = document.getElementById(`sec-${tab}`);
+                if(t) {
+                    t.classList.remove('hidden', 'animate-fade-up');
+                    void t.offsetWidth;
+                    t.classList.add('animate-fade-up');
+                    window.scrollTo({top:0, behavior:'smooth'});
                 }
             };
 
-            const renderStudents = () => {
-                const grid = document.getElementById('students-grid');
-                grid.innerHTML = '';
+            const renderStudents = (filter = 'all', search = '') => {
+                const c = document.getElementById('students-grid');
+                if(!c) return;
+                c.innerHTML = '';
                 
-                let filtered = DataModule.students;
-                if(currentFilter !== 'all') filtered = filtered.filter(s => s.gender === currentFilter);
-                if(currentSearch) filtered = filtered.filter(s => s.name.toLowerCase().includes(currentSearch) || s.no.toString().includes(currentSearch));
-
-                if(filtered.length === 0) {
-                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-[var(--text-secondary)]">Tidak ada siswa ditemukan.</div>`;
-                    return;
-                }
-
-                filtered.forEach((s, idx) => {
-                    const role = Object.keys(DataModule.roles).find(k => k === s.name) ? DataModule.roles[s.name] : 'Siswa';
-                    const isPengurus = role !== 'Siswa';
-                    const initial = s.name.charAt(0);
-                    const colorClasses = s.gender === 'L' ? 'bg-blue-100 text-blue-600 border-blue-200' : 'bg-pink-100 text-pink-600 border-pink-200';
-                    const delay = (idx % 10) * 50; // Stagger effect max 10
-
-                    grid.innerHTML += `
-                        <div class="glass-panel p-4 rounded-2xl flex items-center gap-4 card-hover cursor-pointer btn-tap" style="animation-delay: ${delay}ms" onclick="UI.openIDCard('${s.id}')">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg border shadow-sm ${colorClasses} shrink-0">
-                                ${initial}
-                            </div>
+                let data = DataModule.students;
+                if(filter !== 'all') data = data.filter(s => s.gender === filter);
+                if(search) data = data.filter(s => s.name.toLowerCase().includes(search.toLowerCase()) || s.no.toString().includes(search));
+                
+                if(!data.length) { c.innerHTML = '<div class="col-span-full py-8 text-center text-sm opacity-50">Siswa tidak ditemukan.</div>'; return; }
+                
+                data.forEach((s, i) => {
+                    const r = Object.keys(DataModule.roles).find(k=>k===s.name) ? DataModule.roles[s.name] : 'Siswa';
+                    const cBg = s.gender === 'L' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' : 'bg-pink-500/10 text-pink-600 border-pink-500/20';
+                    c.innerHTML += `
+                        <div class="glass-panel p-4 rounded-2xl flex items-center gap-4 card-hover btn-tap cursor-pointer" style="animation-delay:${(i%10)*50}ms" onclick="UI.openID('${s.id}')">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg border ${cBg} shrink-0">${s.name.charAt(0)}</div>
                             <div class="flex-grow min-w-0">
-                                <h4 class="font-bold text-sm truncate uppercase tracking-tight">${s.name}</h4>
+                                <h4 class="font-bold text-sm truncate uppercase">${s.name}</h4>
                                 <div class="flex items-center gap-2 mt-1">
-                                    <span class="text-[0.65rem] font-mono opacity-70">No. ${s.no}</span>
-                                    ${isPengurus ? `<span class="text-[0.6rem] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 border border-amber-500/20">${role}</span>` : ''}
+                                    <span class="text-[0.65rem] font-mono opacity-60">No.${s.no}</span>
+                                    ${r !== 'Siswa' ? `<span class="text-[0.6rem] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 border border-amber-500/20">${r}</span>` : ''}
                                 </div>
                             </div>
-                            <div class="shrink-0 text-[var(--border-color)]">
-                                <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            <i data-lucide="chevron-right" class="w-5 h-5 opacity-30 shrink-0"></i>
+                        </div>
+                    `;
+                });
+                lucide.createIcons();
+            };
+
+            const renderSchedule = (day, btn) => {
+                if(btn) {
+                    document.querySelectorAll('#schedule-tabs .pill-nav').forEach(e=>e.classList.remove('active'));
+                    btn.classList.add('active');
+                }
+                
+                document.getElementById('schedule-day-title').querySelector('span').innerText = day;
+                const bdg = document.getElementById('schedule-badge-today');
+                day === DataModule.getDayName() ? bdg.classList.remove('hidden') : bdg.classList.add('hidden');
+                
+                const c = document.getElementById('schedule-timeline');
+                c.innerHTML = '';
+                
+                if(!DataModule.schedule[day]) { c.innerHTML = '<p class="opacity-50 text-sm">Libur / Tidak ada jadwal.</p>'; return; }
+                
+                const isT = day === DataModule.getDayName(), mins = new Date().getHours()*60 + new Date().getMinutes();
+                
+                DataModule.schedule[day].forEach(s => {
+                    let [st, en] = DataModule.parseTime(s.t);
+                    let isC = isT && mins >= st && mins < en, isP = isT && mins >= en;
+                    
+                    let dC = s.br ? 'bg-amber-500' : 'bg-[var(--border-color)]';
+                    if(isC) dC = 'bg-emerald-500 animate-pulse'; else if(isP) dC = 'bg-[var(--border-color)] opacity-50'; else if(!s.br) dC = 'bg-blue-500';
+                    
+                    let bC = isC ? 'border-emerald-500/30 shadow-md bg-emerald-500/5' : 'border-transparent';
+                    
+                    c.innerHTML += `
+                        <div class="relative ${isP?'opacity-50':'opacity-100'} transition-opacity">
+                            <div class="absolute -left-[1.6rem] top-1.5 w-3.5 h-3.5 rounded-full ${dC} border-[3px] border-[var(--bg-body)] z-10"></div>
+                            <div class="bg-[var(--bg-surface-solid)] p-3.5 rounded-2xl border ${bC} ${s.br?'bg-amber-500/5':''}">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h4 class="font-bold text-sm ${s.br?'text-amber-600':''}">${s.m}</h4>
+                                    <span class="font-mono text-[0.65rem] bg-[var(--border-color)] px-1.5 py-0.5 rounded font-bold">${s.t}</span>
+                                </div>
+                                ${s.g ? `<p class="text-[0.65rem] text-[var(--text-secondary)] font-bold uppercase tracking-wider mt-1"><i data-lucide="user" class="w-3 h-3 inline pb-0.5"></i> ${s.g}</p>` : ''}
                             </div>
                         </div>
                     `;
                 });
+                lucide.createIcons();
             };
 
             const renderOrg = () => {
                 const c = document.getElementById('org-content');
-                let html = '';
-                
-                // Pembina / Inti
-                html += `<h4 class="text-xs font-bold text-amber-500 uppercase tracking-wider mb-2">Dewan Pembina</h4><div class="space-y-2 mb-6">`;
-                ["TUTI TURSILAH, S.Pd.I.", "TRESNA FUJIE LATIFAH, S.Pd.", "FAHMI ARIZAL NUR FACHRUDIN, S.Pd."].forEach(n => {
-                    html += `<div class="p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl"><div class="font-bold text-sm">${n}</div><div class="text-xs text-[var(--text-secondary)]">${DataModule.roles[n]}</div></div>`;
+                let h = `<div class="mb-5"><h4 class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-3 flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4"></i> Pengurus Inti</h4><div class="grid grid-cols-2 gap-2">`;
+                Object.entries(DataModule.roles).forEach(([n, r]) => {
+                    h += `<div class="p-3 bg-[var(--bg-body)] border border-[var(--border-color)] rounded-xl text-center btn-tap cursor-pointer" onclick="UI.openIDByName('${n}')"><div class="text-[0.65rem] font-bold text-amber-600 mb-1">${r}</div><div class="font-bold text-xs truncate capitalize">${n.toLowerCase()}</div></div>`;
                 });
-                html += `</div>`;
-
-                // Murid Inti
-                html += `<h4 class="text-xs font-bold text-amber-500 uppercase tracking-wider mb-2">Pengurus Inti</h4><div class="grid grid-cols-2 gap-2 mb-6">`;
-                Object.entries(DataModule.roles).forEach(([name, role]) => {
-                    if(!role.includes('Wali') && !role.includes('Konselor') && !role.includes('Projek')) {
-                         html += `<div class="p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl flex flex-col justify-center text-center card-hover cursor-pointer" onclick="UI.openIDCardByName('${name}')">
-                            <div class="text-[0.65rem] font-bold text-amber-600 mb-1">${role}</div>
-                            <div class="font-bold text-xs truncate capitalize">${name.toLowerCase()}</div>
-                         </div>`;
-                    }
+                h += `</div></div><div class="mb-2"><h4 class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-3 flex items-center gap-2"><i data-lucide="users" class="w-4 h-4"></i> Seksi Bidang</h4><div class="space-y-3">`;
+                Object.entries(DataModule.sections).forEach(([s, ns]) => {
+                    h += `<div class="p-4 bg-[var(--bg-body)] border border-[var(--border-color)] rounded-xl"><div class="font-bold text-sm mb-2 pb-1 border-b border-[var(--border-color)]">${s}</div><ul class="text-xs space-y-1">`;
+                    ns.forEach(n => h += `<li class="flex items-center gap-1.5 cursor-pointer hover:text-amber-500 transition-colors capitalize" onclick="UI.openIDByName('${n}')"><div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> ${n.toLowerCase()}</li>`);
+                    h += `</ul></div>`;
                 });
-                html += `</div>`;
-
-                // Seksi
-                html += `<h4 class="text-xs font-bold text-amber-500 uppercase tracking-wider mb-2">Seksi Bidang</h4><div class="space-y-3 mb-6">`;
-                Object.entries(DataModule.sections).forEach(([sec, names]) => {
-                    html += `<div class="p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl">
-                        <div class="font-bold text-sm mb-2 border-b border-[var(--border-color)] pb-1">${sec}</div>
-                        <ul class="text-xs space-y-1">`;
-                    names.forEach(n => html += `<li class="flex items-center gap-1 before:content-['•'] before:text-amber-500 capitalize cursor-pointer hover:text-amber-500 transition-colors" onclick="UI.openIDCardByName('${n}')">${n.toLowerCase()}</li>`);
-                    html += `</ul></div>`;
-                });
-                html += `</div>`;
-
-                // Koor Mapel
-                 html += `<h4 class="text-xs font-bold text-amber-500 uppercase tracking-wider mb-2">Koor. Mata Pelajaran</h4><div class="grid grid-cols-2 gap-2">`;
-                 Object.entries(DataModule.koorMapel).forEach(([mapel, name]) => {
-                     html += `<div class="p-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-lg text-center">
-                        <div class="text-[0.6rem] opacity-70 truncate">${mapel}</div>
-                        <div class="font-bold text-[0.7rem] truncate">${name}</div>
-                     </div>`;
-                 });
-                 html += `</div>`;
-
-                c.innerHTML = html;
+                c.innerHTML = h + `</div></div>`;
             };
 
             const renderUniform = () => {
                 const c = document.getElementById('uniform-content');
                 c.innerHTML = '';
-                const today = DataModule.getDayName();
-                
-                Object.entries(DataModule.seragam).forEach(([day, desc]) => {
-                    const isToday = day === today;
-                    c.innerHTML += `
-                        <div class="p-4 rounded-xl border ${isToday ? 'bg-amber-500/10 border-amber-500 text-amber-700 dark:text-amber-400' : 'bg-[var(--bg-surface-solid)] border-[var(--border-color)]'} flex items-center justify-between">
-                            <div>
-                                <h4 class="font-bold text-sm flex items-center gap-2">
-                                    ${day} ${isToday ? '<span class="px-1.5 py-0.5 text-[0.55rem] bg-amber-500 text-white rounded">Hari Ini</span>' : ''}
-                                </h4>
-                                <p class="text-xs mt-1 ${isToday?'opacity-90':'opacity-70'}">${desc}</p>
-                            </div>
-                            <div class="shrink-0 p-2 rounded-full ${isToday ? 'bg-amber-500/20' : 'bg-gray-100 dark:bg-gray-800'}">
-                                <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>
-                            </div>
-                        </div>
-                    `;
+                const td = DataModule.getDayName();
+                Object.entries(DataModule.seragam).forEach(([d, ds]) => {
+                    const isT = d === td;
+                    c.innerHTML += `<div class="p-4 rounded-xl border ${isT?'bg-amber-500/10 border-amber-500 text-amber-700 dark:text-amber-400':'bg-[var(--bg-body)] border-[var(--border-color)]'} flex items-center justify-between"><div class="flex-grow"><h4 class="font-bold text-sm flex items-center gap-2">${d} ${isT?'<span class="px-1.5 py-0.5 text-[0.55rem] bg-amber-500 text-white rounded uppercase tracking-wider font-bold">Hari Ini</span>':''}</h4><p class="text-xs mt-1 font-medium ${isT?'opacity-90':'opacity-70'}">${ds}</p></div><div class="shrink-0 p-2.5 rounded-xl ${isT?'bg-amber-500/20':'bg-[var(--border-color)]'}"><i data-lucide="shirt" class="w-5 h-5"></i></div></div>`;
                 });
             };
 
             const renderPiket = () => {
-                const c = document.getElementById('piket-grid');
+                const c = document.getElementById('piket-content');
                 c.innerHTML = '';
-                const today = DataModule.getDayName();
-
-                Object.entries(DataModule.piket).forEach(([day, names]) => {
-                    const isToday = day === today;
-                    let html = `
-                        <div class="glass-panel p-5 rounded-2xl ${isToday ? 'border-amber-500 shadow-md shadow-amber-500/20 ring-1 ring-amber-500' : ''}">
-                            <h3 class="font-bold text-lg mb-3 pb-2 border-b border-[var(--border-color)] flex justify-between">
-                                ${day}
-                                ${isToday ? '<span class="text-[0.6rem] uppercase tracking-wider bg-amber-500 text-white px-2 py-0.5 rounded-md self-center">Hari Ini</span>' : ''}
-                            </h3>
-                            <ul class="space-y-1.5 text-xs">
-                    `;
-                    names.forEach(n => {
-                        html += `<li class="truncate capitalize cursor-pointer hover:text-amber-500 transition-colors" onclick="UI.openIDCardByName('${n}')">${n.toLowerCase()}</li>`;
-                    });
-                    html += `</ul></div>`;
-                    c.innerHTML += html;
+                const td = DataModule.getDayName();
+                Object.entries(DataModule.piket).forEach(([d, ns]) => {
+                    const isT = d === td;
+                    let h = `<div class="p-5 rounded-2xl border ${isT?'bg-emerald-500/5 border-emerald-500 shadow-md':'bg-[var(--bg-body)] border-[var(--border-color)]'}"><h3 class="font-bold text-[0.95rem] mb-3 pb-2 border-b ${isT?'border-emerald-500/30 text-emerald-600 dark:text-emerald-400':'border-[var(--border-color)]'} flex justify-between items-center">${d} ${isT?'<span class="text-[0.6rem] uppercase tracking-wider bg-emerald-500 text-white px-2 py-0.5 rounded-md">Hari Ini</span>':''}</h3><ul class="space-y-1.5 text-xs font-medium">`;
+                    ns.forEach(n => h += `<li class="truncate capitalize cursor-pointer hover:text-emerald-500 transition-colors" onclick="UI.openIDByName('${n}')">${n.toLowerCase()}</li>`);
+                    c.innerHTML += h + `</ul></div>`;
                 });
             };
-
-            const showModal = (id) => {
-                document.getElementById(id).classList.add('active');
-                if(id === 'cmd-palette') {
-                    setTimeout(() => document.getElementById('cmd-input').focus(), 50);
+            
+            const renderGallery = () => {
+                // Highlights
+                const hc = document.getElementById('gal-highlights');
+                const hl = ['Memories', 'Pramuka', 'Classmeet', 'Study Tour'];
+                if(hc) {
+                    hc.innerHTML = hl.map(h => `<div class="flex flex-col items-center gap-1.5 shrink-0 btn-tap cursor-pointer"><div class="ig-story-ring"><div class="w-14 h-14 rounded-full bg-gray-200 border-2 border-[var(--bg-surface-solid)] overflow-hidden"><img src="https://images.unsplash.com/photo-1511629091441-ee46146481b6?w=100&q=80" class="w-full h-full object-cover"></div></div><span class="text-[0.65rem] font-medium">${h}</span></div>`).join('');
+                }
+                
+                // Grid
+                const gc = document.getElementById('gal-grid');
+                if(gc) {
+                    gc.innerHTML = DataModule.igPosts.map(p => `<div class="aspect-square bg-gray-200 relative group cursor-pointer overflow-hidden" onclick="UI.openPost(${p.id})"><img src="${p.img}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-bold gap-1.5"><i data-lucide="heart" class="w-4 h-4 fill-current"></i> ${p.likes}</div></div>`).join('');
                 }
             };
-            const closeModal = (id) => {
-                document.getElementById(id).classList.remove('active');
+
+            const openPost = (id) => {
+                const p = DataModule.igPosts.find(x => x.id === id);
+                if(!p) return;
+                document.getElementById('gal-post-img').innerHTML = `<img src="${p.img}" class="w-full h-full object-contain">`;
+                document.getElementById('gal-post-likes').innerText = `${p.likes} likes`;
+                document.getElementById('gal-post-caption').innerText = p.cap;
+                document.getElementById('gal-post-date').innerText = p.date;
+                showModal('modal-post');
+                lucide.createIcons();
             };
 
-            const openIDCard = (studentId) => {
-                const s = DataModule.students.find(x => x.id === studentId);
-                if(s) {
-                    const role = Object.keys(DataModule.roles).find(k => k === s.name) ? DataModule.roles[s.name] : 'Siswa';
-                    document.getElementById('modal-id-name').innerText = s.name;
-                    document.getElementById('modal-id-role').innerText = role;
-                    document.getElementById('modal-id-name-school').innerText = s.name;
-                    
-                    // Generate UI Avatar
-                    const bgColor = s.gender === 'L' ? 'dbeafe' : 'fce7f3';
-                    const textColor = s.gender === 'L' ? '2563eb' : 'db2777';
-                    const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=${bgColor}&color=${textColor}&size=128&bold=true`;
-                    
-                    document.getElementById('modal-id-photo').innerHTML = `<img src="${avatarUrl}" class="w-full h-full object-cover">`;
-                    document.getElementById('modal-id-photo-school').innerHTML = `<img src="${avatarUrl}" class="w-full h-full object-cover">`;
-                    
-                    // Make sure it opens front side
-                    document.getElementById('id-card').classList.remove('flipped');
-                    showModal('modal-id');
-                }
+            const showModal = (id) => { 
+                const m = document.getElementById(id); 
+                m.classList.add('active'); 
+                if(id==='cmd-palette') setTimeout(()=>document.getElementById('cmd-input').focus(), 50);
+                HW.play('tap');
+            };
+            const closeModal = (id) => { 
+                document.getElementById(id).classList.remove('active'); 
+                HW.play('tap');
+            };
+
+            const getAvatar = (n, g) => `https://ui-avatars.com/api/?name=${encodeURIComponent(n)}&background=${g==='L'?'dbeafe':'fce7f3'}&color=${g==='L'?'2563eb':'db2777'}&size=128&bold=true`;
+
+            const openID = (id) => {
+                const s = DataModule.students.find(x => x.id === id);
+                if(!s) return;
+                const r = Object.keys(DataModule.roles).find(k=>k===s.name) ? DataModule.roles[s.name] : 'Member 10 L';
+                document.getElementById('modal-id-name').innerText = s.name;
+                document.getElementById('modal-id-role').innerText = r;
+                document.getElementById('modal-id-nis').innerText = s.no.toString().padStart(2, '0');
+                document.getElementById('modal-id-name-school').innerText = s.name;
+                
+                const ava = getAvatar(s.name, s.gender);
+                document.getElementById('modal-id-photo').innerHTML = `<img src="${ava}" class="w-full h-full object-cover">`;
+                document.getElementById('modal-id-photo-school').innerHTML = `<img src="${ava}" class="w-full h-full object-cover">`;
+                
+                // Show badge if exists
+                const badgeEl = document.getElementById('modal-id-badge');
+                if(App.inventory.activeBadge) {
+                    const b = ShopModule.items.find(x=>x.id === App.inventory.activeBadge);
+                    if(b) {
+                        badgeEl.innerHTML = `<i data-lucide="${b.icon}" class="w-3.5 h-3.5"></i> ${b.name}`;
+                        badgeEl.classList.remove('hidden');
+                    } else badgeEl.classList.add('hidden');
+                } else badgeEl.classList.add('hidden');
+                
+                document.getElementById('id-card').classList.remove('flipped');
+                showModal('modal-id');
+                lucide.createIcons();
             };
             
-            const openIDCardByName = (name) => {
-                const s = DataModule.students.find(x => x.name.toLowerCase() === name.toLowerCase());
-                if(s) openIDCard(s.id);
-            };
+            const openIDByName = (n) => { const s = DataModule.students.find(x => x.name.toLowerCase() === n.toLowerCase()); if(s) openID(s.id); };
 
             const toast = (msg) => {
                 const c = document.getElementById('toast-container');
                 const t = document.createElement('div');
-                t.className = "bg-[var(--bg-surface-solid)] border border-[var(--border-color)] px-4 py-2 rounded-xl shadow-lg font-semibold text-sm flex items-center gap-2 transform transition-all duration-300 translate-y-[-20px] opacity-0";
-                t.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span> ${msg}`;
+                t.className = "bg-[var(--bg-surface-solid)] border border-[var(--border-color)] px-4 py-2.5 rounded-2xl shadow-xl shadow-black/10 font-bold text-sm flex items-center gap-2.5 transform transition-all duration-300 translate-y-[-20px] opacity-0";
+                t.innerHTML = `<div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div> ${msg}`;
                 c.appendChild(t);
-                
-                // Animate in
-                requestAnimationFrame(() => {
-                    t.classList.remove('translate-y-[-20px]', 'opacity-0');
-                    t.classList.add('translate-y-0', 'opacity-100');
-                });
-                
-                // Remove
-                setTimeout(() => {
-                    t.classList.remove('translate-y-0', 'opacity-100');
-                    t.classList.add('translate-y-[-20px]', 'opacity-0');
-                    setTimeout(() => t.remove(), 300);
-                }, 3000);
+                requestAnimationFrame(() => { t.classList.remove('translate-y-[-20px]', 'opacity-0'); t.classList.add('translate-y-0', 'opacity-100'); });
+                setTimeout(() => { t.classList.remove('translate-y-0', 'opacity-100'); t.classList.add('translate-y-[-20px]', 'opacity-0'); setTimeout(()=>t.remove(), 300); }, 3000);
             };
 
-            const actions = [
-                {k: "Jadwal", f: () => switchTab('schedule'), i: "Melihat jadwal pelajaran"},
-                {k: "Siswa", f: () => switchTab('students'), i: "Melihat data siswa"},
-                {k: "Struktur Organisasi", f: () => showModal('modal-org'), i: "Melihat pengurus kelas"},
-                {k: "Piket", f: () => switchTab('piket'), i: "Jadwal kebersihan"},
-                {k: "Seragam", f: () => showModal('modal-uniform'), i: "Aturan pakaian"},
-                {k: "Catatan", f: () => showModal('modal-todo'), i: "Buka buku catatan"},
-                {k: "Game / Arcade", f: () => switchTab('games'), i: "Main game ringan"},
-                {k: "Tema / Dark Mode", f: () => { App.toggleTheme(); closeModal('cmd-palette'); }, i: "Ganti tampilan"},
-                {k: "Instagram", f: () => { window.open('https://www.instagram.com/x.luminance4us'); closeModal('cmd-palette'); }, i: "Buka sosial media"}
+            const cmds = [
+                { k: 'Jadwal', i: 'calendar', a: ()=>switchTab('schedule') },
+                { k: 'Siswa', i: 'users', a: ()=>switchTab('students') },
+                { k: 'Organisasi', i: 'shield-check', a: ()=>showModal('modal-org') },
+                { k: 'Piket', i: 'sparkles', a: ()=>showModal('modal-piket') },
+                { k: 'Seragam', i: 'shirt', a: ()=>showModal('modal-uniform') },
+                { k: 'Catatan', i: 'clipboard-list', a: ()=>showModal('modal-todo') },
+                { k: 'Galeri (IG)', i: 'instagram', a: ()=>switchTab('gallery') },
+                { k: 'Toko (Shop)', i: 'store', a: ()=>showModal('modal-shop') },
+                { k: 'Arcade / Games', i: 'gamepad-2', a: ()=>switchTab('games') },
+                { k: 'Pengaturan', i: 'settings', a: ()=>switchTab('settings') },
+                { k: 'Ganti Tema', i: 'moon', a: ()=>{ App.toggleThemeSwitch({checked: !document.documentElement.classList.contains('dark-mode')}); closeModal('cmd-palette'); } }
             ];
 
-            const renderCmdList = (query = '') => {
+            const filterCmd = (q) => {
                 const c = document.getElementById('cmd-list');
+                const f = cmds.filter(x => x.k.toLowerCase().includes(q.toLowerCase()));
+                c.innerHTML = f.map((x,i) => `<div class="cmd-item" onclick="UI.execCmd(${i})"><div class="p-2.5 bg-[var(--border-color)] rounded-xl"><i data-lucide="${x.i}" class="w-4 h-4"></i></div><div class="font-bold text-sm">${x.k}</div></div>`).join('');
+                if(!f.length) c.innerHTML = '<div class="p-5 text-center text-sm opacity-50 font-medium">Perintah tidak ditemukan.</div>';
+                lucide.createIcons();
+            };
+            const execCmd = (i) => { closeModal('cmd-palette'); setTimeout(cmds[i].a, 150); };
+
+            return { init, switchTab, renderStudents, renderSchedule, showModal, closeModal, openID, openIDByName, openPost, toast, filterCmd, execCmd, cmds };
+        })();
+        
+        // Expose to global for HTML onclicks
+        DataModule.filterStudents = (f, btn) => { document.querySelectorAll('#sec-students .pill-nav').forEach(e=>e.classList.remove('active')); btn.classList.add('active'); UI.renderStudents(f, document.getElementById('search-student').value); HW.play('tap'); };
+        DataModule.searchStudent = (v) => { const f = document.querySelector('#sec-students .pill-nav.active').dataset.filter; UI.renderStudents(f, v); };
+        DataModule.renderSchedule = (d, btn) => { UI.renderSchedule(d, btn); HW.play('tap'); };
+
+
+        // --- 4. SHOP MODULE ---
+        const ShopModule = (function() {
+            const items = [
+                { id: 'b_crown', type: 'badge', icon: 'crown', name: 'Mahkota Emas', price: 50, desc: 'Tampil mewah di ID Card' },
+                { id: 'b_star', type: 'badge', icon: 'star', name: 'Bintang Kelas', price: 30, desc: 'Badge bintang bersinar' },
+                { id: 'b_shield', type: 'badge', icon: 'shield', name: 'Pelindung', price: 40, desc: 'Badge tameng kuat' },
+                { id: 'b_zap', type: 'badge', icon: 'zap', name: 'Petir', price: 20, desc: 'Badge energi tinggi' },
+                { id: 't_king', type: 'title', icon: 'award', name: 'Title: Sultan', price: 100, desc: 'Ubah role ID menjadi Sultan' },
+                { id: 't_pro', type: 'title', icon: 'award', name: 'Title: Pro Gamer', price: 80, desc: 'Ubah role ID menjadi Gamer' }
+            ];
+
+            const renderShop = (type, btn) => {
+                if(btn) {
+                    document.querySelectorAll('#modal-shop .pill-nav').forEach(e=>e.classList.remove('active'));
+                    btn.classList.add('active');
+                }
+                const c = document.getElementById('shop-grid');
                 c.innerHTML = '';
-                const q = query.toLowerCase();
-                let count = 0;
-                actions.forEach(a => {
-                    if(a.k.toLowerCase().includes(q) || a.i.toLowerCase().includes(q)) {
-                        c.innerHTML += `<div class="cmd-item" onclick="UI.execCmd('${a.k}')">
-                            <div class="p-2 bg-[var(--border-color)] rounded-lg"><svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
-                            <div><div class="font-bold text-sm">${a.k}</div><div class="text-[0.65rem] opacity-60">${a.i}</div></div>
-                        </div>`;
-                        count++;
-                    }
+                
+                items.filter(x => x.type === type).forEach(i => {
+                    const owned = App.inventory.owned.includes(i.id);
+                    const active = App.inventory.activeBadge === i.id || App.inventory.activeTitle === i.id;
+                    
+                    let btnHtml = '';
+                    if(!owned) btnHtml = `<button class="w-full py-1.5 mt-2 bg-amber-500 text-white font-bold text-xs rounded-lg btn-tap" onclick="ShopModule.buy('${i.id}')">Beli Ⓛ ${i.price}</button>`;
+                    else if(!active) btnHtml = `<button class="w-full py-1.5 mt-2 bg-[var(--border-color)] font-bold text-xs rounded-lg btn-tap" onclick="ShopModule.equip('${i.id}')">Pakai</button>`;
+                    else btnHtml = `<button class="w-full py-1.5 mt-2 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 font-bold text-xs rounded-lg cursor-default">Dipakai <i data-lucide="check-circle" class="w-3 h-3 inline"></i></button>`;
+
+                    c.innerHTML += `
+                        <div class="p-4 bg-[var(--bg-body)] border border-[var(--border-color)] rounded-2xl flex flex-col items-center text-center">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-2"><i data-lucide="${i.icon}" class="w-6 h-6"></i></div>
+                            <h4 class="font-bold text-sm mb-0.5">${i.name}</h4>
+                            <p class="text-[0.6rem] opacity-60 mb-2 leading-tight flex-grow">${i.desc}</p>
+                            ${btnHtml}
+                        </div>
+                    `;
                 });
-                if(count===0) c.innerHTML = '<div class="p-4 text-center text-sm opacity-50">Tidak ditemukan</div>';
+                lucide.createIcons();
             };
 
-            const execCmd = (k) => {
-                const a = actions.find(x => x.k === k);
-                if(a) {
-                    closeModal('cmd-palette');
-                    setTimeout(a.f, 150);
+            const buy = (id) => {
+                const i = items.find(x => x.id === id);
+                if(App.points >= i.price) {
+                    App.updatePoints(-i.price);
+                    App.inventory.owned.push(id);
+                    App.saveData();
+                    UI.toast(`Berhasil membeli ${i.name}!`);
+                    HW.play('coin');
+                    renderShop(i.type);
+                } else {
+                    UI.toast('Koin tidak cukup! Mainkan game.');
+                    HW.play('err');
                 }
             };
 
-            return { 
-                init, switchTab, renderStudents, showModal, closeModal, 
-                openIDCard, openIDCardByName, toast, renderCmdList, execCmd,
-                filterCmd: (q) => renderCmdList(q)
+            const equip = (id) => {
+                const i = items.find(x => x.id === id);
+                if(i.type === 'badge') App.inventory.activeBadge = id;
+                else App.inventory.activeTitle = id;
+                App.saveData();
+                UI.toast(`${i.name} dipasang!`);
+                HW.play('success');
+                renderShop(i.type);
             };
+
+            return { items, renderShop, buy, equip };
         })();
 
 
-        // --- 3. DATA EXPOSED FUNCTIONS FOR HTML ---
-        DataModule.filterStudents = (gender, btnEl) => {
-            document.querySelectorAll('#sec-students .pill-nav').forEach(el => el.classList.remove('active'));
-            btnEl.classList.add('active');
-            UI.currentFilter = gender; // Note: UI module var accessed badly here in standard pattern, but functional for single file
-            UI.renderStudents();
-        };
+        // --- 5. GAME ENGINE ---
+        const GameEngine = (function() {
+            let active = null;
+            let timer = null;
+            let score = 0;
+            let time = 0;
 
-        DataModule.searchStudent = (val) => {
-            UI.currentSearch = val.toLowerCase();
-            UI.renderStudents();
-        };
-
-        DataModule.renderSchedule = (day, btnEl) => {
-            document.querySelectorAll('#schedule-tabs .pill-nav').forEach(el => el.classList.remove('active'));
-            if(btnEl) btnEl.classList.add('active');
-
-            document.getElementById('schedule-day-title').querySelector('span').innerText = day;
-            const badge = document.getElementById('schedule-badge-today');
-            if(day === DataModule.getDayName()) badge.classList.remove('hidden');
-            else badge.classList.add('hidden');
-
-            const c = document.getElementById('schedule-timeline');
-            c.innerHTML = '';
-            
-            const scheds = DataModule.schedule[day];
-            if(!scheds) {
-                c.innerHTML = `<div class="text-sm opacity-60">Tidak ada jadwal (Libur).</div>`;
-                return;
-            }
-
-            const now = new Date();
-            const currentMins = now.getHours() * 60 + now.getMinutes();
-            const isToday = day === DataModule.getDayName();
-
-            scheds.forEach((s, idx) => {
-                let [start, end] = DataModule.parseTime(s.t);
-                let isCurrent = isToday && (currentMins >= start && currentMins < end);
-                let isPast = isToday && currentMins >= end;
+            const openGame = (id) => {
+                active = id;
+                score = 0;
+                document.getElementById('game-score').innerText = '0';
+                const c = document.getElementById('game-canvas');
+                c.innerHTML = `<div class="m-auto text-center"><button class="px-8 py-3 bg-amber-500 text-white rounded-2xl font-bold text-lg shadow-lg btn-tap" onclick="GameEngine.start()">Mulai Game</button></div>`;
                 
-                let dotColor = s.br ? 'bg-amber-500' : 'bg-gray-300';
-                if(isCurrent) dotColor = 'bg-emerald-500 animate-pulse';
-                else if (isPast) dotColor = 'bg-gray-300 opacity-40';
-                else if (!s.br) dotColor = 'bg-blue-500';
-
-                let opacityClass = isPast ? 'opacity-50' : 'opacity-100';
-                let borderClass = isCurrent ? 'border border-emerald-500/30 shadow-md' : 'border border-transparent';
+                const meta = {
+                    reaction: {t: 'Refleks Kilat', i: 'zap'}, guess: {t: 'Tebak Angka', i: 'help-circle'},
+                    memory: {t: 'Memory Match', i: 'grid-3x3'}, mash: {t: 'Speed Tap', i: 'mouse-pointer-click'},
+                    math: {t: 'Math Genius', i: 'calculator'}, ttt: {t: 'Tic Tac Toe', i: 'hash'}
+                }[id];
                 
-                c.innerHTML += `
-                    <div class="relative ${opacityClass}">
-                        <div class="absolute -left-[1.35rem] top-1.5 w-3 h-3 rounded-full ${dotColor} border-2 border-white dark:border-[#18181B] z-10"></div>
-                        <div class="bg-[var(--bg-surface-solid)] p-3 rounded-xl ${borderClass} ${s.br ? 'bg-opacity-50' : ''}">
-                            <div class="flex justify-between items-start mb-1">
-                                <h4 class="font-bold text-sm ${s.br ? 'text-amber-500' : ''}">${s.m}</h4>
-                                <span class="font-mono text-[0.65rem] bg-[var(--bg-body)] px-1.5 py-0.5 rounded border border-[var(--border-color)]">${s.t}</span>
-                            </div>
-                            ${s.g ? `<p class="text-[0.65rem] text-[var(--text-secondary)] font-medium uppercase tracking-wider">${s.g}</p>` : ''}
-                        </div>
+                document.getElementById('game-title').innerText = meta.t;
+                document.getElementById('game-icon').setAttribute('data-lucide', meta.i);
+                
+                UI.showModal('modal-game');
+                lucide.createIcons();
+            };
+
+            const start = () => {
+                HW.play('success');
+                score = 0;
+                document.getElementById('game-score').innerText = '0';
+                const c = document.getElementById('game-canvas');
+                c.innerHTML = '';
+                
+                // Specific Game Init
+                if(active === 'reaction') g_reaction(c);
+                else if(active === 'guess') g_guess(c);
+                else if(active === 'memory') g_memory(c);
+                else if(active === 'mash') g_mash(c);
+                else if(active === 'math') g_math(c);
+                else if(active === 'ttt') g_ttt(c);
+            };
+
+            const end = (pts, msg) => {
+                clearInterval(timer);
+                document.getElementById('game-timer').classList.add('hidden');
+                
+                if(pts > 0) {
+                    App.updatePoints(pts);
+                    UI.toast(`+${pts} Koin ditambahkan!`);
+                    HW.play('coin');
+                } else HW.play('success');
+                
+                document.getElementById('game-canvas').innerHTML = `
+                    <div class="m-auto text-center animate-fade-up">
+                        <div class="text-4xl mb-3">🏆</div>
+                        <h3 class="font-bold text-xl mb-1">${msg}</h3>
+                        <p class="font-bold text-amber-500 mb-6">Skor Akhir: ${score}</p>
+                        <button class="px-6 py-2 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl font-bold btn-tap" onclick="GameEngine.start()">Main Lagi</button>
                     </div>
                 `;
-            });
-        };
-
-
-        // --- 4. GAME MODULE ---
-        const GameModule = (function() {
-            let gameInterval;
-            
-            const clearCanvas = () => {
-                const c = document.getElementById('game-container');
-                c.innerHTML = '';
-                clearInterval(gameInterval);
-                document.getElementById('game-score').innerText = 'Skor: 0';
-            };
-            
-            const closeGame = () => {
-                clearCanvas();
-                UI.closeModal('modal-game');
             };
 
-            const initReaction = () => {
-                document.getElementById('game-title').innerText = "Refleks Kilat";
-                clearCanvas();
-                const c = document.getElementById('game-container');
-                let score = 0;
+            const closeGame = () => { clearInterval(timer); UI.closeModal('modal-game'); active = null; };
+            const addScore = (p) => { score += p; document.getElementById('game-score').innerText = score; };
+
+            // --- Game Implementations ---
+            
+            const g_reaction = (c) => {
+                let s = 'wait', to, startT;
+                c.innerHTML = `<button id="r-btn" class="m-auto w-48 h-48 rounded-full bg-red-500 text-white font-bold text-2xl shadow-xl transition-all btn-tap">Tunggu...</button>`;
+                const btn = document.getElementById('r-btn');
                 
-                const btn = document.createElement('button');
-                btn.className = "w-40 h-40 rounded-full bg-red-500 text-white font-bold text-xl shadow-xl transition-transform active:scale-95 flex items-center justify-center select-none";
-                btn.innerText = "Tunggu...";
-                c.appendChild(btn);
-
-                const info = document.createElement('p');
-                info.className = "mt-6 text-sm font-bold opacity-70";
-                info.innerText = "Jangan ketuk sebelum hijau!";
-                c.appendChild(info);
-
-                let state = 'wait'; // wait, ready
-                let timeout;
-                let startTime;
-
                 const reset = () => {
-                    state = 'wait';
-                    btn.className = "w-40 h-40 rounded-full bg-red-500 text-white font-bold text-xl shadow-xl transition-transform active:scale-95 flex items-center justify-center select-none";
-                    btn.innerText = "Tunggu...";
-                    let delay = Math.random() * 3000 + 1000;
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        state = 'ready';
-                        btn.className = "w-40 h-40 rounded-full bg-emerald-500 text-white font-bold text-xl shadow-xl shadow-emerald-500/50 transition-transform active:scale-95 flex items-center justify-center select-none";
-                        btn.innerText = "KETUK!";
-                        startTime = Date.now();
-                    }, delay);
+                    s = 'wait'; btn.className = "m-auto w-48 h-48 rounded-full bg-red-500 text-white font-bold text-2xl shadow-xl transition-all btn-tap"; btn.innerText = "Tunggu...";
+                    clearTimeout(to);
+                    to = setTimeout(() => {
+                        s = 'click'; btn.className = "m-auto w-48 h-48 rounded-full bg-emerald-500 text-white font-bold text-2xl shadow-xl shadow-emerald-500/40 transition-all btn-tap"; btn.innerText = "KETUK!";
+                        startT = Date.now();
+                    }, Math.random()*2500 + 1000);
                 };
-
+                
                 btn.onclick = () => {
-                    if(state === 'wait') {
-                        clearTimeout(timeout);
-                        UI.toast("Terlalu cepat! Coba lagi.");
-                        score = Math.max(0, score - 5);
-                        document.getElementById('game-score').innerText = `Skor: ${score}`;
-                        reset();
-                    } else if (state === 'ready') {
-                        let ms = Date.now() - startTime;
-                        let points = ms < 300 ? 20 : ms < 500 ? 10 : 5;
-                        score += points;
-                        document.getElementById('game-score').innerText = `Skor: ${score}`;
-                        UI.toast(`Waktu: ${ms}ms (+${points})`);
-                        reset();
+                    if(s === 'wait') { clearTimeout(to); UI.toast('Terlalu Cepat!'); HW.play('err'); addScore(-5); reset(); }
+                    else {
+                        let ms = Date.now() - startT;
+                        let p = ms < 300 ? 50 : ms < 500 ? 25 : 10;
+                        addScore(p); UI.toast(`${ms}ms! +${p}`); HW.play('tap');
+                        if(score >= 200) end(20, 'Reaksi Luar Biasa!'); else reset();
                     }
                 };
-                
                 reset();
-                UI.showModal('modal-game');
             };
 
-            const initTTT = () => {
-                document.getElementById('game-title').innerText = "Tic Tac Toe";
-                clearCanvas();
-                const c = document.getElementById('game-container');
-                let board = ['', '', '', '', '', '', '', '', ''];
-                let player = 'X';
-                let gameActive = true;
-                let score = 0;
+            const g_guess = (c) => {
+                let tgt = Math.floor(Math.random()*100)+1, att = 0;
+                c.innerHTML = `
+                    <div class="m-auto text-center w-full max-w-[220px]">
+                        <div class="text-5xl font-bold mb-4" id="g-hint">❓</div>
+                        <input type="number" id="g-in" class="w-full text-center text-2xl font-bold py-3 bg-[var(--bg-surface-solid)] border-2 border-[var(--border-color)] rounded-xl outline-none focus:border-amber-500 mb-4" placeholder="1-100">
+                        <button id="g-btn" class="w-full py-3 bg-amber-500 text-white font-bold text-lg rounded-xl btn-tap">Tebak</button>
+                    </div>
+                `;
+                document.getElementById('g-btn').onclick = () => {
+                    let v = parseInt(document.getElementById('g-in').value);
+                    if(isNaN(v)) return;
+                    att++; HW.play('tap');
+                    if(v === tgt) { addScore(Math.max(10, 100 - (att*10))); end(score, `Benar! Angkanya ${tgt}`); }
+                    else {
+                        document.getElementById('g-hint').innerText = v < tgt ? "📈" : "📉";
+                        document.getElementById('g-in').value = '';
+                        UI.toast(v < tgt ? 'Lebih Besar!' : 'Lebih Kecil!');
+                    }
+                };
+            };
+
+            const g_memory = (c) => {
+                const icons = ['anchor','compass','fish','ship','sun','umbrella'];
+                let deck = [...icons, ...icons].sort(()=>Math.random()-0.5);
+                let flipped = [], matched = 0;
                 
-                const grid = document.createElement('div');
-                grid.className = "grid grid-cols-3 gap-2 bg-[var(--border-color)] p-2 rounded-xl";
+                c.innerHTML = `<div class="m-auto grid grid-cols-4 gap-2 w-full max-w-[280px]" id="m-grid"></div>`;
+                const grid = document.getElementById('m-grid');
+                
+                deck.forEach((ic, i) => {
+                    let btn = document.createElement('button');
+                    btn.className = "aspect-square bg-[var(--bg-surface-solid)] border-2 border-[var(--border-color)] rounded-xl flex items-center justify-center transition-all";
+                    btn.innerHTML = `<i data-lucide="${ic}" class="w-8 h-8 opacity-0 transition-opacity"></i>`;
+                    btn.onclick = () => {
+                        if(flipped.length >= 2 || btn.dataset.matched || btn.dataset.flipped) return;
+                        HW.play('tap');
+                        btn.dataset.flipped = '1';
+                        btn.querySelector('i').classList.remove('opacity-0');
+                        btn.classList.add('bg-amber-500/10', 'border-amber-500');
+                        flipped.push({btn, ic});
+                        
+                        if(flipped.length === 2) {
+                            if(flipped[0].ic === flipped[1].ic) {
+                                HW.play('success'); addScore(20); matched++;
+                                flipped.forEach(f => { f.btn.dataset.matched='1'; f.btn.classList.replace('bg-amber-500/10', 'bg-emerald-500/20'); f.btn.classList.replace('border-amber-500', 'border-emerald-500'); });
+                                flipped = [];
+                                if(matched === 6) setTimeout(()=>end(20, 'Ingatan Tajam!'), 500);
+                            } else {
+                                setTimeout(() => {
+                                    HW.play('err');
+                                    flipped.forEach(f => { delete f.btn.dataset.flipped; f.btn.querySelector('i').classList.add('opacity-0'); f.btn.classList.remove('bg-amber-500/10', 'border-amber-500'); });
+                                    flipped = [];
+                                }, 800);
+                            }
+                        }
+                    };
+                    grid.appendChild(btn);
+                });
+                lucide.createIcons();
+            };
+
+            const g_mash = (c) => {
+                time = 10;
+                document.getElementById('game-timer').innerText = `${time}s`;
+                document.getElementById('game-timer').classList.remove('hidden');
+                
+                c.innerHTML = `<button id="m-btn" class="m-auto w-40 h-40 rounded-full bg-pink-500 text-white font-bold text-4xl shadow-xl active:scale-95 transition-transform select-none">TAP!</button>`;
+                document.getElementById('m-btn').onclick = () => { addScore(1); HW.play('tap'); };
+                
+                timer = setInterval(() => {
+                    time--; document.getElementById('game-timer').innerText = `${time}s`;
+                    if(time <= 0) end(Math.floor(score/5), 'Waktu Habis!');
+                }, 1000);
+            };
+
+            const g_math = (c) => {
+                time = 30;
+                document.getElementById('game-timer').innerText = `${time}s`;
+                document.getElementById('game-timer').classList.remove('hidden');
+                
+                timer = setInterval(() => {
+                    time--; document.getElementById('game-timer').innerText = `${time}s`;
+                    if(time <= 0) end(Math.floor(score/10), 'Waktu Habis!');
+                }, 1000);
+
+                c.innerHTML = `
+                    <div class="m-auto text-center w-full">
+                        <div class="text-4xl font-bold mb-8" id="mt-q">1+1</div>
+                        <div class="grid grid-cols-2 gap-3 max-w-[200px] mx-auto" id="mt-opts"></div>
+                    </div>
+                `;
+                
+                const nextQ = () => {
+                    let a = Math.floor(Math.random()*20)+1, b = Math.floor(Math.random()*20)+1, isAdd = Math.random()>0.5;
+                    let ans = isAdd ? a+b : Math.abs(a-b);
+                    document.getElementById('mt-q').innerText = isAdd ? `${a} + ${b}` : `${Math.max(a,b)} - ${Math.min(a,b)}`;
+                    
+                    let opts = [ans, ans+Math.floor(Math.random()*5)+1, ans-Math.floor(Math.random()*5)-1, ans+10].sort(()=>Math.random()-0.5);
+                    let h = '';
+                    opts.forEach(o => h += `<button class="py-4 bg-[var(--bg-surface-solid)] border-2 border-[var(--border-color)] rounded-xl font-bold text-xl btn-tap" onclick="GameEngine.chkMath(${o}, ${ans})">${o}</button>`);
+                    document.getElementById('mt-opts').innerHTML = h;
+                };
+                
+                GameEngine.chkMath = (sel, ans) => {
+                    if(sel === ans) { HW.play('success'); addScore(10); nextQ(); }
+                    else { HW.play('err'); addScore(-5); UI.toast('Salah!'); }
+                };
+                nextQ();
+            };
+
+            const g_ttt = (c) => {
+                let b = ['','','','','','','','',''], act = true;
+                c.innerHTML = `<div class="m-auto grid grid-cols-3 gap-2 bg-[var(--border-color)] p-2 rounded-xl" id="t-grid"></div>`;
+                const g = document.getElementById('t-grid');
+                
+                const chk = () => {
+                    const w = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+                    for(let i of w) if(b[i[0]] && b[i[0]]===b[i[1]] && b[i[0]]===b[i[2]]) return b[i[0]];
+                    return !b.includes('') ? 'T' : null;
+                };
                 
                 const render = () => {
-                    grid.innerHTML = '';
-                    board.forEach((cell, i) => {
+                    g.innerHTML = '';
+                    b.forEach((v, i) => {
                         let div = document.createElement('div');
-                        div.className = "w-20 h-20 bg-[var(--bg-surface-solid)] rounded-lg flex items-center justify-center text-3xl font-bold cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-zinc-800";
-                        if(cell === 'X') div.classList.add('text-blue-500');
-                        if(cell === 'O') div.classList.add('text-red-500');
-                        div.innerText = cell;
-                        div.onclick = () => playRound(i);
-                        grid.appendChild(div);
+                        div.className = `w-20 h-20 bg-[var(--bg-surface-solid)] rounded-lg flex items-center justify-center text-4xl font-bold cursor-pointer ${v==='X'?'text-blue-500':'text-red-500'}`;
+                        div.innerText = v;
+                        div.onclick = () => {
+                            if(!act || v !== '') return;
+                            b[i] = 'X'; HW.play('tap'); render();
+                            let r = chk(); if(r) { finish(r); return; }
+                            act = false;
+                            setTimeout(() => {
+                                let emp = b.map((v,i)=>v===''?i:null).filter(v=>v!==null);
+                                b[emp[Math.floor(Math.random()*emp.length)]] = 'O';
+                                HW.play('tap'); render();
+                                r = chk(); if(r) finish(r); else act = true;
+                            }, 500);
+                        };
+                        g.appendChild(div);
                     });
                 };
-
-                const checkWin = () => {
-                    const winCond = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-                    for(let w of winCond) {
-                        if(board[w[0]] && board[w[0]] === board[w[1]] && board[w[0]] === board[w[2]]) {
-                            return board[w[0]];
-                        }
-                    }
-                    if(!board.includes('')) return 'Tie';
-                    return null;
-                };
-
-                const playRound = (idx) => {
-                    if(!gameActive || board[idx] !== '') return;
-                    board[idx] = 'X';
-                    render();
-                    let res = checkWin();
-                    if(res) { endGame(res); return; }
-                    
-                    // Bot Move (Random empty)
-                    setTimeout(() => {
-                        let empty = board.map((v,i) => v===''?i:null).filter(v=>v!==null);
-                        if(empty.length > 0) {
-                            let botIdx = empty[Math.floor(Math.random() * empty.length)];
-                            board[botIdx] = 'O';
-                            render();
-                            res = checkWin();
-                            if(res) endGame(res);
-                        }
-                    }, 400);
-                };
-
-                const endGame = (res) => {
-                    gameActive = false;
-                    if(res === 'X') { UI.toast('Kamu Menang! +10'); score+=10; }
-                    else if(res === 'O') UI.toast('Bot Menang!');
-                    else UI.toast('Seri!');
-                    
-                    document.getElementById('game-score').innerText = `Skor: ${score}`;
-                    
-                    const resetBtn = document.createElement('button');
-                    resetBtn.className = "mt-6 py-2 px-6 bg-amber-500 text-white rounded-full font-bold shadow-md absolute bottom-10";
-                    resetBtn.innerText = "Main Lagi";
-                    resetBtn.onclick = () => {
-                        board = ['', '', '', '', '', '', '', '', ''];
-                        gameActive = true;
-                        resetBtn.remove();
-                        render();
-                    };
-                    c.appendChild(resetBtn);
-                };
-
-                c.appendChild(grid);
-                render();
-                UI.showModal('modal-game');
-            };
-            
-            const initGuess = () => {
-                document.getElementById('game-title').innerText = "Tebak Angka";
-                clearCanvas();
-                const c = document.getElementById('game-container');
-                let target = Math.floor(Math.random() * 100) + 1;
-                let attempts = 0;
-                let score = parseInt(document.getElementById('game-score').innerText.split(' ')[1]||0);
-
-                const div = document.createElement('div');
-                div.className = "w-full max-w-xs text-center";
-                div.innerHTML = `
-                    <div class="text-4xl font-bold mb-6" id="guess-hint">❓</div>
-                    <p class="text-sm mb-4 font-bold">Tebak dari 1 - 100</p>
-                    <input type="number" id="guess-input" class="w-full bg-[var(--bg-surface-solid)] border-2 border-[var(--border-color)] rounded-xl py-3 px-4 text-center text-xl font-bold focus:border-amber-500 outline-none mb-4" placeholder="Masukkan angka">
-                    <button id="guess-btn" class="w-full py-3 bg-amber-500 text-white rounded-xl font-bold text-lg shadow-md btn-tap">Tebak!</button>
-                    <p class="text-xs opacity-50 mt-4" id="guess-att">Percobaan: 0</p>
-                `;
-                c.appendChild(div);
-
-                document.getElementById('guess-btn').onclick = () => {
-                    const inp = document.getElementById('guess-input');
-                    let val = parseInt(inp.value);
-                    if(isNaN(val)) return;
-                    attempts++;
-                    document.getElementById('guess-att').innerText = `Percobaan: ${attempts}`;
-                    
-                    if(val === target) {
-                        document.getElementById('guess-hint').innerText = "🎉";
-                        document.getElementById('guess-hint').className = "text-6xl mb-6 animate-bounce";
-                        let pts = Math.max(10, 50 - (attempts * 5));
-                        score += pts;
-                        document.getElementById('game-score').innerText = `Skor: ${score}`;
-                        UI.toast(`Benar! ${attempts} percobaan. +${pts} Skor`);
-                        
-                        document.getElementById('guess-btn').innerText = "Main Lagi";
-                        document.getElementById('guess-btn').onclick = () => {
-                            target = Math.floor(Math.random() * 100) + 1;
-                            attempts = 0;
-                            document.getElementById('guess-att').innerText = `Percobaan: 0`;
-                            document.getElementById('guess-hint').innerText = "❓";
-                            document.getElementById('guess-hint').className = "text-4xl font-bold mb-6";
-                            inp.value = '';
-                            document.getElementById('guess-btn').innerText = "Tebak!";
-                            initGuess(); // Re-bind safely
-                        };
-                    } else if (val < target) {
-                        document.getElementById('guess-hint').innerText = "Lebih Besar 📈";
-                        inp.value = '';
-                    } else {
-                        document.getElementById('guess-hint').innerText = "Lebih Kecil 📉";
-                        inp.value = '';
-                    }
-                    inp.focus();
-                };
                 
-                UI.showModal('modal-game');
-            }
+                const finish = (r) => {
+                    if(r === 'X') { addScore(50); end(10, 'Kamu Menang!'); }
+                    else if(r === 'O') end(0, 'Bot Menang!');
+                    else end(2, 'Seri!');
+                };
+                render();
+            };
 
-            return { closeGame, initReaction, initTTT, initGuess };
+            return { openGame, closeGame, start, chkMath: (s,a)=>GameEngine.chkMath(s,a) };
         })();
 
 
-        // --- 5. MAIN APP & STORAGE ---
+        // --- 6. CORE APP (Init & State) ---
         const App = (function() {
-            let todos = JSON.parse(localStorage.getItem('xlum_todos')) || [];
+            let todos = [];
+            
+            const state = {
+                points: parseInt(localStorage.getItem('xl_points')) || 0,
+                inventory: JSON.parse(localStorage.getItem('xl_inv')) || { owned: [], activeBadge: null, activeTitle: null },
+                settings: {
+                    theme: localStorage.getItem('xl_theme') || 'light',
+                    perf: localStorage.getItem('xl_perf') === 'true',
+                    sound: localStorage.getItem('xl_sound') !== 'false',
+                    haptic: localStorage.getItem('xl_haptic') !== 'false'
+                }
+            };
             
             const init = () => {
-                // Restore theme
-                if(localStorage.getItem('xlum_theme') === 'dark') {
-                    document.documentElement.classList.add('dark-mode');
-                    document.getElementById('toggle-dark').checked = true;
-                }
+                // Apply Settings
+                if(state.settings.theme === 'dark') document.documentElement.classList.add('dark-mode');
+                if(state.settings.perf) document.documentElement.classList.add('perf-mode');
+                
+                document.getElementById('set-theme').checked = state.settings.theme === 'dark';
+                document.getElementById('set-perf').checked = state.settings.perf;
+                document.getElementById('set-sound').checked = state.settings.sound;
+                document.getElementById('set-haptic').checked = state.settings.haptic;
+                
+                updatePoints(0);
+                
+                todos = JSON.parse(localStorage.getItem('xl_todos')) || [];
                 renderTodos();
+                
                 UI.init();
                 
-                // Keyboard shortcut Ctrl+K
+                // Keyboard Shortcuts
                 document.addEventListener('keydown', (e) => {
-                    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                        e.preventDefault();
-                        if(document.getElementById('cmd-palette').classList.contains('active')) UI.closeModal('cmd-palette');
-                        else UI.showModal('cmd-palette');
-                    }
-                    if (e.key === 'Escape') {
-                        document.querySelectorAll('.modal-overlay.active').forEach(el => el.classList.remove('active'));
-                    }
+                    if((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); UI.showModal('cmd-palette'); }
+                    if(e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(el => el.classList.remove('active'));
                 });
+                
+                setTimeout(() => UI.toast("Selamat datang di portal X.Luminance!"), 500);
             };
 
-            const toggleTheme = () => {
-                document.documentElement.classList.toggle('dark-mode');
-                const isDark = document.documentElement.classList.contains('dark-mode');
-                localStorage.setItem('xlum_theme', isDark ? 'dark' : 'light');
-                const toggle = document.getElementById('toggle-dark');
-                if(toggle) toggle.checked = isDark;
-                UI.toast(`Tema diubah ke ${isDark ? 'Gelap' : 'Terang'}`);
-            };
-            
             const toggleThemeSwitch = (el) => {
-                if(el.checked) document.documentElement.classList.add('dark-mode');
-                else document.documentElement.classList.remove('dark-mode');
-                localStorage.setItem('xlum_theme', el.checked ? 'dark' : 'light');
+                el.checked ? document.documentElement.classList.add('dark-mode') : document.documentElement.classList.remove('dark-mode');
+                state.settings.theme = el.checked ? 'dark' : 'light';
+                saveSettings();
             };
 
+            const togglePerfMode = (el) => {
+                el.checked ? document.documentElement.classList.add('perf-mode') : document.documentElement.classList.remove('perf-mode');
+                state.settings.perf = el.checked;
+                saveSettings();
+                UI.toast(el.checked ? "Mode Ringan Aktif" : "Mode Visual Penuh Aktif");
+            };
+
+            const toggleSetting = (key, el) => {
+                state.settings[key] = el.checked;
+                saveSettings();
+            };
+
+            const saveSettings = () => {
+                localStorage.setItem('xl_theme', state.settings.theme);
+                localStorage.setItem('xl_perf', state.settings.perf);
+                localStorage.setItem('xl_sound', state.settings.sound);
+                localStorage.setItem('xl_haptic', state.settings.haptic);
+            };
+
+            const updatePoints = (add) => {
+                state.points += add;
+                localStorage.setItem('xl_points', state.points);
+                document.getElementById('header-coins').innerText = state.points;
+                document.getElementById('arcade-coins-display').innerText = state.points;
+                document.getElementById('shop-coins-display').innerText = state.points;
+            };
+
+            const saveData = () => { localStorage.setItem('xl_inv', JSON.stringify(state.inventory)); };
+
+            // Todo Logic
             const addTodo = () => {
                 const inp = document.getElementById('todo-input');
                 if(!inp.value.trim()) return;
                 todos.unshift({ id: Date.now(), text: inp.value.trim(), done: false });
-                localStorage.setItem('xlum_todos', JSON.stringify(todos));
-                inp.value = '';
-                renderTodos();
+                localStorage.setItem('xl_todos', JSON.stringify(todos));
+                inp.value = ''; HW.play('tap'); renderTodos();
             };
 
-            const toggleTodo = (id) => {
-                let t = todos.find(x => x.id === id);
-                if(t) t.done = !t.done;
-                localStorage.setItem('xlum_todos', JSON.stringify(todos));
-                renderTodos();
-            };
-            
-            const delTodo = (id) => {
-                todos = todos.filter(x => x.id !== id);
-                localStorage.setItem('xlum_todos', JSON.stringify(todos));
-                renderTodos();
-            };
+            const toggleTodo = (id) => { let t = todos.find(x => x.id === id); if(t) t.done = !t.done; localStorage.setItem('xl_todos', JSON.stringify(todos)); HW.play('tap'); renderTodos(); };
+            const delTodo = (id) => { todos = todos.filter(x => x.id !== id); localStorage.setItem('xl_todos', JSON.stringify(todos)); HW.play('tap'); renderTodos(); };
 
             const renderTodos = () => {
                 const c = document.getElementById('todo-list');
                 if(!c) return;
                 c.innerHTML = '';
-                if(todos.length === 0) {
-                    c.innerHTML = '<div class="text-xs opacity-50 text-center py-4">Belum ada catatan.</div>';
-                    return;
-                }
+                if(!todos.length) { c.innerHTML = '<div class="text-xs opacity-50 text-center py-6 font-medium">Belum ada catatan. Tambahkan tugas baru!</div>'; return; }
                 todos.forEach(t => {
                     c.innerHTML += `
-                        <div class="flex items-center justify-between p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl group">
-                            <div class="flex items-center gap-3 overflow-hidden">
-                                <input type="checkbox" ${t.done?'checked':''} class="w-4 h-4 accent-amber-500 rounded cursor-pointer shrink-0" onchange="App.toggleTodo(${t.id})">
-                                <span class="text-sm truncate ${t.done?'line-through opacity-50':''} cursor-pointer" onclick="App.toggleTodo(${t.id})">${t.text}</span>
+                        <div class="flex items-center justify-between p-3.5 bg-[var(--bg-surface-solid)] border border-[var(--border-color)] rounded-xl group transition-all hover:border-amber-500/50">
+                            <div class="flex items-center gap-3 overflow-hidden cursor-pointer w-full" onclick="App.toggleTodo(${t.id})">
+                                <div class="w-5 h-5 rounded border-2 ${t.done?'bg-amber-500 border-amber-500':'border-[var(--border-color)]'} flex items-center justify-center shrink-0 transition-colors">
+                                    ${t.done?'<i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>':''}
+                                </div>
+                                <span class="text-sm truncate font-medium ${t.done?'line-through opacity-50':''}">${t.text}</span>
                             </div>
-                            <button onclick="App.delTodo(${t.id})" class="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1">
-                                <svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            <button onclick="App.delTodo(${t.id})" class="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-lg hover:bg-red-500/10">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
                     `;
                 });
+                lucide.createIcons();
             };
 
             const clearData = () => {
-                if(confirm("Apakah Anda yakin ingin mereset semua data lokal?")) {
-                    localStorage.removeItem('xlum_theme');
-                    localStorage.removeItem('xlum_todos');
+                if(confirm("PERINGATAN: Semua koin, item, dan catatan akan dihapus permanen. Lanjutkan?")) {
+                    localStorage.clear();
                     location.reload();
                 }
             };
 
-            return { init, toggleTheme, toggleThemeSwitch, addTodo, toggleTodo, delTodo, clearData };
+            // Expose properties needed by other modules
+            return { 
+                init, toggleThemeSwitch, togglePerfMode, toggleSetting, updatePoints, saveData,
+                addTodo, toggleTodo, delTodo, clearData,
+                get points() { return state.points; },
+                get inventory() { return state.inventory; },
+                get settings() { return state.settings; },
+                haptic: () => HW.vibrate(10)
+            };
         })();
 
         // BOOTSTRAP
