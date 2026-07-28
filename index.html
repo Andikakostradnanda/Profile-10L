@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth antialiased" data-theme="sunset">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>X.Luminance | Premium Portal v6.6</title>
+    <meta name="description" content="Website Resmi Kelas 10 L SMA Negeri 2 Majalengka. Tropical Premium iOS Edition.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        theme: {
+                            primary: 'var(--color-primary)',
+                            accent: 'var(--color-accent)',
+                            surface: 'var(--bg-surface-solid)',
+                        }
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'pop-in': 'popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+                        'slide-in-right': 'slideInRight 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                        'progress': 'progress 1s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+                        popIn: { '0%': { opacity: '0', transform: 'scale(0.85)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+                        slideInRight: { '0%': { transform: 'translateX(100%)' }, '100%': { transform: 'translateX(0)' } },
+                        progress: { '0%': { width: '0%' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* === TROPICAL PREMIUM iOS THEME VARIABLES === */
+        :root, [data-theme="sunset"] {
+            --color-primary: #FF7B54;
+            --color-accent: #FFB26B;
+            --color-primary-glow: rgba(255, 123, 84, 0.2);
+            --app-bg-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2000&auto=format&fit=crop');
+        }
+        [data-theme="ocean"] {
+            --color-primary: #00A8CC;
+            --color-accent: #20C997;
+            --color-primary-glow: rgba(0, 168, 204, 0.2);
+            --app-bg-image: url('https://images.unsplash.com/photo-1518098268026-4e89f1a2cd8e?q=80&w=2000&auto=format&fit=crop');
+        }
+        [data-theme="tropical"] {
+            --color-primary: #059669;
+            --color-accent: #34D399;
+            --color-primary-glow: rgba(5, 150, 105, 0.2);
+            --app-bg-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2000&auto=format&fit=crop');
+        }
+
+        /* === GLASSMORPHISM & LIGHT/DARK MODE === */
+        :root {
+            --bg-body: #F4F4F9; 
+            --bg-surface: rgba(255, 255, 255, 0.65);
+            --bg-surface-solid: #FFFFFF;
+            --text-primary: #1C1C1E;
+            --text-secondary: #8E8E93;
+            --border-glass: rgba(255, 255, 255, 0.5);
+            --border-solid: rgba(0, 0, 0, 0.08);
+            --glass-blur: blur(25px) saturate(180%);
+            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.06);
+            --overlay-bg: rgba(0,0,0,0.4);
+        }
+        .dark {
+            --bg-body: #000000;
+            --bg-surface: rgba(28, 28, 30, 0.65);
+            --bg-surface-solid: #1C1C1E;
+            --text-primary: #F2F2F7;
+            --text-secondary: #8E8E93;
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --border-solid: rgba(255, 255, 255, 0.12);
+            --glass-blur: blur(30px) saturate(200%);
+            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --overlay-bg: rgba(0,0,0,0.7);
+        }
+
+        /* Base Setup */
+        body { background-color: var(--bg-body); color: var(--text-primary); transition: background-color 0.5s ease, color 0.5s ease; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+        body.no-glass { --bg-surface: var(--bg-surface-solid); --glass-blur: none; --border-glass: var(--border-solid); }
+        body.text-large { font-size: 110%; } body.text-small { font-size: 90%; }
+        body.reduce-motion *, body.reduce-motion ::before, body.reduce-motion ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+
+        /* Ambient Backgrounds */
+        .ambient-bg { position: fixed; inset: 0; z-index: -2; background-image: var(--app-bg-image); background-size: cover; background-position: center; opacity: 0.15; pointer-events: none; transition: background 1s ease; }
+        .dark .ambient-bg { opacity: 0.25; filter: brightness(0.7) contrast(1.2); }
+        .ambient-gradient { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at top right, var(--color-primary-glow), transparent 60%); pointer-events: none; }
+
+        /* iOS Glass Classes */
+        .glass-panel { 
+            background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); 
+            box-shadow: var(--shadow-glass); border: 1px solid var(--border-glass); border-radius: 1.5rem; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+        }
+        .glass-nav { background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-solid); }
+        
+        /* Interactions */
+        .btn-tap { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, box-shadow 0.2s ease; }
+        .btn-tap:active { transform: scale(0.92); opacity: 0.8; }
+        .card-hover:hover { transform: translateY(-3px); box-shadow: 0 15px 35px -5px var(--color-primary-glow); border-color: var(--color-primary); }
+
+        /* Slide Drawer (Sidebar) */
+        .drawer-overlay { position: fixed; inset: 0; background: var(--overlay-bg); backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 1000; }
+        .drawer-overlay.active { opacity: 1; pointer-events: auto; }
+        .drawer-content { position: fixed; top: 0; left: 0; height: 100vh; width: 300px; max-width: 85vw; background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-right: 1px solid var(--border-glass); transform: translateX(-100%); transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); z-index: 1001; display: flex; flex-direction: column; }
+        .drawer-overlay.active .drawer-content { transform: translateX(0); }
+
+        /* Modals (Fixed jumping bug) */
+        .modal-overlay { position: fixed; inset: 0; background: var(--overlay-bg); backdrop-filter: blur(10px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 2000; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: var(--bg-surface); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-glass); border-radius: 2rem; width: 100%; max-height: 85vh; overflow-y: auto; transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 30px 60px rgba(0,0,0,0.2); overscroll-behavior: contain; }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+
+        /* Floating Bubble Bottom Nav */
+        .bottom-nav-container { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 900; width: 90%; max-width: 400px; pointer-events: none; }
+        .bubble-nav { pointer-events: auto; background: var(--bg-surface); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-glass); border-radius: 99px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: flex; justify-content: space-between; padding: 0.5rem; transition: transform 0.3s ease; touch-action: pan-x; }
+        .nav-item { width: 3.5rem; height: 3.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 50%; color: var(--text-secondary); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; }
+        .nav-item.active { color: var(--bg-body); background: var(--color-primary); box-shadow: 0 5px 15px var(--color-primary-glow); transform: translateY(-5px); }
+        .nav-item svg { width: 22px; height: 22px; stroke-width: 2.5; fill: none; stroke: currentColor; transition: transform 0.3s ease; }
+        .nav-item.active svg { transform: scale(1.1); stroke: var(--bg-body); }
+
+        /* Stable ID Card Wrapper */
+        .id-card-wrapper { perspective: 1200px; width: 320px; height: 480px; margin: 0 auto; position: relative; }
+        @media (max-width: 360px) { .id-card-wrapper { width: 290px; height: 435px; } }
+        .id-card-inner { position: absolute; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); transform-style: preserve-3d; }
+        .id-card-wrapper.flipped .id-card-inner { transform: rotateY(180deg); }
+        .id-card-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 1.5rem; overflow: hidden; display: flex; flex-direction: column; background: var(--bg-surface-solid); border: 1px solid var(--border-solid); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .id-card-back { transform: rotateY(180deg); }
+
+        /* Instagram UI specific */
+        .ig-theme { background-color: #000 !important; color: #fff !important; border-color: #262626 !important; }
+        .ig-story-ring { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); padding: 3px; border-radius: 50%; cursor: pointer; }
+        .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        .ig-item { aspect-ratio: 1/1; background: #262626; position: relative; cursor: pointer; overflow: hidden; }
+        .ig-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .ig-item:active img { transform: scale(0.95); }
+
+        /* Special Cosmetics */
+        body.badge-verified .profile-badge::after { content: ''; display: inline-block; width: 16px; height: 16px; margin-left: 4px; vertical-align: -3px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233b82f6" stroke="white" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>') center/contain no-repeat; }
+        
+        /* Game Engine Canvas */
+        #game-canvas { width: 100%; height: 100%; max-height: 60vh; border-radius: 1rem; background: var(--bg-surface-solid); overflow: hidden; position: relative; }
+        
+        /* Utilities */
+        ::-webkit-scrollbar { width: 5px; height: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border-solid); border-radius: 10px; }
+        .hide-scroll::-webkit-scrollbar { display: none; } .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .text-gradient { background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    </style>
+</head>
+<body class="pb-28 text-sm sm:text-base">
+
+    <!-- Ambient Backgrounds -->
+    <div class="ambient-bg"></div>
+    <div class="ambient-gradient"></div>
+    <div id="particles" class="fixed inset-0 pointer-events-none z-[9999]"></div>
+
+    <!-- HEADER (Glass) -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-nav">
+        <!-- iOS Style Progress/XP Bar -->
+        <div class="w-full h-1 bg-[var(--border-solid)] relative cursor-pointer" onclick="UI.toast(`XP: ${State.xp} / ${State.xpNext}. Main Arcade untuk level up!`)">
+            <div id="header-xp-bar" class="h-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-all duration-1000 ease-out" style="width: 0%;"></div>
+        </div>
+        
+        <div class="px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <button class="p-2 -ml-2 rounded-full hover:bg-[var(--border-solid)] transition-colors btn-tap" onclick="UI.toggleDrawer()">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="15" y2="6"></line><line x1="3" y1="18" x2="18" y2="18"></line></svg>
+                </button>
+                
+                <!-- Dual Logos as requested -->
+                <div class="flex items-center group">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-10 h-10 rounded-full border-2 border-[var(--color-primary)] shadow-md cursor-pointer btn-tap z-10 object-cover bg-white" onclick="UI.openGenericID(false)" alt="Kelas">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-10 h-10 rounded-full border-2 border-[var(--bg-body)] shadow-md cursor-pointer btn-tap -ml-4 z-0 object-contain bg-white p-1" onclick="UI.openGenericID(true)" alt="Sekolah">
+                </div>
+                
+                <div class="ml-1 leading-tight">
+                    <h1 class="font-serif font-bold text-lg">X.Luminance</h1>
+                    <p class="text-[10px] font-bold text-[var(--color-primary)] uppercase tracking-widest mt-0.5">
+                        <span id="header-level" class="bg-[var(--color-primary-glow)] px-1 rounded mr-1">Lv.1</span> Gen 26/27
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] text-sm font-bold cursor-pointer btn-tap shadow-sm" onclick="UI.showModal('modal-shop')">
+                    <span id="header-coins" class="text-[var(--color-primary)]">0</span>
+                    <span class="text-xs">🪙</span>
+                </div>
+                <button class="w-10 h-10 rounded-full bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] flex items-center justify-center btn-tap shadow-sm text-[var(--color-primary)]" onclick="UI.toggleCmd()">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR DRAWER (Glass Menu) -->
+    <div id="drawer" class="drawer-overlay" onclick="if(event.target===this) UI.toggleDrawer()">
+        <div class="drawer-content p-6">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-12 h-12 rounded-xl object-cover border border-[var(--border-glass)]">
+                    <div>
+                        <div class="font-serif font-bold text-lg">Menu Utama</div>
+                        <div class="text-xs opacity-70">SMAN 2 Majalengka</div>
+                    </div>
+                </div>
+                <button class="p-2 btn-tap rounded-full bg-[var(--border-solid)]" onclick="UI.toggleDrawer()">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <nav class="space-y-2 flex-grow overflow-y-auto hide-scroll pb-4">
+                <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest px-2 mb-2">Navigasi</div>
+                <a href="#" onclick="UI.switchTab('home'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg> Dashboard</a>
+                <a href="#" onclick="UI.switchTab('schedule'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="w-5 h-5 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Jadwal & Pelajaran</a>
+                <a href="#" onclick="UI.switchTab('students'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="w-5 h-5 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Direktori Siswa</a>
+                <a href="#" onclick="UI.switchTab('gallery'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="w-5 h-5 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle></svg> IG Gallery</a>
+                <a href="#" onclick="UI.switchTab('games'); UI.toggleDrawer()" class="flex items-center justify-between px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap">
+                    <span class="flex items-center gap-3"><svg class="w-5 h-5 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 12h4"></path></svg> Arcade (50 Games)</span>
+                    <span class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full animate-pulse">NEW</span>
+                </a>
+                
+                <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest px-2 mb-2 mt-6">Akses Cepat</div>
+                <a href="#" onclick="UI.showModal('modal-piket'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap">Jadwal Piket</a>
+                <a href="#" onclick="UI.showModal('modal-uniform'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap">Aturan Seragam</a>
+                <a href="#" onclick="UI.showModal('modal-org'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap">Struktur Organisasi</a>
+                <a href="#" onclick="UI.showModal('modal-shop'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap text-[var(--color-primary)]">Premium Shop</a>
+            </nav>
+            
+            <div class="mt-auto pt-4">
+                <div class="glass-panel p-4 bg-gradient-to-r from-[var(--color-primary-glow)] to-transparent border-none flex items-center justify-between cursor-pointer btn-tap" onclick="UI.toggleCmd(); UI.toggleDrawer()">
+                    <div>
+                        <div class="font-bold text-sm text-[var(--color-primary)]">AI Helper & Search</div>
+                        <div class="text-xs opacity-70">Pencarian Pintar</div>
+                    </div>
+                    <svg class="w-5 h-5 text-[var(--color-primary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-4xl mx-auto px-4 pt-24 relative z-10 min-h-screen">
+        
+        <!-- === HOME SECTION === -->
+        <section id="sec-home" class="view-section animate-fade-up">
+            <!-- Hero Banner -->
+            <div class="glass-panel p-6 sm:p-8 mb-6 relative overflow-hidden flex flex-col justify-end min-h-[220px] rounded-[2rem] group cursor-pointer btn-tap border-[var(--border-glass)]" onclick="UI.openGenericID(false)">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10 pointer-events-none"></div>
+                <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover z-0 opacity-90 group-hover:scale-105 transition-transform duration-700" alt="">
+                
+                <div class="relative z-20 text-white">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-md rounded-full text-xs font-bold mb-3 border border-white/20">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Tahun Ajaran 2026/2027
+                    </div>
+                    <h2 class="font-serif text-4xl sm:text-5xl font-bold leading-tight mb-1">X.Luminance</h2>
+                    <p class="text-sm opacity-90 font-medium">SMA Negeri 2 Majalengka • Kelas 10 L</p>
+                </div>
+            </div>
+
+            <!-- Realtime Status (Updated per Minute) -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                <div class="glass-panel p-4 flex flex-col justify-center items-center text-center">
+                    <svg class="w-6 h-6 text-blue-500 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+                    <div class="font-bold text-sm" id="rt-date">Memuat...</div>
+                </div>
+                <div class="glass-panel p-4 flex flex-col justify-center items-center text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-[var(--color-primary-glow)] animate-pulse opacity-20"></div>
+                    <svg class="w-6 h-6 text-emerald-500 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <div class="font-bold text-xl text-[var(--color-primary)] font-mono" id="rt-time">00:00</div>
+                </div>
+                <div class="glass-panel p-4 col-span-2 card-hover cursor-pointer btn-tap flex flex-col justify-center" onclick="UI.switchTab('schedule')">
+                    <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-1">Aktivitas Saat Ini</div>
+                    <div class="font-bold text-lg truncate" id="rt-subject">Mengecek Jadwal...</div>
+                </div>
+            </div>
+
+            <!-- Quick Access Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <!-- Klik 1: Jadwal -->
+                <div class="glass-panel p-5 card-hover btn-tap cursor-pointer flex flex-col justify-between h-full relative" onclick="UI.switchTab('schedule')">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="p-2.5 bg-blue-500/10 text-blue-500 rounded-xl"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
+                        <span class="text-[10px] font-bold bg-[var(--bg-surface-solid)] px-2 py-1 rounded shadow-sm border border-[var(--border-solid)]">JADWAL</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base mb-1">Pelajaran Hari Ini</h3>
+                        <p class="text-xs opacity-70">Lihat urutan mapel</p>
+                    </div>
+                </div>
+                <!-- Klik 2: Piket -->
+                <div class="glass-panel p-5 card-hover btn-tap cursor-pointer flex flex-col justify-between h-full relative" onclick="UI.showModal('modal-piket')">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="p-2.5 bg-amber-500/10 text-amber-500 rounded-xl"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                        <span class="text-[10px] font-bold bg-[var(--bg-surface-solid)] px-2 py-1 rounded shadow-sm border border-[var(--border-solid)]" id="badge-piket">MEMUAT</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base mb-1">Jadwal Piket</h3>
+                        <p class="text-xs opacity-70 truncate" id="desc-piket">Siapa yang bersih-bersih?</p>
+                    </div>
+                </div>
+                <!-- Klik 3: Seragam -->
+                <div class="glass-panel p-5 card-hover btn-tap cursor-pointer flex flex-col justify-between h-full relative" onclick="UI.showModal('modal-uniform')">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="p-2.5 bg-pink-500/10 text-pink-500 rounded-xl"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg></div>
+                        <span class="text-[10px] font-bold bg-[var(--bg-surface-solid)] px-2 py-1 rounded shadow-sm border border-[var(--border-solid)]">ATURAN</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base mb-1">Seragam</h3>
+                        <p class="text-xs text-[var(--color-primary)] font-bold truncate" id="desc-uniform">Mengecek...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Utilities Grid -->
+            <div class="mb-8">
+                <h3 class="font-serif font-bold text-xl mb-4 pl-1">Utilitas & Menu Pintar</h3>
+                <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-8 gap-3" id="util-grid">
+                    <!-- JS Rendered -->
+                </div>
+            </div>
+            
+            <!-- Countdown -->
+            <div class="glass-panel p-5 flex justify-between items-center bg-gradient-to-r from-[var(--color-primary-glow)] to-transparent border-[var(--color-primary)]">
+                <div>
+                    <h4 class="font-bold">Kenaikan Kelas</h4>
+                    <div class="text-xs opacity-70 mt-1">Fokus dan raih nilai terbaik!</div>
+                </div>
+                <div class="text-right">
+                    <div class="font-black text-3xl text-[var(--color-primary)] leading-none">320</div>
+                    <div class="text-[10px] font-bold opacity-60 uppercase mt-1">Hari Lagi</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- === STUDENTS SECTION === -->
+        <section id="sec-students" class="view-section hidden animate-fade-up">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="font-serif text-3xl font-bold">Direktori Siswa</h2>
+                    <p class="text-sm opacity-70 mt-1">Daftar lengkap 46 siswa/i X.Luminance.</p>
+                </div>
+                <div class="flex gap-2 bg-[var(--bg-surface-solid)] p-1.5 rounded-full border border-[var(--border-solid)] shadow-sm">
+                    <button class="px-5 py-2 rounded-full text-sm font-bold transition-all bg-[var(--color-primary)] text-white filter-btn shadow-md" onclick="UI.filterStudents('all', this)">Semua (46)</button>
+                    <button class="px-5 py-2 rounded-full text-sm font-bold transition-all text-[var(--text-secondary)] filter-btn" onclick="UI.filterStudents('L', this)">Laki-laki</button>
+                    <button class="px-5 py-2 rounded-full text-sm font-bold transition-all text-[var(--text-secondary)] filter-btn" onclick="UI.filterStudents('P', this)">Perempuan</button>
+                </div>
+            </div>
+            
+            <div class="relative mb-6">
+                <input type="text" id="search-student" placeholder="Cari nama, absen, NIS, posisi..." class="w-full glass-panel py-4 pl-12 pr-4 outline-none focus:border-[var(--color-primary)] font-medium shadow-sm transition-colors" onkeyup="UI.searchStudent(this.value)">
+                <svg class="w-6 h-6 absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="students-grid">
+                <!-- JS Rendered -->
+            </div>
+        </section>
+
+        <!-- === SCHEDULE SECTION === -->
+        <section id="sec-schedule" class="view-section hidden animate-fade-up">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="font-serif text-3xl font-bold">Jadwal Pelajaran</h2>
+                    <p class="text-sm opacity-70 mt-1">Tahun 2026/2027 SMAN 2 Majalengka</p>
+                </div>
+                <div class="flex gap-2 overflow-x-auto hide-scroll w-full md:w-auto pb-2" id="schedule-tabs">
+                    <!-- JS Rendered -->
+                </div>
+            </div>
+            <div class="glass-panel p-6">
+                <div class="flex justify-between items-center border-b border-[var(--border-solid)] pb-4 mb-6">
+                    <h3 class="font-bold text-2xl text-[var(--color-primary)]" id="sched-title">Senin</h3>
+                    <span class="text-[10px] px-3 py-1 bg-[var(--color-primary)] text-white rounded-full font-bold tracking-widest hidden shadow-md uppercase" id="sched-badge">Hari Ini</span>
+                </div>
+                <div class="relative pl-6 border-l-2 border-[var(--border-solid)] space-y-6" id="sched-timeline">
+                    <!-- JS Rendered -->
+                </div>
+            </div>
+        </section>
+
+        <!-- === GALLERY SECTION (INSTAGRAM CLONE) === -->
+        <section id="sec-gallery" class="view-section hidden animate-fade-up px-0 sm:px-4">
+            <!-- iPhone/IG Container -->
+            <div class="max-w-[400px] mx-auto ig-theme sm:rounded-[2.5rem] sm:border-8 border-[#262626] overflow-hidden shadow-2xl relative pb-16 font-sans h-[100dvh] sm:h-[85vh] flex flex-col">
+                <!-- Top Nav -->
+                <div class="flex justify-between items-center p-3 border-b border-[#262626] bg-black z-20 shrink-0">
+                    <div class="font-bold text-xl flex items-center gap-1 cursor-pointer tracking-tight" onclick="UI.toast('Refresh feed...')">
+                        x.luminance4us <svg class="w-4 h-4 text-blue-500 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    </div>
+                    <div class="flex gap-4">
+                        <svg class="w-6 h-6 cursor-pointer btn-tap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="UI.toast('Mode Lokal: Upload mati')"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                        <svg class="w-6 h-6 cursor-pointer btn-tap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="UI.toggleDrawer()"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </div>
+                </div>
+                
+                <div class="overflow-y-auto hide-scroll flex-grow">
+                    <!-- Profile Info -->
+                    <div class="p-4 flex items-center gap-6">
+                        <div class="w-20 h-20 shrink-0 ig-story-ring relative btn-tap" onclick="UI.openHighlight('Bobo')">
+                            <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-full h-full rounded-full border-2 border-black object-cover bg-white" alt="">
+                        </div>
+                        <div class="flex-grow flex justify-around text-center">
+                            <div><div class="font-bold text-lg">3</div><div class="text-xs opacity-90">Posts</div></div>
+                            <div class="cursor-pointer btn-tap" onclick="UI.switchTab('students')"><div class="font-bold text-lg">46</div><div class="text-xs opacity-90">Followers</div></div>
+                            <div><div class="font-bold text-lg">1</div><div class="text-xs opacity-90">Following</div></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bio -->
+                    <div class="px-4 pb-3 text-sm">
+                        <div class="font-bold">X.Luminance 10 L 🌴✨</div>
+                        <div class="opacity-90 leading-tight my-1">
+                            Official SMAN 2 Majalengka.<br>
+                            Building memories, chasing dreams.<br>
+                            "We shine brighter together" ☀️
+                        </div>
+                        <div class="text-blue-300 text-xs font-medium cursor-pointer mb-3" onclick="UI.toast('Membuka web sekolah')">sman2majalengka.sch.id</div>
+                        <div class="flex gap-2">
+                            <button class="flex-1 bg-[#262626] py-1.5 rounded-lg font-bold text-sm btn-tap" onclick="UI.toast('Following!')">Following ⌄</button>
+                            <button class="flex-1 bg-[#262626] py-1.5 rounded-lg font-bold text-sm btn-tap" onclick="UI.toast('DM feature lokal')">Message</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Highlights -->
+                    <div class="px-4 pb-4 flex gap-4 overflow-x-auto hide-scroll" id="ig-highlights">
+                        <!-- JS Rendered -->
+                    </div>
+                    
+                    <!-- Tabs -->
+                    <div class="flex border-t border-[#262626]">
+                        <div class="flex-1 py-3 flex justify-center border-b border-white cursor-pointer"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+                        <div class="flex-1 py-3 flex justify-center text-gray-500 cursor-pointer btn-tap" onclick="UI.toast('Reels kosong')"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4z"></path><rect x="3" y="5" width="12" height="14" rx="2"></rect></svg></div>
+                        <div class="flex-1 py-3 flex justify-center text-gray-500 cursor-pointer btn-tap" onclick="UI.toast('Belum ada tag')"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                    </div>
+                    
+                    <!-- Grid (Uses specific webp links) -->
+                    <div class="ig-grid pb-4" id="ig-grid">
+                        <!-- JS Rendered -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- === ARCADE GAMES SECTION (50 GAMES Engine) === -->
+        <section id="sec-games" class="view-section hidden animate-fade-up">
+             <div class="text-center mb-8 glass-panel p-6 rounded-[2rem] relative overflow-hidden border-[var(--color-primary)]">
+                <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-primary-glow)] to-transparent opacity-50"></div>
+                <h2 class="font-serif text-4xl font-bold mb-2 text-gradient relative z-10">Arcade v6.6</h2>
+                <p class="text-[var(--text-secondary)] text-sm max-w-md mx-auto relative z-10">Mainkan 50 mini-game unik! Latih otak, refleks, dan memori untuk farming XP & Koin betulan tanpa grinding idle.</p>
+                <div class="mt-4 inline-flex items-center gap-2 bg-[var(--bg-surface-solid)] px-5 py-2 rounded-full border border-[var(--border-solid)] shadow-sm font-bold text-sm">
+                    Total Koin: <span id="games-coin" class="text-[var(--color-primary)] text-lg">0</span> 🪙
+                </div>
+            </div>
+            
+            <div class="flex justify-between items-center mb-4 px-1">
+                <h3 class="font-bold text-lg">Daftar Tantangan (50)</h3>
+                <span class="text-[10px] bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-2 py-1 rounded font-bold uppercase tracking-widest border border-[var(--color-primary)]">Play to Earn</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" id="games-grid">
+                <!-- JS Rendered (50 buttons linking to GameEngine) -->
+            </div>
+        </section>
+
+        <!-- === SETTINGS SECTION === -->
+        <section id="sec-settings" class="view-section hidden animate-fade-up max-w-2xl mx-auto">
+            <div class="mb-8 pl-2">
+                <h2 class="font-serif text-3xl font-bold mb-1">Pengaturan</h2>
+                <p class="text-sm opacity-70">Sesuaikan UI & performa sistem.</p>
+            </div>
+            <div id="settings-container" class="space-y-6">
+                <!-- JS Rendered -->
+            </div>
+            
+            <!-- Footer/Credits -->
+            <div class="mt-16 text-center pb-8 opacity-60">
+                <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-12 h-12 mx-auto rounded-xl grayscale mb-3" alt="[attachment_0](attachment)">
+                <p class="text-xs font-bold tracking-widest uppercase">Version 6.6 Premium</p>
+                <p class="text-[10px] mt-1">Design & Code by AK ᡕᠵデᡁ᠊╾━</p>
+                <p class="text-[10px] mt-4">© 2026/2027 Kelas 10 L - SMAN 2 Majalengka.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING BUBBLE BOTTOM NAV (Slideable feel via CSS overscroll) -->
+    <div class="bottom-nav-container">
+        <nav class="bubble-nav overflow-x-auto hide-scroll">
+            <button class="nav-item active btn-tap" data-target="home" onclick="UI.switchTab('home')">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </button>
+            <button class="nav-item btn-tap" data-target="schedule" onclick="UI.switchTab('schedule')">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </button>
+            <button class="nav-item btn-tap" data-target="students" onclick="UI.switchTab('students')">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </button>
+            <button class="nav-item btn-tap" data-target="gallery" onclick="UI.switchTab('gallery')">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </button>
+            <button class="nav-item btn-tap" data-target="games" onclick="UI.switchTab('games')">
+                 <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 12h4"></path><line x1="18" y1="12" x2="18.01" y2="12"></line></svg>
+            </button>
+            <button class="nav-item btn-tap" data-target="settings" onclick="UI.switchTab('settings')">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+        </nav>
+    </div>
+
+    <!-- === MODALS === -->
+    
+    <!-- 1. ID Card Modal (Stable wrapper to prevent shifting) -->
+    <div id="modal-id" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-id')">
+        <div class="flex flex-col items-center relative z-10 w-full" id="id-modal-content">
+            
+            <div id="id-toggles" class="flex justify-center mb-6 gap-2 bg-[var(--bg-surface-solid)] p-1.5 rounded-full border border-[var(--border-solid)] shadow-lg animate-fade-up">
+                <button class="px-5 py-2 rounded-full text-sm font-bold btn-tap transition-all bg-[var(--color-primary)] text-white shadow-md" id="btn-id-kelas" onclick="UI.flipID(false)">Kartu Kelas</button>
+                <button class="px-5 py-2 rounded-full text-sm font-bold btn-tap transition-all text-[var(--text-secondary)]" id="btn-id-sekolah" onclick="UI.flipID(true)">Kartu Sekolah</button>
+            </div>
+            
+            <!-- STABLE CONTAINER -->
+            <div class="id-card-wrapper animate-pop-in" id="id-card">
+                <div class="id-card-inner">
+                    <!-- FRONT: Kelas -->
+                    <div class="id-card-face id-card-front" style="background: linear-gradient(145deg, var(--bg-surface-solid) 0%, var(--bg-body) 100%); border-color: var(--color-primary-glow);">
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-[var(--color-primary-glow)] rounded-full blur-3xl -mr-10 -mt-10"></div>
+                        <div class="p-5 pb-0 flex justify-between items-start z-10 relative">
+                            <div>
+                                <h3 class="font-serif font-bold text-2xl tracking-tight">X.Luminance</h3>
+                                <p class="text-[9px] font-bold text-[var(--color-primary)] tracking-widest uppercase mt-1">Official Member</p>
+                            </div>
+                            <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-12 h-12 rounded-xl shadow-md object-cover" alt="">
+                        </div>
+                        
+                        <div class="flex-grow flex flex-col items-center justify-center p-4 z-10 relative mt-2">
+                            <div class="w-32 h-32 rounded-full bg-gray-200 mb-4 border-[3px] border-[var(--bg-surface-solid)] overflow-hidden shadow-xl" id="id-photo-kelas"></div>
+                            <h2 class="font-bold text-xl uppercase tracking-wide w-full text-center px-4 leading-tight profile-badge line-clamp-2 min-h-[50px] flex items-center justify-center" id="id-name-kelas">NAMA</h2>
+                            <p class="text-[10px] font-bold text-white bg-[var(--color-primary)] px-4 py-1.5 rounded-full mt-2 uppercase tracking-widest shadow-md" id="id-role-kelas">Siswa</p>
+                            
+                            <div class="flex gap-4 mt-5">
+                                <a href="#" class="w-10 h-10 rounded-full bg-[var(--bg-surface)] border border-[var(--border-solid)] flex items-center justify-center shadow-sm text-pink-500 btn-tap"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-[var(--bg-surface)] border border-[var(--border-solid)] flex items-center justify-center shadow-sm text-blue-500 btn-tap"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-[var(--text-primary)] text-[var(--bg-body)] p-4 flex justify-between items-center text-[9px] font-bold tracking-widest uppercase z-10 relative">
+                            <span>ID: <span id="id-nis-kelas"></span></span>
+                            <span>SMAN 2 Majalengka</span>
+                        </div>
+                    </div>
+                    
+                    <!-- BACK: Sekolah -->
+                    <div class="id-card-face id-card-back bg-[#f8f9fa] text-gray-900 border-[#0f4c81]/20">
+                        <div class="bg-[#0f4c81] text-white p-4 flex items-center gap-3 shadow-md relative z-10">
+                            <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-12 h-12 bg-white rounded-full p-1 shadow-sm object-contain" alt="">
+                            <div class="text-left leading-tight">
+                                <h4 class="font-bold text-sm uppercase tracking-wider">Kartu Pelajar</h4>
+                                <p class="text-[9px] font-medium uppercase opacity-90 mt-0.5">SMA Negeri 2 Majalengka</p>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none z-0">
+                            <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-48 h-48 grayscale" alt="">
+                        </div>
+
+                        <div class="flex-grow p-5 flex flex-col items-center relative z-10 pt-6">
+                            <div class="w-24 h-32 bg-gray-200 mb-4 border-2 border-white shadow-lg rounded overflow-hidden" id="id-photo-sekolah"></div>
+                            
+                            <h2 class="font-bold text-lg uppercase text-center w-full border-b-2 border-gray-300 pb-2 mb-3 text-[#0f4c81] line-clamp-2 min-h-[44px] flex items-center justify-center leading-tight" id="id-name-sekolah">NAMA</h2>
+                            
+                            <div class="w-full text-[10px] space-y-2 text-left text-gray-800 font-bold px-2 uppercase tracking-wide">
+                                <p class="flex justify-between border-b border-gray-200 pb-1"><span class="opacity-60">NIS/NISN</span><span id="id-nis-sekolah" class="text-right"></span></p>
+                                <p class="flex justify-between border-b border-gray-200 pb-1"><span class="opacity-60">Kelas</span><span>X L</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-200 p-2.5 text-center text-[8px] text-gray-600 font-bold border-t border-gray-300 relative z-10 uppercase tracking-widest">
+                            Berlaku Selama Menjadi Siswa
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="mt-6 w-12 h-12 rounded-full glass-panel flex items-center justify-center btn-tap text-[var(--text-secondary)] shadow-xl animate-fade-up border-[var(--border-solid)] hover:bg-red-500 hover:text-white" onclick="UI.closeModal('modal-id')" style="animation-delay: 0.1s">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. IG Post Detail Modal -->
+    <div id="modal-ig-post" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-ig-post')">
+        <div class="modal-content p-0 max-w-sm bg-[#000] text-white rounded-3xl overflow-hidden shadow-2xl border border-[#262626] ig-theme">
+            <div class="flex items-center justify-between p-3 border-b border-[#262626]">
+                <div class="flex items-center gap-2">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-8 h-8 rounded-full object-cover" alt="">
+                    <span class="font-bold text-sm">x.luminance4us</span>
+                </div>
+                <svg class="w-5 h-5 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+            </div>
+            <img id="ig-detail-img" src="" class="w-full aspect-square object-cover" oncontextmenu="return false;" alt="">
+            <div class="p-4">
+                <div class="flex justify-between mb-3">
+                    <div class="flex gap-4">
+                        <svg class="w-6 h-6 cursor-pointer btn-tap transition-colors" id="ig-detail-like" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="UI.toggleIGLike()"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        <svg class="w-6 h-6 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        <svg class="w-6 h-6 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </div>
+                    <svg class="w-6 h-6 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div class="font-bold text-sm mb-1.5"><span id="ig-detail-likes">0</span> likes</div>
+                <div class="text-sm leading-snug"><span class="font-bold mr-2">x.luminance4us</span><span id="ig-detail-cap" class="opacity-90"></span></div>
+                <div class="text-[10px] text-gray-500 mt-2 font-bold tracking-widest uppercase">BARU SAJA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. IG Highlight Story Modal -->
+    <div id="modal-highlight" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-highlight')">
+        <div class="modal-content p-0 max-w-sm bg-black text-white rounded-3xl overflow-hidden shadow-2xl border border-[#262626] ig-theme relative h-[80vh] flex flex-col">
+            <!-- Progress bars -->
+            <div class="absolute top-0 left-0 right-0 p-3 z-30 flex gap-1" id="story-progress-container"></div>
+            
+            <!-- Header -->
+            <div class="absolute top-4 left-3 right-3 flex justify-between items-center z-30">
+                <div class="flex items-center gap-2">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-8 h-8 rounded-full border border-white/20" alt="">
+                    <span class="font-bold text-sm tracking-tight" id="story-title">Highlight</span>
+                </div>
+                <button class="w-8 h-8 flex items-center justify-center btn-tap" onclick="UI.closeModal('modal-highlight')">
+                    <svg class="w-6 h-6 drop-shadow-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <!-- Media -->
+            <div class="flex-grow relative bg-zinc-900 flex items-center justify-center" id="story-media-container">
+                <!-- Injected via JS -->
+            </div>
+            
+            <!-- Navigation overlays -->
+            <div class="absolute inset-y-0 left-0 w-1/3 z-20 cursor-pointer" onclick="UI.prevStory()"></div>
+            <div class="absolute inset-y-0 right-0 w-2/3 z-20 cursor-pointer" onclick="UI.nextStory()"></div>
+            
+            <!-- Bottom UI -->
+            <div class="absolute bottom-0 left-0 right-0 p-4 z-30 bg-gradient-to-t from-black/80 to-transparent">
+                <input type="text" placeholder="Balas cerita ini..." class="w-full bg-transparent border border-white/30 rounded-full px-4 py-3 text-sm text-white placeholder-white/70 outline-none backdrop-blur-md">
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Other Standard Modals -->
+    <div id="modal-org" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-org')">
+        <div class="modal-content p-0 max-w-lg">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface)] backdrop-blur-md z-10">
+                <h3 class="font-bold text-lg">Struktur Organisasi</h3>
+                <button onclick="UI.closeModal('modal-org')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <div class="p-6 bg-[var(--bg-body)]" id="content-org"></div>
+        </div>
+    </div>
+
+    <div id="modal-piket" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-piket')">
+        <div class="modal-content p-0 max-w-sm">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface)] backdrop-blur-md z-10">
+                <h3 class="font-bold text-lg">Jadwal Kebersihan</h3>
+                <button onclick="UI.closeModal('modal-piket')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <div class="p-5 bg-[var(--bg-body)]">
+                <div class="flex gap-2 overflow-x-auto hide-scroll pb-4" id="piket-tabs"></div>
+                <div id="piket-list" class="space-y-2 mt-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-uniform" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-uniform')">
+        <div class="modal-content p-0 max-w-sm">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface)] backdrop-blur-md z-10">
+                <h3 class="font-bold text-lg">Aturan Seragam</h3>
+                <button onclick="UI.closeModal('modal-uniform')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <div class="p-5 bg-[var(--bg-body)] space-y-2" id="uniform-list"></div>
+        </div>
+    </div>
+
+    <div id="modal-shop" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-shop')">
+        <div class="modal-content p-0 max-w-2xl">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface)] backdrop-blur-md z-10">
+                <h3 class="font-bold text-lg flex items-center gap-2">Premium Shop</h3>
+                <div class="flex items-center gap-3">
+                    <span class="font-bold text-[var(--color-primary)] bg-[var(--color-primary-glow)] px-3 py-1 rounded-full text-sm"><span id="shop-coins">0</span> 🪙</span>
+                    <button onclick="UI.closeModal('modal-shop')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+            </div>
+            <div class="p-6 bg-[var(--bg-body)] grid grid-cols-1 sm:grid-cols-2 gap-4" id="shop-grid"></div>
+        </div>
+    </div>
+
+    <!-- 5. COMMAND PALETTE (AI Search) -->
+    <div id="cmd-palette" class="modal-overlay items-start pt-[15vh]" onclick="if(event.target===this) UI.closeModal('cmd-palette')">
+        <div class="modal-content p-0 max-w-xl">
+            <div class="p-4 flex items-center gap-3 border-b border-[var(--border-solid)] bg-[var(--bg-surface-solid)] relative">
+                <svg class="w-6 h-6 text-[var(--color-primary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="cmd-input" placeholder="Tanya AI atau cari menu..." class="flex-grow bg-transparent border-none outline-none text-base font-medium w-full" onkeyup="UI.searchCmd(this.value)">
+                <span class="text-[10px] font-bold bg-[var(--border-solid)] px-2 py-1 rounded text-[var(--text-secondary)]">ESC</span>
+            </div>
+            <div class="bg-gradient-to-r from-[var(--color-primary-glow)] to-transparent px-4 py-2 flex items-center gap-2 border-b border-[var(--border-solid)]">
+                <svg class="w-4 h-4 text-[var(--color-primary)] animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span id="cmd-ai-text" class="text-[11px] font-bold text-[var(--color-primary)]">AI Siap membantu. Ketik sesuatu.</span>
+            </div>
+            <div class="max-h-[50vh] overflow-y-auto p-2" id="cmd-results"></div>
+        </div>
+    </div>
+
+    <!-- 6. GAME CONTAINER ENGINE -->
+    <div id="modal-game" class="modal-overlay" onclick="if(event.target===this) GameEngine.close()">
+        <div class="modal-content p-0 w-[95%] max-w-xl h-[85vh] flex flex-col shadow-2xl border-[var(--color-primary)]">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center bg-[var(--bg-surface-solid)] z-10 shrink-0">
+                <h3 class="font-bold text-lg flex items-center gap-2">
+                    <span id="ge-icon">🎮</span> <span id="ge-title">Game Title</span>
+                </h3>
+                <div class="flex items-center gap-3">
+                    <span class="font-bold text-sm bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-3 py-1 rounded-lg border border-[var(--color-primary)]" id="ge-score">0 Pts</span>
+                    <button onclick="GameEngine.close()" class="p-2 btn-tap rounded-full bg-[var(--border-solid)] hover:bg-red-500 hover:text-white transition-colors"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+            </div>
+            <!-- Dynamic Canvas Area -->
+            <div class="flex-grow p-4 bg-[var(--bg-body)] flex flex-col items-center justify-center relative overflow-hidden" id="ge-canvas">
+                <!-- Injected via GameEngine -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast-container" class="fixed top-24 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 pointer-events-none items-center w-[90%] max-w-sm"></div>
+
+    <!-- === JAVASCRIPT === -->
+    <script>
+        // ---------------- 1. DATA KELAS (EXACT AS REQUESTED) ----------------
+        const rawStudentsData = [
+            { no: 1, name: "ADE ROHMAT", nisn: "0103663188", nis: "262710004", g: "L" }, { no: 2, name: "AJENG PRATIWI", nisn: "0101234300", nis: "262710021", g: "P" }, { no: 3, name: "ALBIAN REVAN FAUZAN", nisn: "0111940756", nis: "262710024", g: "L" }, { no: 4, name: "APRILIANI NUR SABRINA", nisn: "0109308236", nis: "262710047", g: "P" }, { no: 5, name: "AYU WURININGSIH", nisn: "0099624618", nis: "262710063", g: "P" }, { no: 6, name: "AZRI KAUTHAR ANSHAR", nisn: "0112909747", nis: "262710065", g: "L" }, { no: 7, name: "CINTA AMELA NURCAHAYA", nisn: "0105227012", nis: "262710085", g: "P" }, { no: 8, name: "DEWI MUTIA", nisn: "0111203715", nis: "262710107", g: "P" }, { no: 9, name: "DIDAN AGUNG FIRMANSYAH", nisn: "0106517800", nis: "262710112", g: "L" }, { no: 10, name: "ELISA FITRIYANI", nisn: "0107307969", nis: "262710127", g: "P" }, { no: 11, name: "EVANDHER RAYHAN KURNICOVA", nisn: "0103038857", nis: "262710137", g: "L" }, { no: 12, name: "FAREL MUHAMAD HISYAM", nisn: "0109363382", nis: "262710150", g: "L" }, { no: 13, name: "FEYZHA RANU SALSABITHA", nisn: "0118340643", nis: "262710163", g: "P" }, { no: 14, name: "FITROH DWI SUKMA", nisn: "0108206355", nis: "262710170", g: "P" }, { no: 15, name: "HANA SYAKIRA ANINDYTA", nisn: "0115239595", nis: "262710193", g: "P" }, { no: 16, name: "IRIHMANA DZAKI", nisn: "0081509833", nis: "262710213", g: "L" }, { no: 17, name: "JENISA LUTHFIAH", nisn: "0109747601", nis: "262710217", g: "P" }, { no: 18, name: "KANDISA", nisn: "0114676581", nis: "262710223", g: "P" }, { no: 19, name: "KHAYRA ADZKIA HAIFA", nisn: "0119789897", nis: "262710234", g: "P" }, { no: 20, name: "LUCIANA MEISYA PUTRI", nisn: "0116649260", nis: "262710246", g: "P" }, { no: 21, name: "M. ANDIKA KOSTRADNANDA", nisn: "0103247002", nis: "262710252", g: "L" }, { no: 22, name: "MOCHAMMAD FAWWAZ", nisn: "0115206920", nis: "262710273", g: "L" }, { no: 23, name: "MUHAMAD FADLI", nisn: "0116363520", nis: "262710284", g: "L" }, { no: 24, name: "MUHAMMAD ARIF AL BADAR", nisn: "0112956308", nis: "262710296", g: "L" }, { no: 25, name: "MUHAMMAD MUFTAHURROHMAN MUSTHOFA", nisn: "0113613860", nis: "262710308", g: "L" }, { no: 26, name: "MUHAMMAD YUSRON AWLA", nisn: "0117685202", nis: "262710320", g: "L" }, { no: 27, name: "MYEISHA AZMI FAKHIRA", nisn: "0111287188", nis: "262710323", g: "P" }, { no: 28, name: "NAILA LAILATUL RAMADHANI", nisn: "0105834945", nis: "262710335", g: "P" }, { no: 29, name: "NAZWA ALGHUMAISHA", nisn: "0105940174", nis: "262710350", g: "P" }, { no: 30, name: "NOVI TRESNAWATI SUHERMAN", nisn: "0104968959", nis: "262710367", g: "P" }, { no: 31, name: "PRINCE EZHAD ALVARO SYAHPUTRA", nisn: "0104375031", nis: "262710377", g: "L" }, { no: 32, name: "RAHMA NADIRA YULIANTI", nisn: "0105245895", nis: "262710397", g: "P" }, { no: 33, name: "RAIHAN ATAYA FADHILAH", nisn: "0085796070", nis: "262710398", g: "L" }, { no: 34, name: "RATU SYIFA OCTAVIANI", nisn: "0107046338", nis: "262710406", g: "P" }, { no: 35, name: "RENITA KUSMAYANTI", nisn: "0105417307", nis: "262710419", g: "P" }, { no: 36, name: "REZKY RULLIAN NURHAFIZ", nisn: "0103611682", nis: "262710427", g: "L" }, { no: 37, name: "SAFIRA NAILA TABINA", nisn: "0111839155", nis: "262710454", g: "P" }, { no: 38, name: "SENDY AULIA RAHMA", nisn: "0106444245", nis: "262710466", g: "P" }, { no: 39, name: "SILVANA NURAENI", nisn: "0119716409", nis: "262710477", g: "P" }, { no: 40, name: "STEFANY SHINTIARA PUTRI", nisn: "0108444319", nis: "262710490", g: "P" }, { no: 41, name: "SYAHRIZA ZIAN FIRDAUS", nisn: "0115426522", nis: "262710495", g: "L" }, { no: 42, name: "TRI INDRAWATI", nisn: "0119357005", nis: "262710507", g: "P" }, { no: 43, name: "UFAIRAH ZAHRA", nisn: "3120660019", nis: "262710508", g: "P" }, { no: 44, name: "WINDYA SRI MULYATI OKTAYANI", nisn: "0109430514", nis: "262710522", g: "P" }, { no: 45, name: "ZAHWA ANNISA SETIAWAN", nisn: "0105131980", nis: "262710539", g: "P" }, { no: 46, name: "ZALPA CHAERUL AZAM", nisn: "0109912881", nis: "262710543", g: "L" }
+        ];
+
+        const DB = {
+            students: rawStudentsData.map(s => ({ id: `S${s.no}`, ...s })),
+            roles: {
+                "TUTI TURSILAH, S.Pd.I.": "Wali Kelas", "TRESNA FUJIE LATIFAH, S.Pd.": "Konselor/BK", "FAHMI ARIZAL NUR FACHRUDIN, S.Pd.": "Koor. Projek",
+                "PRINCE EZHAD ALVARO SYAHPUTRA": "Ketua Murid", "CINTA AMELA NURCAHAYA": "Wakil KM",
+                "JENISA LUTHFIAH": "Sekretaris 1", "DEWI MUTIA": "Sekretaris 2",
+                "NAILA LAILATUL RAMADHANI": "Bendahara 1", "KANDISA": "Bendahara 2", "UFAIRAH ZAHRA": "Bendahara 3"
+            },
+            sections: {
+                "Keamanan": ["NOVI TRESNAWATI SUHERMAN", "MUHAMMAD ARIF AL BADAR"], "Olahraga": ["ZALPA CHAERUL AZAM", "SYAHRIZA ZIAN FIRDAUS"],
+                "Kerohanian": ["FEYZHA RANU SALSABITHA", "RAHMA NADIRA YULIANTI"], "Kebersihan": ["FAREL MUHAMAD HISYAM", "ELISA FITRIYANI"],
+                "Budi Pekerti": ["ZAHWA ANNISA SETIAWAN", "SAFIRA NAILA TABINA"]
+            },
+            schedule: {
+                "Senin": [{ t: "06.30-07.15", m: "Upacara / Perwalian", g: "TUTI TURSILAH" }, { t: "07.15-09.15", m: "Pend. Agama Islam", g: "TUTI TURSILAH" }, { t: "09.15-09.45", m: "Istirahat", br: true }, { t: "09.45-11.05", m: "Seni Rupa", g: "ADE FATURRACHMAN" }, { t: "11.05-11.45", m: "BK/B. Indonesia", g: "TRESNA FUJIE" }, { t: "11.45-12.20", m: "Istirahat", br: true }, { t: "12.20-13.00", m: "BK/B. Indonesia", g: "TRESNA FUJIE" }, { t: "13.00-15.00", m: "Sosiologi", g: "ADE LINA" }],
+                "Selasa": [{ t: "06.30-08.30", m: "Sejarah", g: "H. AGUS HERMAWAN" }, { t: "08.30-09.10", m: "Informatika", g: "CRISTY SRI OCTINA" }, { t: "09.10-09.40", m: "Istirahat", br: true }, { t: "09.40-10.20", m: "Informatika", g: "CRISTY SRI OCTINA" }, { t: "10.20-11.40", m: "Biologi", g: "Hj. YUYUN Y." }, { t: "11.40-12.20", m: "Istirahat", br: true }, { t: "12.20-13.00", m: "Biologi", g: "Hj. YUYUN Y." }, { t: "13.00-15.00", m: "BK/B. Indonesia", g: "TRESNA FUJIE" }],
+                "Rabu": [{ t: "06.30-08.45", m: "Kimia", g: "WULAN KAROLINA" }, { t: "08.45-09.30", m: "Geografi", g: "ANITA DEWI" }, { t: "09.30-09.50", m: "Istirahat", br: true }, { t: "09.50-11.20", m: "Geografi", g: "ANITA DEWI" }, { t: "11.20-12.05", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "12.05-12.45", m: "Istirahat", br: true }, { t: "12.45-13.30", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "13.30-15.00", m: "Koding & KA", g: "DEFI WULANDANI" }],
+                "Kamis": [{ t: "06.30-07.50", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "07.50-09.10", m: "Pend. Pancasila", g: "FAHMI ARIZAL" }, { t: "09.10-09.40", m: "Istirahat", br: true }, { t: "09.40-10.20", m: "Bahasa Sunda", g: "AEF SAEPUL" }, { t: "10.20-11.40", m: "Fisika", g: "Drs. AHMAD IBROHIM" }, { t: "11.40-12.20", m: "Istirahat", br: true }, { t: "12.20-13.00", m: "Fisika", g: "Drs. AHMAD IBROHIM" }, { t: "13.00-15.00", m: "Bahasa Inggris", g: "ENDAH RETNO" }],
+                "Jumat": [{ t: "06.30-07.10", m: "Keg. Keagamaan", g: "Guru Agama" }, { t: "07.10-09.10", m: "Ekonomi/PKWU", g: "TENNY SUKMARA" }, { t: "09.10-09.30", m: "Istirahat", br: true }, { t: "09.30-11.30", m: "PJOK", g: "NANTO KURNIANTO" }, { t: "13.00-15.30", m: "Pramuka", g: "Pembina Pramuka" }]
+            },
+            piket: {
+                "Senin": ["ADE ROHMAT", "AJENG PRATIWI", "ALBIAN REVAN FAUZAN", "APRILIANI NUR SABRINA", "AYU WURININGSIH", "AZRI KAUTHAR ANSHAR", "CINTA AMELA NURCAHAYA", "DEWI MUTIA", "DIDAN AGUNG FIRMANSYAH"],
+                "Selasa": ["ELISA FITRIYANI", "EVANDHER RAYHAN KURNICOVA", "FAREL MUHAMAD HISYAM", "FEYZHA RANU SALSABITHA", "FITROH DWI SUKMA", "HANA SYAKIRA ANINDYTA", "IRIHMANA DZAKI", "JENISA LUTHFIAH", "KANDISA"],
+                "Rabu": ["KHAYRA ADZKIA HAIFA", "LUCIANA MEISYA PUTRI", "M. ANDIKA KOSTRADNANDA", "MOCHAMMAD FAWWAZ", "MUHAMAD FADLI", "MUHAMMAD ARIF AL BADAR", "MUHAMMAD MUFTAHURROHMAN MUSTHOFA", "MUHAMMAD YUSRON AWLA", "MYEISHA AZMI FAKHIRA"],
+                "Kamis": ["NAILA LAILATUL RAMADHANI", "NAZWA ALGHUMAISHA", "NOVI TRESNAWATI SUHERMAN", "PRINCE EZHAD ALVARO SYAHPUTRA", "RAHMA NADIRA YULIANTI", "RAIHAN ATAYA FADHILAH", "RATU SYIFA OCTAVIANI", "RENITA KUSMAYANTI", "REZKY RULLIAN NURHAFIZ"],
+                "Jumat": ["SAFIRA NAILA TABINA", "SENDY AULIA RAHMA", "SILVANA NURAENI", "STEFANY SHINTIARA PUTRI", "SYAHRIZA ZIAN FIRDAUS", "TRI INDRAWATI", "UFAIRAH ZAHRA", "WINDYA SRI MULYATI OKTAYANI", "ZAHWA ANNISA SETIAWAN", "ZALPA CHAERUL AZAM"]
+            },
+            seragam: { "Senin": "PSAS Putih Abu", "Selasa": "PSAS Putih Abu", "Rabu": "Pramuka Lengkap", "Kamis": "Baju Muslim", "Jumat": "Pramuka Lengkap" },
+            
+            // IG ASSETS (As Requested)
+            igPosts: [
+                { id: 1, src: "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Postingan/kiri.webp", likes: 842, cap: "Vibes sunset premium. 🌅" },
+                { id: 2, src: "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Postingan/tengah.webp", likes: 756, cap: "Clean look local gallery. 📸" },
+                { id: 3, src: "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Postingan/kanan.webp", likes: 921, cap: "The final piece of the grid. ✨" }
+            ],
+            highlights: {
+                Bobo: ["https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Bobo/highlight%20bobo.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Bobo/higlight%20bobo.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Bobo/higlight%20bobo1.mp4"],
+                Boys: ["https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/highlight%20bobo.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/highlit%20biys.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/highlitg%20biys.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/highlti%20Boys.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/hightli%20bosy.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/higlight%20bobo.mp4"],
+                Girls: ["https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Cewe/highlight%20cewe.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Cewe/highlight%20cewe.webp", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Cewe/higlight%20bobo1.mp4"]
+            },
+            
+            shop: [
+                { id: 'theme_sunset', name: 'Sunset (Default)', desc: 'Nuansa senja hangat.', price: 0, type: 'Tema', icon: '🌅' },
+                { id: 'theme_ocean', name: 'Deep Ocean', desc: 'Nuansa biru laut dalam.', price: 150, type: 'Tema', icon: '🌊' },
+                { id: 'theme_tropical', name: 'Tropical Premium', desc: 'Nuansa hijau emerald mewah.', price: 250, type: 'Tema', icon: '🌴' },
+                { id: 'badge_verified', name: 'Verified Badge', desc: 'Centang biru di sebelah namamu.', price: 500, type: 'Kosmetik', icon: '✔️' },
+                { id: 'fx_superglass', name: 'Ultra Glass FX', desc: 'Efek blur kaca maksimal (Butuh HP kuat).', price: 350, type: 'Visual', icon: '💎' }
+            ],
+            
+            games: []
+        };
+
+        // ---------------- 2. 50 GAMES GENERATOR ----------------
+        const baseGames = [
+            { id: 'react', name: 'Refleks Kilat', icon: '⚡', desc: 'Ketuk layar secepat mungkin saat hijau!' },
+            { id: 'mem', name: 'Pola Memori', icon: '🧠', desc: 'Hafalkan dan ketuk urutan kotak yang benar.' },
+            { id: 'math', name: 'Hitung Cepat', icon: '🧮', desc: 'Selesaikan soal matematika sebelum waktu habis.' },
+            { id: 'color', name: 'Jebakan Warna', icon: '🎨', desc: 'Pilih warna teksnya, bukan tulisan katanya!' },
+            { id: 'time', name: 'Stop Tepat', icon: '⏱️', desc: 'Hentikan bar tepat di area target.' }
+        ];
+        for(let i=0; i<50; i++) {
+            let base = baseGames[i % 5];
+            let level = Math.floor(i / 5) + 1;
+            DB.games.push({
+                id: `g_${i}`, logic: base.id, level: level,
+                name: `${base.name} Lv.${level}`,
+                icon: base.icon, desc: `Tingkat kesulitan ${level}/10. ${base.desc}`
+            });
+        }
+
+        // ---------------- 3. STATE MANAGER ----------------
+        const State = {
+            coins: 50, xp: 0, level: 1, xpNext: 100,
+            inv: ['theme_sunset'],
+            eq: { theme: 'sunset', badge: false, fx: false },
+            set: { dark: false, noGlass: false },
+            
+            init() {
+                try {
+                    let d = JSON.parse(localStorage.getItem('xl_v66'));
+                    if(d) { Object.assign(this, d); this.calcLevel(); }
+                } catch(e){}
+                this.apply();
+            },
+            save() { localStorage.setItem('xl_v66', JSON.stringify({coins:this.coins, xp:this.xp, inv:this.inv, eq:this.eq, set:this.set})); UI.updateHead(); },
+            addXP(v) { this.xp += v; this.calcLevel(); this.save(); },
+            calcLevel() {
+                let n = Math.floor(Math.sqrt(this.xp / 15)) + 1;
+                this.xpNext = 15 * Math.pow(n, 2);
+                if(n > this.level) { this.level = n; UI.toast(`Level Up! Kamu sekarang Lv.${n} 🎉`); }
+            },
+            addCoin(v) { this.coins += v; if(v>0){ this.addXP(Math.ceil(v/2)); UI.toast(`+${v} Koin & XP! 🪙`); UI.spawnCoins(); } this.save(); },
+            buy(id) {
+                let itm = DB.shop.find(x=>x.id===id);
+                if(this.inv.includes(id)) return;
+                if(this.coins < itm.price) return UI.toast('Koin tidak cukup! Main Arcade dulu.');
+                this.coins -= itm.price; this.inv.push(id); this.save();
+                UI.toast(`Berhasil beli ${itm.name}!`); UI.renderShop();
+            },
+            equip(id) {
+                let itm = DB.shop.find(x=>x.id===id);
+                if(itm.type === 'Tema') this.eq.theme = id.replace('theme_','');
+                if(id === 'badge_verified') this.eq.badge = !this.eq.badge;
+                if(id === 'fx_superglass') this.eq.fx = !this.eq.fx;
+                this.save(); this.apply(); UI.renderShop();
+            },
+            apply() {
+                document.documentElement.setAttribute('data-theme', this.eq.theme);
+                document.documentElement.classList.toggle('dark', this.set.dark);
+                document.body.classList.toggle('no-glass', this.set.noGlass);
+                document.body.classList.toggle('badge-verified', this.eq.badge);
+                document.documentElement.style.setProperty('--glass-blur', (this.eq.fx && !this.set.noGlass) ? 'blur(40px) saturate(200%)' : 'blur(25px) saturate(180%)');
+            }
+        };
+
+        // ---------------- 4. UI CONTROLLER ----------------
+        const UI = {
+            modals: [],
+            igState: { curHighlight: '', deck: [], idx: 0, tmr: null },
+            
+            init() {
+                this.rtClock(); 
+                // Diperbarui menjadi setiap 1 menit (60000 ms) sesuai permintaan
+                setInterval(()=>this.rtClock(), 60000);
+                
+                this.renderGrid(); this.renderStudents('all'); this.renderSchedTabs(); this.renderPiketTabs();
+                this.renderUniforms(); this.renderOrg(); this.renderIG(); this.renderGames(); this.renderSet();
+                State.init(); this.updateHead();
+                
+                document.addEventListener('keydown', e => {
+                    if((e.ctrlKey||e.metaKey) && e.key === 'k') { e.preventDefault(); this.toggleCmd(); }
+                    if(e.key === 'Escape' && this.modals.length) this.closeModal(this.modals[this.modals.length-1]);
+                });
+            },
+            
+            rtClock() {
+                const d = new Date();
+                const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                const mon = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+                const dn = days[d.getDay()];
+                document.getElementById('rt-date').innerText = `${d.getDate()} ${mon[d.getMonth()]}`;
+                
+                // Format Jam dan Menit Saja (Per Menit)
+                document.getElementById('rt-time').innerText = d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+                
+                let subj = "Bebas / Luar Jam";
+                let ms = d.getHours()*60 + d.getMinutes();
+                if(DB.schedule[dn]) {
+                    DB.schedule[dn].forEach(s => {
+                        let pts = s.t.split('-');
+                        let start = parseInt(pts[0].split('.')[0])*60 + parseInt(pts[0].split('.')[1]);
+                        let end = parseInt(pts[1].split('.')[0])*60 + parseInt(pts[1].split('.')[1]);
+                        if(ms >= start && ms < end) subj = s.m;
+                    });
+                }
+                document.getElementById('rt-subject').innerText = subj;
+                
+                if(DB.piket[dn]) { document.getElementById('badge-piket').innerText = "HARI INI"; document.getElementById('desc-piket').innerText = DB.piket[dn].slice(0,3).join(', ') + "..."; }
+                else { document.getElementById('badge-piket').innerText = "LIBUR"; document.getElementById('desc-piket').innerText = "Tidak ada jadwal piket."; }
+                
+                document.getElementById('desc-uniform').innerText = DB.seragam[dn] || "Bebas/Libur";
+            },
+
+            updateHead() {
+                document.getElementById('header-coins').innerText = State.coins;
+                document.getElementById('shop-coins').innerText = State.coins;
+                document.getElementById('games-coin').innerText = State.coins;
+                document.getElementById('header-level').innerText = `Lv.${State.level}`;
+                
+                let pBase = 15 * Math.pow(State.level-1, 2);
+                let pct = ((State.xp - pBase) / (State.xpNext - pBase)) * 100;
+                document.getElementById('header-xp-bar').style.width = `${Math.min(100, Math.max(0, pct))}%`;
+            },
+
+            switchTab(id) {
+                document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+                const n = document.querySelector(`.nav-item[data-target="${id}"]`); if(n) n.classList.add('active');
+                
+                document.querySelectorAll('.view-section').forEach(e => { e.classList.add('hidden'); e.classList.remove('animate-fade-up'); });
+                const t = document.getElementById(`sec-${id}`);
+                if(t) { t.classList.remove('hidden'); void t.offsetWidth; t.classList.add('animate-fade-up'); window.scrollTo({top:0, behavior:'smooth'}); }
+            },
+            
+            toggleDrawer() { document.getElementById('drawer').classList.toggle('active'); },
+            
+            showModal(id) {
+                const m = document.getElementById(id);
+                if(m) {
+                    m.classList.add('active'); if(!this.modals.includes(id)) this.modals.push(id);
+                    if(id === 'cmd-palette') { document.getElementById('cmd-input').focus(); this.searchCmd(''); }
+                    if(id === 'modal-shop') this.renderShop();
+                }
+            },
+            closeModal(id) {
+                const m = document.getElementById(id);
+                if(m) { m.classList.remove('active'); this.modals = this.modals.filter(x => x !== id); }
+                if(id === 'modal-highlight' && this.igState.tmr) { clearInterval(this.igState.tmr); document.getElementById('story-media-container').innerHTML = ''; }
+            },
+            
+            toast(msg) {
+                const c = document.getElementById('toast-container');
+                const t = document.createElement('div');
+                t.className = "bg-[var(--text-primary)] text-[var(--bg-body)] px-5 py-3 rounded-full shadow-2xl font-bold text-sm transform transition-all translate-y-[-20px] opacity-0 text-center";
+                t.innerText = msg; c.prepend(t);
+                requestAnimationFrame(() => { t.classList.remove('translate-y-[-20px]', 'opacity-0'); });
+                setTimeout(() => { t.classList.add('opacity-0'); setTimeout(()=>t.remove(), 300); }, 3000);
+            },
+            
+            spawnCoins() {
+                const c = document.getElementById('particles');
+                for(let i=0; i<3; i++) {
+                    let p = document.createElement('div'); p.className = 'absolute text-3xl drop-shadow-md z-[9999]'; p.innerText = '🪙';
+                    p.style.left = `calc(50vw + ${(Math.random()-0.5)*100}px)`; p.style.top = `calc(50vh + ${(Math.random()-0.5)*100}px)`;
+                    p.style.animation = `floatUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards`;
+                    c.appendChild(p); setTimeout(()=>p.remove(), 1000);
+                }
+            },
+
+            // --- Renders ---
+            renderGrid() {
+                const arr = [
+                    {i:'📅', t:'Jadwal', a:"UI.switchTab('schedule')"}, {i:'👥', t:'Siswa', a:"UI.switchTab('students')"},
+                    {i:'📸', t:'Galeri', a:"UI.switchTab('gallery')"}, {i:'🎮', t:'Arcade', a:"UI.switchTab('games')"},
+                    {i:'🛍️', t:'Shop', a:"UI.showModal('modal-shop')"}, {i:'🧹', t:'Piket', a:"UI.showModal('modal-piket')"},
+                    {i:'👔', t:'Seragam', a:"UI.showModal('modal-uniform')"}, {i:'⚙️', t:'Setting', a:"UI.switchTab('settings')"}
+                ];
+                document.getElementById('util-grid').innerHTML = arr.map(x => `
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer btn-tap group" onclick="${x.a}">
+                        <div class="w-14 h-14 bg-[var(--bg-surface)] border border-[var(--border-solid)] rounded-[1.2rem] flex items-center justify-center text-2xl shadow-sm group-hover:border-[var(--color-primary)] transition-colors">${x.i}</div>
+                        <span class="text-[9px] font-bold tracking-wide uppercase text-center">${x.t}</span>
+                    </div>
+                `).join('');
+            },
+
+            renderStudents(flt, q='') {
+                let l = DB.students;
+                if(flt !== 'all') l = l.filter(x => x.g === flt);
+                if(q) {
+                    q = q.toLowerCase();
+                    l = l.filter(x => x.name.toLowerCase().includes(q) || x.nis.includes(q) || (DB.roles[x.name] && DB.roles[x.name].toLowerCase().includes(q)));
+                }
+                document.getElementById('students-grid').innerHTML = l.length ? l.map((s,i) => `
+                    <div class="glass-panel p-4 flex items-center gap-4 card-hover cursor-pointer btn-tap relative overflow-hidden border-[var(--border-solid)]" style="animation-delay:${(i%10)*20}ms" onclick="UI.openID('${s.id}')">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl shrink-0 ${s.g==='L'?'bg-blue-500/10 text-blue-500':'bg-pink-500/10 text-pink-500'}">${s.name.charAt(0)}</div>
+                        <div class="flex-grow min-w-0">
+                            <h4 class="font-bold text-sm truncate profile-badge">${s.name}</h4>
+                            <div class="text-[10px] opacity-70 truncate font-medium mt-0.5">@${s.name.toLowerCase().split(' ')[0]}_xl</div>
+                            <div class="flex gap-2 mt-1.5">
+                                <span class="text-[9px] font-bold bg-[var(--bg-body)] px-2 py-0.5 rounded shadow-sm border border-[var(--border-solid)]">No.${s.no}</span>
+                                ${DB.roles[s.name] ? `<span class="text-[9px] font-bold bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-2 py-0.5 rounded">${DB.roles[s.name]}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('') : '<div class="col-span-full py-10 text-center opacity-50 font-bold">Tidak ditemukan.</div>';
+            },
+            filterStudents(f, btn) {
+                document.querySelectorAll('.filter-btn').forEach(b => { b.className = "px-5 py-2 rounded-full text-sm font-bold transition-all text-[var(--text-secondary)] filter-btn"; });
+                btn.className = "px-5 py-2 rounded-full text-sm font-bold transition-all bg-[var(--color-primary)] text-white filter-btn shadow-md";
+                this.renderStudents(f, document.getElementById('search-student').value);
+            },
+            searchStudent(v) {
+                const a = document.querySelector('.filter-btn.bg-\\[var\\(--color-primary\\)\\]');
+                let f = a ? (a.innerText.includes('Semua') ? 'all' : (a.innerText==='Laki-laki' ? 'L' : 'P')) : 'all';
+                this.renderStudents(f, v);
+            },
+
+            // --- ID CARD (Fixed Dimensions & Logic) ---
+            openGenericID(isSchool) {
+                const s = DB.students.find(x => x.name === "PRINCE EZHAD ALVARO SYAHPUTRA") || DB.students[0];
+                this.fillID(s);
+                document.getElementById('id-toggles').style.display = 'none';
+                this.flipID(isSchool);
+                this.showModal('modal-id');
+            },
+            openID(id) {
+                const s = DB.students.find(x => x.id === id); if(!s) return;
+                this.fillID(s);
+                document.getElementById('id-toggles').style.display = 'flex';
+                this.flipID(false);
+                this.showModal('modal-id');
+            },
+            fillID(s) {
+                document.getElementById('id-name-kelas').innerText = s.name;
+                document.getElementById('id-role-kelas').innerText = DB.roles[s.name] || 'Siswa';
+                document.getElementById('id-nis-kelas').innerText = `${s.nis} / ${s.nisn}`;
+                document.getElementById('id-name-sekolah').innerText = s.name;
+                document.getElementById('id-nis-sekolah').innerText = `${s.nis} / ${s.nisn}`;
+                
+                const c1 = s.g === 'L' ? 'bae6fd' : 'fbcfe8'; const c2 = s.g === 'L' ? '0284c7' : 'db2777';
+                const av = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=${c1}&color=${c2}&size=256&bold=true`;
+                document.getElementById('id-photo-kelas').innerHTML = `<img src="${av}" class="w-full h-full object-cover" alt="">`;
+                document.getElementById('id-photo-sekolah').innerHTML = `<img src="${av}" class="w-full h-full object-cover" alt="">`;
+            },
+            flipID(toS) {
+                const c = document.getElementById('id-card');
+                const bC = document.getElementById('btn-id-kelas'); const bS = document.getElementById('btn-id-sekolah');
+                if(toS) {
+                    c.classList.add('flipped');
+                    bC.className = "px-5 py-2 rounded-full text-sm font-bold btn-tap transition-all text-[var(--text-secondary)]";
+                    bS.className = "px-5 py-2 rounded-full text-sm font-bold btn-tap transition-all bg-[var(--color-primary)] text-white shadow-md";
+                } else {
+                    c.classList.remove('flipped');
+                    bC.className = "px-5 py-2 rounded-full text-sm font-bold btn-tap transition-all bg-[var(--color-primary)] text-white shadow-md";
+                    bS.className = "px-5 py-2 rounded-full text-sm font-bold btn-tap transition-all text-[var(--text-secondary)]";
+                }
+            },
+
+            // --- SCHED & PIKET ---
+            renderSchedTabs() {
+                const days = ['Senin','Selasa','Rabu','Kamis','Jumat'];
+                let cd = new Date().getDay(); let td = cd>=1 && cd<=5 ? days[cd-1] : 'Senin';
+                document.getElementById('schedule-tabs').innerHTML = days.map(d => `
+                    <button class="px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] shadow-sm ${d===td?'bg-[var(--color-primary)] text-white':'bg-[var(--bg-surface-solid)]'}" onclick="UI.renderSchedDay('${d}', this)">${d}</button>
+                `).join('');
+                this.renderSchedDay(td, document.querySelector('#schedule-tabs .bg-\\[var\\(--color-primary\\)\\]'));
+            },
+            renderSchedDay(d, btn) {
+                if(btn) { document.querySelectorAll('#schedule-tabs button').forEach(b => b.className = "px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] shadow-sm bg-[var(--bg-surface-solid)]"); btn.className = "px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] shadow-sm bg-[var(--color-primary)] text-white"; }
+                
+                document.getElementById('sched-title').innerText = d;
+                let isT = d === ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][new Date().getDay()];
+                document.getElementById('sched-badge').style.display = isT ? 'block' : 'none';
+                
+                let s = DB.schedule[d];
+                if(!s) { document.getElementById('sched-timeline').innerHTML = '<p class="opacity-50 font-bold">Libur.</p>'; return; }
+                
+                let ms = new Date().getHours()*60 + new Date().getMinutes();
+                document.getElementById('sched-timeline').innerHTML = s.map(x => {
+                    let st = parseInt(x.t.split('-')[0].split('.')[0])*60 + parseInt(x.t.split('-')[0].split('.')[1]);
+                    let en = parseInt(x.t.split('-')[1].split('.')[0])*60 + parseInt(x.t.split('-')[1].split('.')[1]);
+                    let cur = isT && ms>=st && ms<en;
+                    
+                    return `
+                    <div class="relative ${isT && ms>=en ? 'opacity-40' : ''}">
+                        <div class="absolute -left-[1.95rem] top-4 w-4 h-4 rounded-full ${cur ? 'bg-[var(--color-primary)] animate-pulse' : x.br ? 'bg-amber-400' : 'bg-gray-300'} border-[3px] border-[var(--bg-surface)] z-10"></div>
+                        <div class="p-4 rounded-2xl bg-[var(--bg-surface-solid)] border ${cur ? 'border-[var(--color-primary)] shadow-sm scale-[1.02]' : 'border-[var(--border-solid)]'} ${x.br ? 'bg-amber-500/5' : ''} transition-all">
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-bold text-base ${x.br ? 'text-amber-500' : ''}">${x.m}</h4>
+                                <span class="font-mono text-[10px] bg-[var(--bg-body)] px-2 py-0.5 rounded border border-[var(--border-solid)] font-bold">${x.t}</span>
+                            </div>
+                            ${x.g ? `<p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">${x.g}</p>` : ''}
+                        </div>
+                    </div>`;
+                }).join('');
+            },
+
+            renderPiketTabs() {
+                const days = ['Senin','Selasa','Rabu','Kamis','Jumat'];
+                let cd = new Date().getDay(); let td = cd>=1 && cd<=5 ? days[cd-1] : 'Senin';
+                document.getElementById('piket-tabs').innerHTML = days.map(d => `
+                    <button class="px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] ${d===td?'bg-[var(--color-primary)] text-white':'bg-[var(--bg-surface-solid)]'}" onclick="UI.renderPiketDay('${d}', this)">${d}</button>
+                `).join('');
+                this.renderPiketDay(td, document.querySelector('#piket-tabs .bg-\\[var\\(--color-primary\\)\\]'));
+            },
+            renderPiketDay(d, btn) {
+                if(btn) { document.querySelectorAll('#piket-tabs button').forEach(b => b.className = "px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] bg-[var(--bg-surface-solid)]"); btn.className = "px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] bg-[var(--color-primary)] text-white"; }
+                
+                let l = DB.piket[d] || [];
+                document.getElementById('piket-list').innerHTML = l.map((n, i) => `
+                    <div class="p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex items-center gap-3 cursor-pointer btn-tap" onclick="UI.openID('${DB.students.find(x=>x.name===n)?.id}')">
+                        <div class="w-6 h-6 rounded-full bg-[var(--color-primary-glow)] text-[var(--color-primary)] flex items-center justify-center font-bold text-xs shrink-0">${i+1}</div>
+                        <div class="font-bold text-sm truncate">${n}</div>
+                    </div>
+                `).join('');
+            },
+
+            renderUniforms() {
+                let td = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][new Date().getDay()];
+                document.getElementById('uniform-list').innerHTML = Object.entries(DB.seragam).map(([d, u]) => `
+                    <div class="p-4 rounded-xl border ${d===td?'bg-[var(--color-primary-glow)] border-[var(--color-primary)]':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'} flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-sm">${d} ${d===td?'<span class="text-[9px] bg-[var(--color-primary)] text-white px-1.5 py-0.5 rounded uppercase ml-2 animate-pulse">Sekarang</span>':''}</h4>
+                            <p class="text-xs opacity-70 mt-0.5 font-medium">${u}</p>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            renderOrg() {
+                const c = document.getElementById('content-org');
+                let h = `<div class="space-y-4">`;
+                
+                h += `<div><h4 class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2 pl-1">Dewan Pembina</h4><div class="space-y-2">`;
+                ["TUTI TURSILAH, S.Pd.I.", "TRESNA FUJIE LATIFAH, S.Pd.", "FAHMI ARIZAL NUR FACHRUDIN, S.Pd."].forEach(n => {
+                    h += `<div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-3 rounded-xl flex justify-between items-center shadow-sm"><span class="font-bold text-sm truncate">${n}</span><span class="text-[9px] font-bold bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-2 py-1 rounded whitespace-nowrap">${DB.roles[n]}</span></div>`;
+                });
+                
+                h += `</div></div><div><h4 class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2 pl-1 mt-4">Pengurus Inti</h4><div class="grid grid-cols-2 gap-2">`;
+                ["PRINCE EZHAD ALVARO SYAHPUTRA", "CINTA AMELA NURCAHAYA", "JENISA LUTHFIAH", "DEWI MUTIA", "NAILA LAILATUL RAMADHANI", "KANDISA"].forEach(n => {
+                    let id = DB.students.find(x=>x.name===n)?.id;
+                    h += `<div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-3 rounded-xl shadow-sm text-center cursor-pointer btn-tap flex flex-col justify-center min-h-[70px]" onclick="UI.openID('${id}')"><div class="text-[9px] font-bold text-[var(--color-primary)] uppercase mb-1">${DB.roles[n]}</div><div class="font-bold text-xs leading-tight">${n}</div></div>`;
+                });
+                
+                h += `</div></div><div><h4 class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2 pl-1 mt-4">Seksi Bidang</h4><div class="space-y-2">`;
+                Object.entries(DB.sections).forEach(([sec, names]) => {
+                    h += `<div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-3 rounded-xl shadow-sm"><div class="font-bold text-xs text-[var(--text-secondary)] uppercase tracking-wider mb-2 border-b border-[var(--border-solid)] pb-1">${sec}</div><ul class="space-y-1.5">`;
+                    names.forEach(n => {
+                        let id = DB.students.find(x=>x.name===n)?.id;
+                        h += `<li class="text-sm font-bold cursor-pointer btn-tap flex items-center gap-2 truncate hover:text-[var(--color-primary)]" onclick="UI.openID('${id}')"><div class="w-1.5 h-1.5 rounded-full bg-[var(--text-secondary)]"></div>${n}</li>`;
+                    });
+                    h += `</ul></div>`;
+                });
+                
+                c.innerHTML = h + `</div></div>`;
+            },
+
+            // --- IG CLONE (With specific links & working Highlights) ---
+            renderIG() {
+                const h = Object.keys(DB.highlights);
+                document.getElementById('ig-highlights').innerHTML = h.map((k,i) => `
+                    <div class="flex flex-col items-center gap-1 cursor-pointer btn-tap" onclick="UI.openHighlight('${k}')">
+                        <div class="w-16 h-16 rounded-full border border-[#262626] p-0.5 bg-black ig-story-ring">
+                            <div class="w-full h-full rounded-full border-2 border-black flex items-center justify-center text-white font-black text-xs" style="background: linear-gradient(135deg, hsl(${(i*120)%360} 70% 50%), hsl(${(i*120+60)%360} 70% 30%));">
+                                ${k.toUpperCase()}
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-medium opacity-90 tracking-wide">${k}</span>
+                    </div>
+                `).join('');
+
+                document.getElementById('ig-grid').innerHTML = DB.igPosts.map(p => `
+                    <div class="ig-item" onclick="UI.openIGPost(${p.id})">
+                        <img src="${p.src}" loading="lazy" alt="">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-white font-bold text-sm backdrop-blur-sm">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> ${p.likes}
+                        </div>
+                    </div>
+                `).join('');
+            },
+            
+            openIGPost(id) {
+                let p = DB.igPosts.find(x=>x.id===id); if(!p) return;
+                document.getElementById('ig-detail-img').src = p.src;
+                document.getElementById('ig-detail-likes').innerText = p.likes;
+                document.getElementById('ig-detail-cap').innerText = p.cap;
+                
+                const svg = document.getElementById('ig-detail-like');
+                svg.setAttribute('fill', 'none'); svg.classList.remove('text-red-500');
+                
+                this.showModal('modal-ig-post');
+            },
+            toggleIGLike() {
+                const s = document.getElementById('ig-detail-like');
+                let l = parseInt(document.getElementById('ig-detail-likes').innerText);
+                if(s.getAttribute('fill') === 'none') { s.setAttribute('fill', 'currentColor'); s.classList.add('text-red-500'); document.getElementById('ig-detail-likes').innerText = l+1; }
+                else { s.setAttribute('fill', 'none'); s.classList.remove('text-red-500'); document.getElementById('ig-detail-likes').innerText = l-1; }
+            },
+
+            // Auto-playing Highlight Engine
+            openHighlight(name) {
+                const deck = DB.highlights[name]; if(!deck) return;
+                this.igState = { curHighlight: name, deck: deck, idx: 0, tmr: null };
+                document.getElementById('story-title').innerText = name;
+                this.renderStoryFrame();
+                this.showModal('modal-highlight');
+            },
+            renderStoryFrame() {
+                const s = this.igState;
+                if(!s.deck[s.idx]) return this.closeModal('modal-highlight');
+                
+                const c = document.getElementById('story-media-container');
+                let src = s.deck[s.idx];
+                let isVid = src.includes('.mp4');
+                
+                if(isVid) {
+                    c.innerHTML = `<video src="${src}" class="absolute inset-0 w-full h-full object-cover" autoplay playsinline muted></video>`;
+                    let v = c.querySelector('video');
+                    v.onended = () => this.nextStory();
+                } else {
+                    c.innerHTML = `<img src="${src}" class="absolute inset-0 w-full h-full object-cover" alt="[attachment_1](attachment)">`;
+                    if(s.tmr) clearTimeout(s.tmr);
+                    s.tmr = setTimeout(() => this.nextStory(), 5000);
+                }
+                
+                document.getElementById('story-progress-container').innerHTML = s.deck.map((_, i) => `
+                    <div class="flex-1 h-0.5 rounded-full bg-white/30 overflow-hidden">
+                        <div class="h-full bg-white ${i===s.idx && !isVid ? 'animate-progress' : ''}" style="width: ${i<s.idx ? '100%' : i>s.idx ? '0%' : isVid ? '100%' : '0'}; ${i===s.idx && !isVid ? 'animation-duration: 5s;' : ''}"></div>
+                    </div>
+                `).join('');
+            },
+            nextStory() {
+                if(this.igState.tmr) clearTimeout(this.igState.tmr);
+                if(this.igState.idx < this.igState.deck.length - 1) {
+                    this.igState.idx++; this.renderStoryFrame();
+                } else {
+                    let keys = Object.keys(DB.highlights);
+                    let currKeyIdx = keys.indexOf(this.igState.curHighlight);
+                    if(currKeyIdx >= 0 && currKeyIdx < keys.length - 1) {
+                        this.openHighlight(keys[currKeyIdx + 1]);
+                    } else {
+                        this.closeModal('modal-highlight');
+                    }
+                }
+            },
+            prevStory() {
+                if(this.igState.tmr) clearTimeout(this.igState.tmr);
+                if(this.igState.idx > 0) {
+                    this.igState.idx--; this.renderStoryFrame();
+                }
+            },
+
+            // --- ARCADE GAMES (50 variations) ---
+            renderGames() {
+                document.getElementById('games-grid').innerHTML = DB.games.map(g => `
+                    <div class="glass-panel p-3 text-center flex flex-col justify-between card-hover cursor-pointer btn-tap border-[var(--border-solid)] relative" onclick="GameEngine.start('${g.logic}', ${g.level}, '${g.name}', '${g.icon}')">
+                        <span class="absolute top-1 right-1 text-[8px] font-bold bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-1.5 py-0.5 rounded-sm">Lv.${g.level}</span>
+                        <div class="text-3xl mt-2 mb-1 drop-shadow-md">${g.icon}</div>
+                        <h4 class="font-bold text-xs truncate w-full mb-1">${g.name}</h4>
+                        <div class="text-[8px] opacity-70 leading-tight min-h-[20px] mb-2 px-1 line-clamp-2">${g.desc}</div>
+                        <button class="w-full py-1.5 bg-[var(--color-primary)] text-white text-[9px] font-bold rounded-lg tracking-widest uppercase">Main</button>
+                    </div>
+                `).join('');
+            },
+
+            // --- SHOP & SETTINGS ---
+            renderShop() {
+                document.getElementById('shop-grid').innerHTML = DB.shop.map(s => {
+                    let owned = State.inv.includes(s.id);
+                    let eq = (s.type==='Tema' && State.eq.theme===s.id.replace('theme_','')) || 
+                             (s.type==='Kosmetik' && State.eq.badge) || 
+                             (s.type==='Visual' && State.eq.fx);
+                    
+                    let btn = '';
+                    if(!owned) btn = `<button class="w-full py-2 bg-[var(--color-primary)] text-white font-bold rounded-xl btn-tap active:scale-95" onclick="State.buy('${s.id}')">Beli (${s.price} 🪙)</button>`;
+                    else if(eq) btn = `<button class="w-full py-2 bg-emerald-500 text-white font-bold rounded-xl cursor-default">Terpasang ✔️</button>`;
+                    else btn = `<button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--color-primary)] text-[var(--color-primary)] font-bold rounded-xl btn-tap active:scale-95" onclick="State.equip('${s.id}')">Gunakan</button>`;
+
+                    return `
+                    <div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-4 rounded-2xl flex flex-col justify-between shadow-sm">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="w-12 h-12 rounded-xl bg-[var(--bg-body)] border border-[var(--border-solid)] flex items-center justify-center text-2xl">${s.icon}</div>
+                                <span class="text-[8px] font-bold bg-[var(--border-solid)] px-2 py-1 rounded uppercase tracking-widest">${s.type}</span>
+                            </div>
+                            <h4 class="font-bold text-base mb-1">${s.name}</h4>
+                            <p class="text-xs opacity-70 mb-4 leading-snug">${s.desc}</p>
+                        </div>
+                        ${btn}
+                    </div>`;
+                }).join('');
+            },
+
+            renderSet() {
+                const conf = [
+                    { id: 'dark', l: 'Dark Mode iOS', d: 'Tampilan elegan gelap' },
+                    { id: 'noGlass', l: 'Matikan Blur', d: 'Untuk HP kentang (Performa)' }
+                ];
+                
+                let h = `<div class="glass-panel overflow-hidden border-[var(--border-solid)] divide-y divide-[var(--border-solid)]">`;
+                conf.forEach(c => {
+                    h += `
+                    <label class="flex justify-between items-center p-4 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                        <div><div class="font-bold text-sm">${c.l}</div><div class="text-[10px] opacity-70 mt-0.5 uppercase tracking-widest">${c.d}</div></div>
+                        <div class="relative">
+                            <input type="checkbox" class="sr-only peer" ${State.set[c.id]?'checked':''} onchange="State.set['${c.id}']=this.checked; State.save(); State.apply();">
+                            <div class="w-10 h-6 bg-gray-300 rounded-full peer peer-checked:bg-[var(--color-primary)] transition-colors"></div>
+                            <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-4 shadow-sm"></div>
+                        </div>
+                    </label>`;
+                });
+                h += `</div>
+                <div class="mt-6 flex flex-col gap-3">
+                    <button class="w-full py-3 glass-panel border-[var(--border-solid)] font-bold text-sm btn-tap hover:text-[var(--color-primary)] transition-colors" onclick="State.addCoin(50)">Claim 50 Koin Gratis 🎁</button>
+                    <button class="w-full py-3 glass-panel border-red-500/30 text-red-500 font-bold text-sm btn-tap hover:bg-red-500 hover:text-white transition-colors" onclick="if(confirm('Reset semua data lokal?')) { localStorage.clear(); location.reload(); }">Reset Semua Data ⚠️</button>
+                </div>`;
+                document.getElementById('settings-container').innerHTML = h;
+            },
+
+            // --- COMMAND PALETTE (AI) ---
+            cmds: [
+                {k: "Home / Dashboard", a: "UI.switchTab('home')"}, {k: "Jadwal Mapel", a: "UI.switchTab('schedule')"},
+                {k: "Direktori Siswa", a: "UI.switchTab('students')"}, {k: "Instagram Gallery", a: "UI.switchTab('gallery')"},
+                {k: "Arcade Games", a: "UI.switchTab('games')"}, {k: "Pengaturan UI", a: "UI.switchTab('settings')"},
+                {k: "Premium Shop", a: "UI.showModal('modal-shop')"}, {k: "Struktur Organisasi", a: "UI.showModal('modal-org')"},
+                {k: "Jadwal Piket", a: "UI.showModal('modal-piket')"}, {k: "Aturan Seragam", a: "UI.showModal('modal-uniform')"}
+            ],
+            searchCmd(q) {
+                let ai = document.getElementById('cmd-ai-text');
+                q = q.toLowerCase();
+                
+                if(q.includes('game')||q.includes('main')) ai.innerText = "Saran: Buka Arcade. Ada 50 game untuk farming koin.";
+                else if(q.includes('jadwal')||q.includes('piket')||q.includes('baju')) ai.innerText = "Saran: Buka menu Piket / Seragam / Jadwal.";
+                else if(q.includes('foto')||q.includes('ig')) ai.innerText = "Saran: Buka IG Gallery. Tersedia fitur Highlight Video.";
+                else if(q.includes('beli')||q.includes('koin')) ai.innerText = "Saran: Buka Premium Shop. Tukar koin dengan efek kaca tebal.";
+                else ai.innerText = "Ketik fitur atau menu yang ingin dicari...";
+
+                let f = this.cmds.filter(x => x.k.toLowerCase().includes(q));
+                document.getElementById('cmd-results').innerHTML = f.length ? f.map(x => `
+                    <div class="p-3 border-b border-[var(--border-solid)] flex items-center gap-3 cursor-pointer hover:bg-[var(--border-solid)] rounded-lg transition-colors btn-tap" onclick="${x.a}; UI.closeModal('cmd-palette')">
+                        <svg class="w-4 h-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        <span class="font-bold text-sm">${x.k}</span>
+                    </div>
+                `).join('') : '<div class="p-6 text-center opacity-50 font-bold text-sm">Tidak ditemukan.</div>';
+            },
+            toggleCmd() {
+                if(document.getElementById('cmd-palette').classList.contains('active')) this.closeModal('cmd-palette');
+                else this.showModal('cmd-palette');
+            }
+        };
+
+        // ---------------- 5. GAME ENGINE (Playable Mini-Games) ----------------
+        const GameEngine = {
+            c: null, tmr: null, pts: 0,
+            
+            close() {
+                clearInterval(this.tmr); clearTimeout(this.tmr);
+                UI.closeModal('modal-game'); this.c.innerHTML = '';
+            },
+            
+            initUI(title, icon) {
+                this.c = document.getElementById('ge-canvas');
+                document.getElementById('ge-title').innerText = title;
+                document.getElementById('ge-icon').innerText = icon;
+                this.pts = 0; this.updatePts();
+                clearInterval(this.tmr); clearTimeout(this.tmr);
+                UI.showModal('modal-game');
+            },
+            
+            updatePts() { document.getElementById('ge-score').innerText = `${this.pts} Pts`; },
+            
+            end(msg, cb) {
+                clearInterval(this.tmr); clearTimeout(this.tmr);
+                let coins = Math.ceil(this.pts / 15);
+                if(coins > 0) State.addCoin(coins);
+                
+                this.c.innerHTML = `
+                    <div class="text-6xl mb-4 animate-bounce">🏁</div>
+                    <div class="font-black text-3xl mb-2 text-center leading-none">${msg}</div>
+                    <div class="text-sm font-bold text-[var(--color-primary)] mb-6 text-center bg-[var(--color-primary-glow)] px-4 py-2 rounded-xl">Skor: ${this.pts} Pts<br><span class="text-emerald-500 text-xs">+${coins} Koin / XP</span></div>
+                    <button class="px-8 py-3 bg-[var(--color-primary)] text-white rounded-full font-bold shadow-lg btn-tap active:scale-95 text-sm uppercase tracking-widest" id="ge-replay">Main Lagi</button>
+                `;
+                document.getElementById('ge-replay').onclick = cb;
+            },
+
+            start(logic, level, title, icon) {
+                this.initUI(title, icon);
+                if(logic === 'react') this.playReact(level, title, icon);
+                else if(logic === 'mem') this.playMem(level, title, icon);
+                else if(logic === 'math') this.playMath(level, title, icon);
+                else if(logic === 'color') this.playColor(level, title, icon);
+                else if(logic === 'time') this.playTime(level, title, icon);
+            },
+
+            playReact(lv, t, ic) {
+                let waitTimeMax = Math.max(1000, 4000 - (lv * 300));
+                let pWin = 10 + (lv * 5);
+                
+                this.c.innerHTML = `<button id="gr-btn" class="w-48 h-48 rounded-full bg-red-500 text-white font-black text-2xl shadow-2xl shadow-red-500/30 active:scale-95 transition-transform select-none flex flex-col items-center justify-center gap-2 border-4 border-white/20"><span class="text-4xl opacity-50">✋</span>TUNGGU</button>`;
+                let b = document.getElementById('gr-btn'), state = 'wait', startT;
+                
+                const loop = () => {
+                    state = 'wait'; b.className = "w-48 h-48 rounded-full bg-red-500 text-white font-black text-2xl shadow-2xl shadow-red-500/30 select-none flex flex-col items-center justify-center gap-2 border-4 border-white/20"; b.innerHTML = '<span class="text-4xl opacity-50">✋</span>TUNGGU';
+                    clearTimeout(this.tmr);
+                    this.tmr = setTimeout(() => {
+                        state = 'go'; b.className = "w-48 h-48 rounded-full bg-emerald-500 text-white font-black text-3xl shadow-2xl shadow-emerald-500/50 active:scale-90 transition-transform select-none flex flex-col items-center justify-center border-4 border-white/20"; b.innerHTML = 'KETUK!';
+                        startT = Date.now();
+                    }, Math.random() * waitTimeMax + 800);
+                };
+                
+                b.onmousedown = () => {
+                    if(state === 'wait') { clearTimeout(this.tmr); this.pts = Math.max(0, this.pts - 5); this.updatePts(); UI.toast("Terlalu cepat! -5 Pts"); loop(); }
+                    else if(state === 'go') {
+                        let ms = Date.now() - startT;
+                        let threshold = Math.max(200, 600 - (lv*30));
+                        if(ms < threshold) { this.pts += pWin; UI.toast(`⚡ ${ms}ms (+${pWin} Pts)`); }
+                        else { this.pts += Math.floor(pWin/2); UI.toast(`Lambat ${ms}ms (+${Math.floor(pWin/2)} Pts)`); }
+                        this.updatePts();
+                        if(this.pts >= pWin*5) return this.end("Level Selesai!", ()=>this.start('react', lv, t, ic));
+                        loop();
+                    }
+                }; loop();
+            },
+
+            playMem(lv, t, ic) {
+                let cols = lv < 4 ? 2 : lv < 7 ? 3 : 4;
+                let rows = lv < 3 ? 2 : lv < 6 ? 3 : 4;
+                let pairs = Math.floor((cols*rows)/2);
+                let emj = ['🍎','🍌','🍉','🍇','🍓','🍒','🍑','🥭'].slice(0, pairs);
+                let deck = [...emj, ...emj].sort(()=>Math.random()-0.5);
+                
+                this.c.innerHTML = `<div id="gm-grid" class="grid gap-2" style="grid-template-columns: repeat(${cols}, minmax(0, 1fr));"></div>`;
+                let g = document.getElementById('gm-grid'), first = null, lock = false, match = 0;
+                
+                deck.forEach(e => {
+                    let b = document.createElement('button');
+                    b.className = "w-16 h-16 sm:w-20 sm:h-20 bg-[var(--bg-surface)] border border-[var(--border-solid)] rounded-xl text-3xl flex items-center justify-center btn-tap shadow-sm";
+                    b.innerHTML = `<span class="opacity-0 scale-50 transition-all duration-300 pointer-events-none">${e}</span>`;
+                    b.onclick = () => {
+                        if(lock || b.dataset.o==='1' || b===first) return;
+                        b.dataset.o='1'; b.classList.add('bg-[var(--color-primary-glow)]', 'border-[var(--color-primary)]'); b.firstChild.classList.remove('opacity-0', 'scale-50');
+                        if(!first) { first = b; return; }
+                        lock = true;
+                        if(first.innerText === b.innerText) {
+                            match++; this.pts += (lv*5); this.updatePts();
+                            first.classList.replace('bg-[var(--color-primary-glow)]','bg-emerald-500/20'); b.classList.replace('bg-[var(--color-primary-glow)]','bg-emerald-500/20');
+                            first.classList.replace('border-[var(--color-primary)]','border-emerald-500'); b.classList.replace('border-[var(--color-primary)]','border-emerald-500');
+                            first = null; lock = false;
+                            if(match === pairs) setTimeout(()=>this.end("Sempurna!", ()=>this.start('mem', lv, t, ic)), 500);
+                        } else {
+                            setTimeout(() => {
+                                first.dataset.o='0'; b.dataset.o='0';
+                                first.classList.remove('bg-[var(--color-primary-glow)]', 'border-[var(--color-primary)]'); b.classList.remove('bg-[var(--color-primary-glow)]', 'border-[var(--color-primary)]');
+                                first.firstChild.classList.add('opacity-0', 'scale-50'); b.firstChild.classList.add('opacity-0', 'scale-50');
+                                first = null; lock = false;
+                            }, 600 - (lv*20));
+                        }
+                    }; g.appendChild(b);
+                });
+            },
+
+            playMath(lv, t, ic) {
+                let maxNum = lv * 10;
+                let ops = lv < 4 ? ['+','-'] : lv < 8 ? ['+','-','*'] : ['+','-','*','/'];
+                let timeLimit = Math.max(3, 10 - Math.floor(lv/2));
+                
+                this.c.innerHTML = `
+                    <div class="w-full bg-[var(--border-solid)] h-2 rounded-full mb-8 relative overflow-hidden"><div id="gmt-bar" class="absolute top-0 left-0 h-full bg-[var(--color-primary)]"></div></div>
+                    <div id="gmt-q" class="text-5xl font-black mb-8 drop-shadow-md font-mono tracking-widest text-center"></div>
+                    <div id="gmt-opts" class="grid grid-cols-2 gap-3 w-full max-w-[250px]"></div>
+                `;
+                
+                const nextQ = () => {
+                    clearInterval(this.tmr);
+                    let op = ops[Math.floor(Math.random()*ops.length)];
+                    let a = Math.floor(Math.random()*maxNum)+1, b = Math.floor(Math.random()*maxNum)+1, ans;
+                    if(op==='+') ans=a+b; else if(op==='-'){ if(b>a) [a,b]=[b,a]; ans=a-b; } else if(op==='*') ans=a*Math.floor(b/2+1); else { ans=a; a=a*b; }
+                    
+                    document.getElementById('gmt-q').innerText = `${a} ${op} ${b}`;
+                    let arr = [ans, ans+Math.floor(Math.random()*10)+1, ans-Math.floor(Math.random()*10)-1, ans+10].sort(()=>Math.random()-0.5);
+                    
+                    document.getElementById('gmt-opts').innerHTML = arr.map(x => `
+                        <button class="py-4 bg-[var(--bg-surface)] border border-[var(--border-solid)] rounded-xl font-black text-xl shadow-sm btn-tap" onclick="GameEngine.ansMath(${x}, ${ans}, ${lv}, '${t}', '${ic}')">${x}</button>
+                    `).join('');
+                    
+                    let w = 100;
+                    this.tmr = setInterval(() => {
+                        w -= (100 / (timeLimit*10)); document.getElementById('gmt-bar').style.width = `${w}%`;
+                        if(w<=0) { clearInterval(this.tmr); this.end("Waktu Habis!", ()=>this.start('math', lv, t, ic)); }
+                    }, 100);
+                }; nextQ();
+                this.ansMath = (sel, ans, lv, t, ic) => {
+                    if(sel === ans) { this.pts += (lv*3); this.updatePts(); if(this.pts >= lv*30) this.end("Lulus!", ()=>this.start('math', lv, t, ic)); else nextQ(); }
+                    else { clearInterval(this.tmr); this.end("Salah Hitung!", ()=>this.start('math', lv, t, ic)); }
+                };
+            },
+
+            playColor(lv, t, ic) {
+                const cols = [{n:'MERAH',c:'#ef4444'},{n:'BIRU',c:'#3b82f6'},{n:'HIJAU',c:'#10b981'},{n:'KUNING',c:'#eab308'}];
+                if(lv>5) cols.push({n:'UNGU',c:'#a855f7'}, {n:'ORANYE',c:'#f97316'});
+                let tLmt = Math.max(10, 35 - (lv*2));
+                
+                this.c.innerHTML = `
+                    <div class="flex justify-between w-full max-w-[280px] font-bold text-sm mb-4"><span class="text-red-500">Waktu: <span id="gc-t">${tLmt}</span>s</span></div>
+                    <div class="text-[10px] font-bold opacity-60 mb-1 uppercase tracking-widest text-center">Pilih warnanya, bukan katanya!</div>
+                    <div id="gc-w" class="text-5xl font-black mb-8 tracking-widest drop-shadow-md text-center"></div>
+                    <div id="gc-opts" class="grid grid-cols-2 gap-3 w-full max-w-[280px]"></div>
+                `;
+                
+                let target;
+                const next = () => {
+                    let w = cols[Math.floor(Math.random()*cols.length)]; target = cols[Math.floor(Math.random()*cols.length)];
+                    let el = document.getElementById('gc-w'); el.innerText = w.n; el.style.color = target.c;
+                    
+                    let opts = [...cols].sort(()=>Math.random()-0.5);
+                    document.getElementById('gc-opts').innerHTML = opts.map(o => `
+                        <button class="py-4 rounded-xl text-white font-black shadow-sm btn-tap active:scale-95 text-sm tracking-widest border border-black/20" style="background:${o.c}" onclick="GameEngine.ansCol('${o.c}', '${target.c}', ${lv}, '${t}', '${ic}')">${o.n}</button>
+                    `).join('');
+                };
+                
+                this.tmr = setInterval(() => { tLmt--; document.getElementById('gc-t').innerText=tLmt; if(tLmt<=0) { clearInterval(this.tmr); this.end("Waktu Habis", ()=>this.start('color', lv, t, ic)); } }, 1000);
+                
+                this.ansCol = (sel, tgt, lv, t, ic) => {
+                    if(sel === tgt) { this.pts += (lv*2); this.updatePts(); if(this.pts >= lv*20) { clearInterval(this.tmr); this.end("Fokus Hebat!", ()=>this.start('color', lv, t, ic)); } else next(); }
+                    else { clearInterval(this.tmr); this.end("Terkecoh!", ()=>this.start('color', lv, t, ic)); }
+                }; next();
+            },
+
+            playTime(lv, t, ic) {
+                let speed = 2 + (lv * 0.5);
+                let tgtW = Math.max(10, 40 - (lv * 2));
+                
+                this.c.innerHTML = `
+                    <div class="text-[10px] font-bold opacity-60 mb-6 uppercase tracking-widest text-center">Ketuk layar saat garis merah di area hijau</div>
+                    <div class="w-full max-w-[300px] h-10 bg-[var(--border-solid)] rounded-full relative overflow-hidden border border-black/10 shadow-inner">
+                        <div class="absolute top-0 bottom-0 bg-emerald-500/50" style="left: 50%; width: ${tgtW}%; transform: translateX(-50%); border-left: 2px solid #10b981; border-right: 2px solid #10b981;"></div>
+                        <div id="gt-line" class="absolute top-0 bottom-0 w-2 bg-red-500 shadow-[0_0_10px_red] rounded-full" style="left: 0%;"></div>
+                    </div>
+                    <button id="gt-btn" class="mt-10 w-32 h-32 rounded-full bg-[var(--color-primary)] text-white font-black text-xl shadow-lg border-4 border-white/20 active:scale-90 transition-transform btn-tap">STOP!</button>
+                `;
+                
+                let p = 0, d = 1, run = true;
+                this.tmr = setInterval(() => {
+                    if(!run) return;
+                    p += (speed * d); if(p>=100 || p<=0) d *= -1;
+                    document.getElementById('gt-line').style.left = `${p}%`;
+                }, 20);
+                
+                document.getElementById('gt-btn').onclick = () => {
+                    if(!run) return; run = false;
+                    let tgtCenter = 50, halfTgt = tgtW/2;
+                    let diff = Math.abs(p - tgtCenter);
+                    if(diff <= halfTgt) {
+                        let gain = Math.floor((halfTgt - diff + 1) * lv);
+                        this.pts += gain; this.updatePts(); UI.toast(`Tepat! +${gain} Pts`);
+                        if(this.pts >= lv*30) { clearInterval(this.tmr); return this.end("Akurasi Sempurna!", ()=>this.start('time', lv, t, ic)); }
+                        setTimeout(()=>{ run=true; }, 500);
+                    } else {
+                        clearInterval(this.tmr); this.end("Meleset!", ()=>this.start('time', lv, t, ic));
+                    }
+                };
+            }
+        };
+
+        // ---------------- 6. INITIALIZATION ----------------
+        document.addEventListener('DOMContentLoaded', () => UI.init());
+
+    </script>
+</body>
+</html>
