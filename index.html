@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>X.Luminance | SMAN 2 MAJALENGKA BY AK v11</title>
-    <meta name="description" content="Website Resmi Kelas 10 L SMA Negeri 2 Majalengka. Tropical Premium iOS Edition.">
+    <title>X.Luminance | SMAN 2 MAJALENGKA </title>
+    <meta name="description" content="Resmi Kelas 10 L SMA Negeri 2 Majalengka.">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -279,7 +279,7 @@
                 
                 <div class="relative z-20 text-white">
                     <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-md rounded-full text-xs font-bold mb-3 border border-white/20">
-                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> TA 2026/2027
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> 2026/2027
                     </div>
                     <h2 class="font-serif text-4xl sm:text-5xl font-bold leading-tight mb-1">X.Luminance</h2>
                     <p class="text-sm opacity-90 font-medium tracking-wide">SMAN 2 Majalengka • Kelas 10 L</p>
@@ -302,10 +302,10 @@
                 <!-- Current Subject & Next Subject Countdown -->
                 <div class="glass-panel p-4 col-span-2 card-hover cursor-pointer btn-tap flex flex-col justify-center relative overflow-hidden" onclick="UI.switchTab('schedule')">
                     <div class="flex justify-between items-start mb-1">
-                        <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">Aktivitas Sekarang</div>
+                        <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">Aktivitas Now Cihuy</div>
                         <div class="text-[10px] font-bold bg-[var(--color-primary)] text-white px-2 py-0.5 rounded animate-pulse" id="rt-next-time">-- min lagi</div>
                     </div>
-                    <div class="font-bold text-lg truncate text-gradient" id="rt-subject">Mengecek Jadwal...</div>
+                    <div class="font-bold text-lg truncate text-gradient" id="rt-subject">Cek Jadwal Bro...</div>
                     <div class="w-full h-1 bg-[var(--border-solid)] mt-2 rounded-full overflow-hidden">
                         <div id="rt-subject-progress" class="h-full bg-[var(--color-primary)]" style="width: 0%"></div>
                     </div>
@@ -319,7 +319,7 @@
                         <div class="p-2.5 bg-blue-500/10 text-blue-500 rounded-xl"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
                         <span class="text-[10px] font-bold bg-[var(--bg-surface-solid)] px-2 py-1 rounded shadow-sm border border-[var(--border-solid)] uppercase tracking-widest">Jadwal</span>
                     </div>
-                    <div><h3 class="font-bold text-base mb-1">Pelajaran Hari Ini</h3><p class="text-xs opacity-70">Lihat urutan mapel</p></div>
+                    <div><h3 class="font-bold text-base mb-1">Jadwal Hari Ini</h3><p class="text-xs opacity-70"> cek mapel</p></div>
                 </div>
                 
                 <div class="glass-panel p-5 card-hover btn-tap cursor-pointer flex flex-col justify-between h-full relative" onclick="UI.showModal('modal-piket')">
@@ -353,8 +353,8 @@
                     <svg width="100" height="100" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2v-2zm0-6h2v4h-2v-4z"/></svg>
                 </div>
                 <div class="text-center sm:text-left mb-4 sm:mb-0 z-10">
-                    <h4 class="font-bold text-lg">Menuju Kenaikan Kelas</h4>
-                    <div class="text-xs font-medium opacity-80 mt-1">Target: Juni 2027. Terus raih nilai terbaik!</div>
+                    <h4 class="font-bold text-lg">Kenaikan Kelas</h4>
+                    <div class="text-xs font-medium opacity-80 mt-1">Juni 2027. Terus raih nilai terbaik! Ya Sigma</div>
                 </div>
                 <div class="text-center sm:text-right z-10 bg-[var(--bg-surface-solid)] px-6 py-3 rounded-2xl shadow-sm border border-[var(--border-solid)]">
                     <div class="font-black text-3xl text-[var(--color-primary)] leading-none" id="rt-promotion-days">--</div>
@@ -367,7 +367,7 @@
         <section id="sec-students" class="view-section hidden animate-fade-up">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div>
-                    <h2 class="font-serif text-3xl font-bold">Direktori Siswa</h2>
+                    <h2 class="font-serif text-3xl font-bold">Daftar Siswa</h2>
                     <p class="text-sm opacity-70 mt-1">Daftar lengkap 46 siswa/i X.Luminance.</p>
                 </div>
                 <div class="flex gap-2 bg-[var(--bg-surface-solid)] p-1.5 rounded-full border border-[var(--border-solid)] shadow-sm">
@@ -628,7 +628,7 @@
                     <!-- IG Button linked from data -->
                     <a href="#" id="sid-ig-btn" onclick="UI.toast('Membuka Instagram ' + this.dataset.ig)" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white font-bold text-sm flex items-center justify-center gap-2 btn-tap shadow-lg">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                        <span id="sid-ig-handle">@instagram</span>
+                        <span id="sid-ig-handle">https://www.instagram.com/x.luminance4us?igsh=eGM4bW5qc2hlbnhk</span>
                     </a>
                 </div>
             </div>
