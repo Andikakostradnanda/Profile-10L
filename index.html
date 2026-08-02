@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth antialiased" data-theme="tropical">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>X.Luminance | SMAN 2 MAJALENGKA BY AK v11</title>
+    <meta name="description" content="Website Resmi Kelas 10 L SMA Negeri 2 Majalengka. Tropical Premium iOS Edition.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        theme: {
+                            primary: 'var(--color-primary)',
+                            accent: 'var(--color-accent)',
+                            surface: 'var(--bg-surface-solid)',
+                        }
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'pop-in': 'popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+                        'slide-in-right': 'slideInRight 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                        'progress': 'progress 1s ease-out forwards',
+                        'spin-slow': 'spin 8s linear infinite',
+                    },
+                    keyframes: {
+                        fadeUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+                        popIn: { '0%': { opacity: '0', transform: 'scale(0.85)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+                        slideInRight: { '0%': { transform: 'translateX(100%)' }, '100%': { transform: 'translateX(0)' } },
+                        progress: { '0%': { width: '0%' }, '100%': { width: '100%' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* === TROPICAL PREMIUM iOS THEME VARIABLES === */
+        :root, [data-theme="tropical"] {
+            --color-primary: #0ea5e9; /* Ocean Blue */
+            --color-accent: #14b8a6; /* Turquoise */
+            --color-primary-glow: rgba(14, 165, 233, 0.2);
+            --app-bg-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2000&auto=format&fit=crop');
+        }
+        [data-theme="sunset"] {
+            --color-primary: #f97316;
+            --color-accent: #f43f5e;
+            --color-primary-glow: rgba(249, 115, 22, 0.2);
+            --app-bg-image: url('https://images.unsplash.com/photo-1518098268026-4e89f1a2cd8e?q=80&w=2000&auto=format&fit=crop');
+        }
+        [data-theme="coral"] {
+            --color-primary: #f43f5e;
+            --color-accent: #fbbf24;
+            --color-primary-glow: rgba(244, 63, 94, 0.2);
+            --app-bg-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2000&auto=format&fit=crop');
+        }
+
+        /* === GLASSMORPHISM & LIGHT/DARK MODE === */
+        :root {
+            --bg-body: #F4F4F9; 
+            --bg-surface: rgba(255, 255, 255, 0.55);
+            --bg-surface-solid: #FFFFFF;
+            --text-primary: #1C1C1E;
+            --text-secondary: #8E8E93;
+            --border-glass: rgba(255, 255, 255, 0.6);
+            --border-solid: rgba(0, 0, 0, 0.08);
+            --glass-blur: blur(25px) saturate(180%);
+            --shadow-glass: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --overlay-bg: rgba(0,0,0,0.4);
+        }
+        .dark {
+            --bg-body: #050505;
+            --bg-surface: rgba(28, 28, 30, 0.55);
+            --bg-surface-solid: #1C1C1E;
+            --text-primary: #F2F2F7;
+            --text-secondary: #8E8E93;
+            --border-glass: rgba(255, 255, 255, 0.15);
+            --border-solid: rgba(255, 255, 255, 0.12);
+            --glass-blur: blur(35px) saturate(200%);
+            --shadow-glass: 0 10px 40px rgba(0, 0, 0, 0.4);
+            --overlay-bg: rgba(0,0,0,0.7);
+        }
+
+        /* Performance Modes */
+        body { background-color: var(--bg-body); color: var(--text-primary); transition: background-color 0.5s ease, color 0.5s ease; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+        body.low-end { 
+            --bg-surface: var(--bg-surface-solid); 
+            --glass-blur: blur(0px); 
+            --border-glass: var(--border-solid); 
+            --shadow-glass: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        body.low-end .ambient-bg { display: none; }
+        body.low-end .animate-fade-up, body.low-end .animate-pop-in { animation: none !important; opacity: 1 !important; transform: none !important; }
+        
+        /* Ambient Backgrounds */
+        .ambient-bg { position: fixed; inset: 0; z-index: -2; background-image: var(--app-bg-image); background-size: cover; background-position: center; opacity: 0.15; pointer-events: none; transition: background 1s ease; }
+        .dark .ambient-bg { opacity: 0.25; filter: brightness(0.6) contrast(1.2); }
+        .ambient-gradient { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at top right, var(--color-primary-glow), transparent 60%); pointer-events: none; }
+
+        /* Premium Panels */
+        .glass-panel { 
+            background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); 
+            box-shadow: var(--shadow-glass); border: 1px solid var(--border-glass); border-radius: 1.5rem; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+        }
+        .glass-nav { background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-solid); }
+        
+        /* Premium Interactions */
+        .btn-tap { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease; cursor: pointer; }
+        .btn-tap:active { transform: scale(0.92); opacity: 0.8; filter: brightness(0.9); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -5px var(--color-primary-glow); border-color: var(--color-primary); }
+
+        /* Slide Drawer (Sidebar) */
+        .drawer-overlay { position: fixed; inset: 0; background: var(--overlay-bg); backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 1000; }
+        .drawer-overlay.active { opacity: 1; pointer-events: auto; }
+        .drawer-content { position: fixed; top: 0; left: 0; height: 100vh; width: 300px; max-width: 85vw; background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-right: 1px solid var(--border-glass); transform: translateX(-100%); transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); z-index: 1001; display: flex; flex-direction: column; }
+        .drawer-overlay.active .drawer-content { transform: translateX(0); }
+
+        /* Modals (Stacked & Stable) */
+        .modal-overlay { position: fixed; inset: 0; background: var(--overlay-bg); backdrop-filter: blur(10px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 2000; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-overlay.stacked { z-index: 2010; } /* For modals over modals */
+        .modal-content { background: var(--bg-surface); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-glass); border-radius: 2rem; width: 100%; max-height: 85vh; overflow-y: auto; transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 30px 60px rgba(0,0,0,0.3); overscroll-behavior: contain; }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+
+        /* Floating Bubble Bottom Nav */
+        .bottom-nav-container { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 900; width: 90%; max-width: 380px; pointer-events: none; }
+        .bubble-nav { pointer-events: auto; background: var(--bg-surface); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-glass); border-radius: 99px; box-shadow: var(--shadow-glass); display: flex; justify-content: space-around; padding: 0.5rem; transition: transform 0.3s ease; }
+        .nav-item { width: 3.5rem; height: 3.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 50%; color: var(--text-secondary); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; }
+        .nav-item.active { color: #fff; background: var(--color-primary); box-shadow: 0 8px 25px var(--color-primary-glow); transform: translateY(-8px); border: 2px solid var(--border-glass); }
+        .nav-item svg { width: 24px; height: 24px; stroke-width: 2; fill: none; stroke: currentColor; transition: transform 0.3s ease; }
+        .nav-item.active svg { transform: scale(1.15); stroke-width: 2.5; }
+
+        /* Instagram UI specific */
+        .ig-theme { background-color: #000 !important; color: #fff !important; border-color: #262626 !important; }
+        .ig-story-ring { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); padding: 3px; border-radius: 50%; cursor: pointer; }
+        .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        .ig-item { aspect-ratio: 1/1; background: #262626; position: relative; cursor: pointer; overflow: hidden; }
+        .ig-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .ig-item:hover img { transform: scale(1.05); }
+
+        /* Progress Bars */
+        .progress-bar-inner { background: linear-gradient(90deg, var(--color-primary), var(--color-accent)); transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Game UI */
+        .game-card { perspective: 1000px; }
+        .game-card-inner { transition: transform 0.6s; transform-style: preserve-3d; }
+        
+        /* Utilities */
+        ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border-solid); border-radius: 10px; }
+        .hide-scroll::-webkit-scrollbar { display: none; } .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .text-gradient { background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        
+        /* SVG Icon styling inside lists */
+        .icon-svg { width: 1.5rem; height: 1.5rem; stroke-width: 1.5; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+</head>
+<body class="pb-32 text-sm sm:text-base">
+
+    <!-- Ambient Backgrounds -->
+    <div class="ambient-bg"></div>
+    <div class="ambient-gradient"></div>
+    <div id="particles" class="fixed inset-0 pointer-events-none z-[9999]"></div>
+
+    <!-- HEADER (Glass) -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-nav">
+        <!-- iOS Style XP Bar -->
+        <div class="w-full h-1 bg-[var(--border-solid)] relative cursor-pointer" onclick="UI.toast(`XP: ${State.xp} / ${State.xpNext}. Mainkan Arcade!`)">
+            <div id="header-xp-bar" class="h-full progress-bar-inner" style="width: 0%;"></div>
+        </div>
+        
+        <div class="px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <button class="p-2 -ml-2 rounded-full hover:bg-[var(--border-solid)] transition-colors btn-tap" onclick="UI.toggleDrawer()">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="15" y2="6"></line><line x1="3" y1="18" x2="18" y2="18"></line></svg>
+                </button>
+                
+                <!-- Dual Logos (Interactive) -->
+                <div class="flex items-center group relative">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-10 h-10 rounded-full border-2 border-[var(--color-primary)] shadow-md cursor-pointer btn-tap z-10 object-cover bg-white" onclick="UI.openClassID()" alt="Kelas">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-10 h-10 rounded-full border-2 border-[var(--bg-body)] shadow-md cursor-pointer btn-tap -ml-4 z-0 object-contain bg-white p-1" onclick="UI.openSchoolID()" alt="Sekolah">
+                </div>
+                
+                <div class="ml-1 leading-tight">
+                    <h1 class="font-serif font-bold text-lg">X.Luminance</h1>
+                    <p class="text-[10px] font-bold text-[var(--color-primary)] uppercase tracking-widest mt-0.5">
+                        <span id="header-level" class="bg-[var(--color-primary-glow)] px-1 rounded mr-1">Lv.1</span> Gen 26/27
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] text-sm font-bold cursor-pointer btn-tap shadow-sm" onclick="UI.showModal('modal-shop')">
+                    <span id="header-coins" class="text-[var(--color-primary)]">0</span>
+                    <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8" stroke="white" stroke-width="2"></path></svg>
+                </div>
+                <button class="w-10 h-10 rounded-full bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] flex items-center justify-center btn-tap shadow-sm text-[var(--color-primary)]" onclick="UI.toggleCmd()">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR DRAWER (Swipeable Menu) -->
+    <div id="drawer" class="drawer-overlay" onclick="if(event.target===this) UI.toggleDrawer()">
+        <div class="drawer-content p-6">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-12 h-12 rounded-xl object-cover border border-[var(--border-glass)] shadow-md">
+                    <div>
+                        <div class="font-serif font-bold text-lg">Menu Utama</div>
+                        <div class="text-[10px] font-bold uppercase tracking-widest text-[var(--color-primary)]">SMAN 2 Majalengka</div>
+                    </div>
+                </div>
+                <button class="p-2 btn-tap rounded-full bg-[var(--border-solid)]" onclick="UI.toggleDrawer()">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <nav class="space-y-2 flex-grow overflow-y-auto hide-scroll pb-4">
+                <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest px-2 mb-2">Navigasi Dasar</div>
+                <a href="#" onclick="UI.switchTab('home'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-blue-500" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg> Dashboard Utama</a>
+                <a href="#" onclick="UI.switchTab('schedule'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-emerald-500" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Jadwal & Waktu</a>
+                <a href="#" onclick="UI.switchTab('students'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-purple-500" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Direktori Siswa</a>
+                
+                <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest px-2 mb-2 mt-6">Hiburan & Media</div>
+                <a href="#" onclick="UI.switchTab('gallery'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-pink-500" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle></svg> IG Gallery</a>
+                <a href="#" onclick="UI.switchTab('games'); UI.toggleDrawer()" class="flex items-center justify-between px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap">
+                    <span class="flex items-center gap-3"><svg class="icon-svg text-orange-500" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 12h4"></path></svg> Arcade v11</span>
+                    <span class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold animate-pulse">HOT</span>
+                </a>
+                
+                <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest px-2 mb-2 mt-6">Akses Info</div>
+                <a href="#" onclick="UI.showModal('modal-piket'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-amber-500" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Jadwal Piket</a>
+                <a href="#" onclick="UI.showModal('modal-uniform'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-rose-500" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg> Aturan Seragam</a>
+                <a href="#" onclick="UI.showModal('modal-org'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-indigo-500" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg> Struktur Organisasi</a>
+            </nav>
+            
+            <div class="mt-auto pt-4">
+                <div class="glass-panel p-4 bg-gradient-to-r from-[var(--color-primary-glow)] to-transparent border-[var(--color-primary)] flex items-center justify-between cursor-pointer btn-tap" onclick="UI.showModal('modal-shop'); UI.toggleDrawer()">
+                    <div>
+                        <div class="font-bold text-sm text-[var(--color-primary)]">Premium Shop</div>
+                        <div class="text-xs opacity-70">Beli Tema & Kosmetik</div>
+                    </div>
+                    <svg class="icon-svg text-[var(--color-primary)]" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-4xl mx-auto px-4 pt-24 relative z-10 min-h-screen">
+        
+        <!-- === HOME SECTION === -->
+        <section id="sec-home" class="view-section animate-fade-up">
+            <!-- Hero Banner -->
+            <div class="glass-panel p-6 sm:p-8 mb-6 relative overflow-hidden flex flex-col justify-end min-h-[220px] rounded-[2rem] group cursor-pointer btn-tap border-[var(--border-glass)]" onclick="UI.openClassID()">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 pointer-events-none"></div>
+                <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover z-0 opacity-90 group-hover:scale-105 transition-transform duration-700" alt="">
+                
+                <div class="relative z-20 text-white">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-md rounded-full text-xs font-bold mb-3 border border-white/20">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> TA 2026/2027
+                    </div>
+                    <h2 class="font-serif text-4xl sm:text-5xl font-bold leading-tight mb-1">X.Luminance</h2>
+                    <p class="text-sm opacity-90 font-medium tracking-wide">SMAN 2 Majalengka • Kelas 10 L</p>
+                </div>
+            </div>
+
+            <!-- Realtime Status -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                <!-- Date -->
+                <div class="glass-panel p-4 flex flex-col justify-center items-center text-center relative overflow-hidden group">
+                    <svg class="icon-svg text-blue-500 mb-2 group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+                    <div class="font-bold text-sm" id="rt-date">Memuat...</div>
+                </div>
+                <!-- Time -->
+                <div class="glass-panel p-4 flex flex-col justify-center items-center text-center relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-[var(--color-primary-glow)] animate-pulse opacity-20"></div>
+                    <svg class="icon-svg text-emerald-500 mb-2 group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <div class="font-bold text-2xl text-[var(--color-primary)] font-mono tracking-tight" id="rt-time">00:00</div>
+                </div>
+                <!-- Current Subject & Next Subject Countdown -->
+                <div class="glass-panel p-4 col-span-2 card-hover cursor-pointer btn-tap flex flex-col justify-center relative overflow-hidden" onclick="UI.switchTab('schedule')">
+                    <div class="flex justify-between items-start mb-1">
+                        <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">Aktivitas Sekarang</div>
+                        <div class="text-[10px] font-bold bg-[var(--color-primary)] text-white px-2 py-0.5 rounded animate-pulse" id="rt-next-time">-- min lagi</div>
+                    </div>
+                    <div class="font-bold text-lg truncate text-gradient" id="rt-subject">Mengecek Jadwal...</div>
+                    <div class="w-full h-1 bg-[var(--border-solid)] mt-2 rounded-full overflow-hidden">
+                        <div id="rt-subject-progress" class="h-full bg-[var(--color-primary)]" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Access Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div class="glass-panel p-5 card-hover btn-tap cursor-pointer flex flex-col justify-between h-full relative" onclick="UI.switchTab('schedule')">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2.5 bg-blue-500/10 text-blue-500 rounded-xl"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
+                        <span class="text-[10px] font-bold bg-[var(--bg-surface-solid)] px-2 py-1 rounded shadow-sm border border-[var(--border-solid)] uppercase tracking-widest">Jadwal</span>
+                    </div>
+                    <div><h3 class="font-bold text-base mb-1">Pelajaran Hari Ini</h3><p class="text-xs opacity-70">Lihat urutan mapel</p></div>
+                </div>
+                
+                <div class="glass-panel p-5 card-hover btn-tap cursor-pointer flex flex-col justify-between h-full relative" onclick="UI.showModal('modal-piket')">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2.5 bg-amber-500/10 text-amber-500 rounded-xl"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                        <span class="text-[10px] font-bold bg-[var(--bg-surface-solid)] px-2 py-1 rounded shadow-sm border border-[var(--border-solid)] uppercase tracking-widest text-amber-500" id="badge-piket">MEMUAT</span>
+                    </div>
+                    <div><h3 class="font-bold text-base mb-1">Jadwal Piket</h3><p class="text-xs opacity-70 truncate font-medium" id="desc-piket">Siapa bersihin kelas?</p></div>
+                </div>
+                
+                <div class="glass-panel p-5 card-hover btn-tap cursor-pointer flex flex-col justify-between h-full relative" onclick="UI.showModal('modal-uniform')">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2.5 bg-pink-500/10 text-pink-500 rounded-xl"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg></div>
+                        <span class="text-[10px] font-bold bg-[var(--bg-surface-solid)] px-2 py-1 rounded shadow-sm border border-[var(--border-solid)] uppercase tracking-widest">Aturan</span>
+                    </div>
+                    <div><h3 class="font-bold text-base mb-1">Seragam</h3><p class="text-xs text-[var(--color-primary)] font-bold truncate" id="desc-uniform">Mengecek...</p></div>
+                </div>
+            </div>
+
+            <!-- Utilities Grid -->
+            <div class="mb-8">
+                <h3 class="font-serif font-bold text-xl mb-4 pl-1">Utilitas & Menu Pintar</h3>
+                <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-8 gap-3" id="util-grid">
+                    <!-- JS Rendered without Emojis -->
+                </div>
+            </div>
+            
+            <!-- Long Term Countdown -->
+            <div class="glass-panel p-6 flex flex-col sm:flex-row justify-between items-center bg-gradient-to-r from-[var(--color-primary-glow)] to-transparent border-[var(--color-primary)] relative overflow-hidden group">
+                <div class="absolute right-0 top-0 opacity-10 scale-150 group-hover:rotate-12 transition-transform duration-700">
+                    <svg width="100" height="100" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2v-2zm0-6h2v4h-2v-4z"/></svg>
+                </div>
+                <div class="text-center sm:text-left mb-4 sm:mb-0 z-10">
+                    <h4 class="font-bold text-lg">Menuju Kenaikan Kelas</h4>
+                    <div class="text-xs font-medium opacity-80 mt-1">Target: Juni 2027. Terus raih nilai terbaik!</div>
+                </div>
+                <div class="text-center sm:text-right z-10 bg-[var(--bg-surface-solid)] px-6 py-3 rounded-2xl shadow-sm border border-[var(--border-solid)]">
+                    <div class="font-black text-3xl text-[var(--color-primary)] leading-none" id="rt-promotion-days">--</div>
+                    <div class="text-[10px] font-bold opacity-60 uppercase tracking-widest mt-1">Hari Lagi</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- === STUDENTS SECTION === -->
+        <section id="sec-students" class="view-section hidden animate-fade-up">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="font-serif text-3xl font-bold">Direktori Siswa</h2>
+                    <p class="text-sm opacity-70 mt-1">Daftar lengkap 46 siswa/i X.Luminance.</p>
+                </div>
+                <div class="flex gap-2 bg-[var(--bg-surface-solid)] p-1.5 rounded-full border border-[var(--border-solid)] shadow-sm">
+                    <button class="px-5 py-2 rounded-full text-sm font-bold transition-all bg-[var(--color-primary)] text-white filter-btn shadow-md" onclick="UI.filterStudents('all', this)">Semua (46)</button>
+                    <button class="px-5 py-2 rounded-full text-sm font-bold transition-all text-[var(--text-secondary)] filter-btn" onclick="UI.filterStudents('L', this)">Laki-laki</button>
+                    <button class="px-5 py-2 rounded-full text-sm font-bold transition-all text-[var(--text-secondary)] filter-btn" onclick="UI.filterStudents('P', this)">Perempuan</button>
+                </div>
+            </div>
+            
+            <div class="relative mb-6">
+                <input type="text" id="search-student" placeholder="Cari nama, absen, NIS, jabatan..." class="w-full glass-panel py-4 pl-12 pr-4 outline-none focus:border-[var(--color-primary)] font-medium shadow-sm transition-colors" onkeyup="UI.searchStudent(this.value)">
+                <svg class="icon-svg absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="students-grid">
+                <!-- JS Rendered -->
+            </div>
+        </section>
+
+        <!-- === SCHEDULE SECTION === -->
+        <section id="sec-schedule" class="view-section hidden animate-fade-up">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="font-serif text-3xl font-bold">Jadwal Pelajaran</h2>
+                    <p class="text-sm opacity-70 mt-1">Tahun 2026/2027 SMAN 2 Majalengka</p>
+                </div>
+                <div class="flex gap-2 overflow-x-auto hide-scroll w-full md:w-auto pb-2" id="schedule-tabs">
+                    <!-- JS Rendered -->
+                </div>
+            </div>
+            <div class="glass-panel p-6">
+                <div class="flex justify-between items-center border-b border-[var(--border-solid)] pb-4 mb-6">
+                    <h3 class="font-bold text-2xl text-[var(--color-primary)]" id="sched-title">Senin</h3>
+                    <span class="text-[10px] px-3 py-1 bg-[var(--color-primary)] text-white rounded-full font-bold tracking-widest hidden shadow-md uppercase" id="sched-badge">Hari Ini</span>
+                </div>
+                <div class="relative pl-6 border-l-2 border-[var(--border-solid)] space-y-6" id="sched-timeline">
+                    <!-- JS Rendered -->
+                </div>
+            </div>
+        </section>
+
+        <!-- === GALLERY SECTION (INSTAGRAM CLONE) === -->
+        <section id="sec-gallery" class="view-section hidden animate-fade-up px-0 sm:px-4">
+            <!-- iPhone/IG Container -->
+            <div class="max-w-[420px] mx-auto ig-theme sm:rounded-[2.5rem] sm:border-[10px] border-[#262626] overflow-hidden shadow-2xl relative pb-16 font-sans h-[100dvh] sm:h-[85vh] flex flex-col">
+                <!-- Top Nav -->
+                <div class="flex justify-between items-center p-4 border-b border-[#262626] bg-black z-20 shrink-0">
+                    <div class="font-bold text-xl flex items-center gap-1 cursor-pointer tracking-tight" onclick="Haptics.vibrate(); UI.toast('Refresh feed...')">
+                        x.luminance4us <svg class="w-4 h-4 text-blue-500 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    </div>
+                    <div class="flex gap-5">
+                        <svg class="w-6 h-6 cursor-pointer btn-tap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="UI.toast('Mode Lokal')"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                        <svg class="w-6 h-6 cursor-pointer btn-tap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="UI.toggleDrawer()"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </div>
+                </div>
+                
+                <div class="overflow-y-auto hide-scroll flex-grow bg-black">
+                    <!-- Profile Info -->
+                    <div class="p-4 flex items-center gap-6">
+                        <div class="w-20 h-20 shrink-0 ig-story-ring relative btn-tap" onclick="UI.openHighlight('Bobo')">
+                            <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-full h-full rounded-full border-2 border-black object-cover bg-white" alt="">
+                        </div>
+                        <div class="flex-grow flex justify-around text-center">
+                            <div><div class="font-bold text-lg">3</div><div class="text-xs opacity-90">Posts</div></div>
+                            <div class="cursor-pointer btn-tap" onclick="UI.switchTab('students')"><div class="font-bold text-lg">46</div><div class="text-xs opacity-90">Followers</div></div>
+                            <div><div class="font-bold text-lg">1</div><div class="text-xs opacity-90">Following</div></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bio -->
+                    <div class="px-4 pb-3 text-sm">
+                        <div class="font-bold text-base mb-0.5">X.Luminance 10 L ✨</div>
+                        <div class="opacity-90 leading-snug mb-2">
+                            Official Account SMAN 2 Majalengka.<br>
+                            Building memories, chasing dreams.<br>
+                            "We shine brighter together" ☀️
+                        </div>
+                        <div class="text-blue-400 text-xs font-medium cursor-pointer mb-4" onclick="UI.toast('Membuka web sekolah')">sman2majalengka.sch.id</div>
+                        <div class="flex gap-2">
+                            <button class="flex-1 bg-[#262626] hover:bg-[#333] transition-colors py-1.5 rounded-lg font-bold text-sm btn-tap" onclick="UI.toast('Following!')">Following ⌄</button>
+                            <button class="flex-1 bg-[#262626] hover:bg-[#333] transition-colors py-1.5 rounded-lg font-bold text-sm btn-tap" onclick="UI.toast('DM feature lokal')">Message</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Highlights -->
+                    <div class="px-4 pb-4 pt-2 flex gap-4 overflow-x-auto hide-scroll" id="ig-highlights">
+                        <!-- JS Rendered -->
+                    </div>
+                    
+                    <!-- Tabs -->
+                    <div class="flex border-t border-[#262626]">
+                        <div class="flex-1 py-3 flex justify-center border-b border-white cursor-pointer"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+                        <div class="flex-1 py-3 flex justify-center text-gray-500 cursor-pointer btn-tap" onclick="UI.toast('Reels kosong')"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4z"></path><rect x="3" y="5" width="12" height="14" rx="2"></rect></svg></div>
+                        <div class="flex-1 py-3 flex justify-center text-gray-500 cursor-pointer btn-tap" onclick="UI.toast('Belum ada tag')"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                    </div>
+                    
+                    <!-- Grid -->
+                    <div class="ig-grid pb-4" id="ig-grid">
+                        <!-- JS Rendered -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- === ARCADE GAMES SECTION (15 Premium Stages) === -->
+        <section id="sec-games" class="view-section hidden animate-fade-up">
+             <div class="text-center mb-8 glass-panel p-6 sm:p-10 rounded-[2rem] relative overflow-hidden border-[var(--color-primary)] shadow-2xl">
+                <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-primary-glow)] to-transparent opacity-80"></div>
+                <h2 class="font-serif text-4xl sm:text-5xl font-bold mb-3 text-gradient relative z-10">Arcade v11</h2>
+                <p class="text-[var(--text-secondary)] text-sm sm:text-base max-w-lg mx-auto relative z-10 font-medium leading-relaxed">Selesaikan 15 Stage unik! Latih otak, refleks, dan logikamu untuk mendapatkan XP & Koin. Tidak ada game tap-tap bodoh disini.</p>
+                <div class="mt-6 inline-flex items-center gap-3 bg-[var(--bg-surface-solid)] px-6 py-3 rounded-full border border-[var(--border-solid)] shadow-md font-bold text-sm relative z-10">
+                    Total Saldo: <span id="games-coin" class="text-[var(--color-primary)] text-xl">0</span> 
+                    <svg class="w-5 h-5 text-yellow-500 fill-current" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8" stroke="white" stroke-width="2"></path></svg>
+                </div>
+            </div>
+            
+            <div class="flex justify-between items-center mb-4 px-1">
+                <h3 class="font-bold text-xl">15 Stages (Play to Earn)</h3>
+                <span class="text-[10px] bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-2 py-1 rounded font-bold uppercase tracking-widest border border-[var(--color-primary)] shadow-sm">Premium</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="games-grid">
+                <!-- JS Rendered -->
+            </div>
+        </section>
+
+        <!-- === SETTINGS SECTION === -->
+        <section id="sec-settings" class="view-section hidden animate-fade-up max-w-2xl mx-auto">
+            <div class="mb-8 pl-2 text-center sm:text-left">
+                <h2 class="font-serif text-3xl font-bold mb-2">Pengaturan</h2>
+                <p class="text-sm opacity-70">Sesuaikan UI, performa, dan fitur kenyamanan.</p>
+            </div>
+            <div id="settings-container" class="space-y-6">
+                <!-- JS Rendered -->
+            </div>
+            
+            <!-- Footer/Credits -->
+            <div class="mt-16 text-center pb-8 opacity-60 flex flex-col items-center">
+                <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-14 h-14 mx-auto rounded-xl grayscale mb-4 opacity-70" alt="Logo">
+                <p class="text-xs font-bold tracking-widest uppercase mb-1">X.Luminance v11 Premium</p>
+                <p class="text-[10px] font-medium tracking-wide">Design & Code by AK ᡕᠵデᡁ᠊╾━</p>
+                <p class="text-[10px] mt-4">© 2026/2027 Kelas 10 L - SMAN 2 Majalengka.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING BUBBLE BOTTOM NAV (iOS Style) -->
+    <div class="bottom-nav-container">
+        <nav class="bubble-nav overflow-x-auto hide-scroll">
+            <button class="nav-item active btn-tap" data-target="home" onclick="UI.switchTab('home')">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </button>
+            <button class="nav-item btn-tap" data-target="schedule" onclick="UI.switchTab('schedule')">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </button>
+            <button class="nav-item btn-tap" data-target="students" onclick="UI.switchTab('students')">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </button>
+            <button class="nav-item btn-tap" data-target="gallery" onclick="UI.switchTab('gallery')">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </button>
+            <button class="nav-item btn-tap" data-target="games" onclick="UI.switchTab('games')">
+                 <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 12h4"></path><line x1="18" y1="12" x2="18.01" y2="12"></line></svg>
+            </button>
+            <button class="nav-item btn-tap" data-target="settings" onclick="UI.switchTab('settings')">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+        </nav>
+    </div>
+
+    <!-- === MODALS (FIXED LAYOUT) === -->
+    
+    <!-- 1A. CLASS ID MODAL -->
+    <div id="modal-class-id" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-class-id')">
+        <div class="flex flex-col items-center relative z-10 w-full max-w-sm animate-pop-in">
+            <div class="bg-[#0f4c81] w-full rounded-[2rem] overflow-hidden shadow-2xl border border-[var(--border-glass)] relative">
+                <!-- Background Pattern -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none z-0">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-64 h-64 object-contain grayscale" alt="">
+                </div>
+                
+                <!-- Header -->
+                <div class="p-6 pb-2 text-center relative z-10 text-white">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-16 h-16 bg-white rounded-full p-1.5 shadow-lg mx-auto mb-3 object-contain" alt="">
+                    <h3 class="font-bold text-xl uppercase tracking-widest">Kelas 10 L</h3>
+                    <p class="text-[10px] uppercase tracking-[0.2em] opacity-80 mt-1">SMA Negeri 2 Majalengka</p>
+                </div>
+                
+                <!-- Body -->
+                <div class="bg-[var(--bg-surface-solid)] text-gray-900 p-6 flex flex-col items-center relative z-10 mt-4 rounded-t-[2rem]">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-28 h-28 rounded-full border-4 border-white shadow-xl -mt-14 mb-4 object-cover" alt="">
+                    <h2 class="font-serif font-bold text-2xl mb-1">X.Luminance</h2>
+                    <p class="text-sm font-bold text-[var(--color-primary)] mb-6 bg-[var(--color-primary-glow)] px-4 py-1 rounded-full uppercase tracking-widest">Official Card</p>
+                    
+                    <!-- Social Links -->
+                    <div class="grid grid-cols-4 gap-3 w-full border-t border-[var(--border-solid)] pt-6">
+                        <a href="#" onclick="UI.toast('Membuka Instagram Kelas')" class="flex flex-col items-center gap-1.5 btn-tap group">
+                            <div class="w-12 h-12 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center group-hover:bg-pink-500 group-hover:text-white transition-colors shadow-sm"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></div>
+                            <span class="text-[9px] font-bold uppercase tracking-wider">IG</span>
+                        </a>
+                        <a href="#" onclick="UI.toast('Membuka TikTok Kelas')" class="flex flex-col items-center gap-1.5 btn-tap group">
+                            <div class="w-12 h-12 rounded-full bg-gray-100 text-gray-900 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors shadow-sm"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg></div>
+                            <span class="text-[9px] font-bold uppercase tracking-wider">TikTok</span>
+                        </a>
+                        <a href="#" onclick="UI.toast('Membuka Facebook Kelas')" class="flex flex-col items-center gap-1.5 btn-tap group">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors shadow-sm"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></div>
+                            <span class="text-[9px] font-bold uppercase tracking-wider">FB</span>
+                        </a>
+                        <a href="#" onclick="UI.toast('Membuka YouTube Kelas')" class="flex flex-col items-center gap-1.5 btn-tap group">
+                            <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></div>
+                            <span class="text-[9px] font-bold uppercase tracking-wider">YT</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <button class="mt-6 w-12 h-12 rounded-full glass-panel flex items-center justify-center btn-tap shadow-xl border border-[var(--border-solid)] hover:bg-red-500 hover:text-white transition-colors" onclick="UI.closeModal('modal-class-id')">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- 1B. STUDENT ID MODAL -->
+    <div id="modal-student-id" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-student-id')">
+        <div class="flex flex-col items-center relative w-full max-w-sm animate-pop-in">
+            <div class="bg-[var(--bg-surface-solid)] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-[var(--border-solid)] relative">
+                
+                <!-- Graphic Header -->
+                <div class="h-32 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 20px 20px;"></div>
+                    <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[var(--bg-surface-solid)] to-transparent"></div>
+                    <div class="absolute top-4 left-4 text-white font-serif font-bold tracking-widest drop-shadow-md">X.LUMINANCE</div>
+                    <div class="absolute top-4 right-4 text-white text-xs font-bold bg-white/20 px-2 py-1 rounded backdrop-blur-sm">26/27</div>
+                </div>
+
+                <!-- Body -->
+                <div class="p-6 flex flex-col items-center relative">
+                    <div class="w-28 h-28 rounded-full border-4 border-[var(--bg-surface-solid)] shadow-xl overflow-hidden -mt-20 mb-4 bg-gray-200" id="sid-photo"></div>
+                    
+                    <h2 class="font-bold text-xl uppercase tracking-wide text-center leading-tight min-h-[56px] flex items-center profile-badge" id="sid-name">NAMA SISWA</h2>
+                    
+                    <div class="flex gap-2 mt-2 mb-6">
+                        <span class="text-[10px] font-bold text-white bg-[var(--color-primary)] px-3 py-1 rounded-full uppercase tracking-widest shadow-sm" id="sid-role">Siswa</span>
+                        <span class="text-[10px] font-bold text-[var(--color-primary)] bg-[var(--color-primary-glow)] px-3 py-1 rounded-full uppercase tracking-widest" id="sid-gender">L</span>
+                    </div>
+
+                    <div class="w-full bg-[var(--bg-body)] rounded-2xl p-4 border border-[var(--border-solid)] space-y-3 mb-6">
+                        <div class="flex justify-between items-center border-b border-[var(--border-solid)] pb-2">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">NIS / NISN</span>
+                            <span class="font-mono font-bold text-sm" id="sid-nis"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">No. Absen</span>
+                            <span class="font-mono font-bold text-sm" id="sid-absen"></span>
+                        </div>
+                    </div>
+
+                    <!-- IG Button linked from data -->
+                    <a href="#" id="sid-ig-btn" onclick="UI.toast('Membuka Instagram ' + this.dataset.ig)" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white font-bold text-sm flex items-center justify-center gap-2 btn-tap shadow-lg">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        <span id="sid-ig-handle">@instagram</span>
+                    </a>
+                </div>
+            </div>
+            
+            <button class="mt-6 w-12 h-12 rounded-full glass-panel flex items-center justify-center btn-tap shadow-xl border border-[var(--border-solid)] hover:bg-red-500 hover:text-white transition-colors" onclick="UI.closeModal('modal-student-id')">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. IG Post Detail Modal -->
+    <div id="modal-ig-post" class="modal-overlay stacked" onclick="if(event.target===this) UI.closeModal('modal-ig-post')">
+        <div class="modal-content p-0 max-w-sm bg-[#000] text-white rounded-3xl overflow-hidden shadow-2xl border border-[#262626] ig-theme">
+            <div class="flex items-center justify-between p-3 border-b border-[#262626]">
+                <div class="flex items-center gap-2">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-8 h-8 rounded-full object-cover" alt="">
+                    <span class="font-bold text-sm">x.luminance4us</span>
+                </div>
+                <svg class="w-5 h-5 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+            </div>
+            <img id="ig-detail-img" src="" class="w-full aspect-square object-cover" oncontextmenu="return false;" alt="">
+            <div class="p-4">
+                <div class="flex justify-between mb-3">
+                    <div class="flex gap-4">
+                        <svg class="w-6 h-6 cursor-pointer btn-tap transition-colors" id="ig-detail-like" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="Haptics.vibrate(); UI.toggleIGLike()"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        <svg class="w-6 h-6 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        <svg class="w-6 h-6 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </div>
+                    <svg class="w-6 h-6 cursor-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div class="font-bold text-sm mb-1.5"><span id="ig-detail-likes">0</span> likes</div>
+                <div class="text-sm leading-snug"><span class="font-bold mr-2">x.luminance4us</span><span id="ig-detail-cap" class="opacity-90"></span></div>
+                <div class="text-[10px] text-gray-500 mt-2 font-bold tracking-widest uppercase">BARU SAJA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. IG Highlight Story Modal -->
+    <div id="modal-highlight" class="modal-overlay stacked" onclick="if(event.target===this) UI.closeModal('modal-highlight')">
+        <div class="modal-content p-0 max-w-sm bg-black text-white rounded-3xl overflow-hidden shadow-2xl border border-[#262626] ig-theme relative h-[80vh] flex flex-col">
+            <div class="absolute top-0 left-0 right-0 p-3 z-30 flex gap-1" id="story-progress-container"></div>
+            
+            <div class="absolute top-4 left-3 right-3 flex justify-between items-center z-30">
+                <div class="flex items-center gap-2">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-8 h-8 rounded-full border border-white/20" alt="">
+                    <span class="font-bold text-sm tracking-tight" id="story-title">Highlight</span>
+                </div>
+                <button class="w-8 h-8 flex items-center justify-center btn-tap" onclick="UI.closeModal('modal-highlight')">
+                    <svg class="w-6 h-6 drop-shadow-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="flex-grow relative bg-zinc-900 flex items-center justify-center" id="story-media-container"></div>
+            
+            <div class="absolute inset-y-0 left-0 w-1/3 z-20 cursor-pointer" onclick="UI.prevStory()"></div>
+            <div class="absolute inset-y-0 right-0 w-2/3 z-20 cursor-pointer" onclick="UI.nextStory()"></div>
+            
+            <div class="absolute bottom-0 left-0 right-0 p-4 z-30 bg-gradient-to-t from-black/80 to-transparent">
+                <input type="text" placeholder="Balas cerita ini..." class="w-full bg-transparent border border-white/30 rounded-full px-4 py-3 text-sm text-white placeholder-white/70 outline-none backdrop-blur-md">
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Organization Structure Modal -->
+    <div id="modal-org" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-org')">
+        <div class="modal-content p-0 max-w-lg">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface)] backdrop-blur-md z-10">
+                <h3 class="font-bold text-lg">Struktur Organisasi</h3>
+                <button onclick="UI.closeModal('modal-org')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <!-- Modified to ensure clicking a student opens their modal ON TOP of this one -->
+            <div class="p-6 bg-[var(--bg-body)]" id="content-org"></div>
+        </div>
+    </div>
+
+    <!-- 5. Schedule Modals (Piket & Uniform) -->
+    <div id="modal-piket" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-piket')">
+        <div class="modal-content p-0 max-w-sm">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface)] backdrop-blur-md z-10">
+                <h3 class="font-bold text-lg">Jadwal Kebersihan</h3>
+                <button onclick="UI.closeModal('modal-piket')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <div class="p-5 bg-[var(--bg-body)]">
+                <div class="flex gap-2 overflow-x-auto hide-scroll pb-4" id="piket-tabs"></div>
+                <div id="piket-list" class="space-y-2 mt-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-uniform" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-uniform')">
+        <div class="modal-content p-0 max-w-sm">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface)] backdrop-blur-md z-10">
+                <h3 class="font-bold text-lg">Aturan Seragam</h3>
+                <button onclick="UI.closeModal('modal-uniform')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <div class="p-5 bg-[var(--bg-body)] space-y-2" id="uniform-list"></div>
+        </div>
+    </div>
+
+    <!-- 6. Shop -->
+    <div id="modal-shop" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-shop')">
+        <div class="modal-content p-0 max-w-2xl">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface)] backdrop-blur-md z-10">
+                <h3 class="font-bold text-lg flex items-center gap-2">Premium Shop</h3>
+                <div class="flex items-center gap-3">
+                    <span class="font-bold text-[var(--color-primary)] bg-[var(--color-primary-glow)] px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                        <span id="shop-coins">0</span> 
+                        <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8" stroke="white" stroke-width="2"></path></svg>
+                    </span>
+                    <button onclick="UI.closeModal('modal-shop')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+            </div>
+            <div class="p-6 bg-[var(--bg-body)] grid grid-cols-1 sm:grid-cols-2 gap-4" id="shop-grid"></div>
+        </div>
+    </div>
+
+    <!-- 7. COMMAND PALETTE (AI Search) -->
+    <div id="cmd-palette" class="modal-overlay items-start pt-[15vh] stacked" onclick="if(event.target===this) UI.closeModal('cmd-palette')">
+        <div class="modal-content p-0 max-w-xl">
+            <div class="p-4 flex items-center gap-3 border-b border-[var(--border-solid)] bg-[var(--bg-surface-solid)] relative">
+                <svg class="w-6 h-6 text-[var(--color-primary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="cmd-input" placeholder="Tanya AI atau cari fitur..." class="flex-grow bg-transparent border-none outline-none text-base font-medium w-full" onkeyup="UI.searchCmd(this.value)">
+                <span class="text-[10px] font-bold bg-[var(--border-solid)] px-2 py-1 rounded text-[var(--text-secondary)]">ESC</span>
+            </div>
+            <div class="bg-gradient-to-r from-[var(--color-primary-glow)] to-transparent px-4 py-2 flex items-center gap-2 border-b border-[var(--border-solid)]">
+                <svg class="w-4 h-4 text-[var(--color-primary)] animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span id="cmd-ai-text" class="text-[11px] font-bold text-[var(--color-primary)]">AI v11 Siap. Ketik sesuatu.</span>
+            </div>
+            <div class="max-h-[50vh] overflow-y-auto p-2" id="cmd-results"></div>
+        </div>
+    </div>
+
+    <!-- 8. GAME CONTAINER ENGINE -->
+    <div id="modal-game" class="modal-overlay" onclick="if(event.target===this) GameEngine.close()">
+        <div class="modal-content p-0 w-[95%] max-w-xl h-[85vh] flex flex-col shadow-2xl border-[var(--color-primary)]">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center bg-[var(--bg-surface-solid)] z-10 shrink-0">
+                <h3 class="font-bold text-lg flex items-center gap-2 text-[var(--color-primary)]">
+                    <span id="ge-icon" class="w-6 h-6"></span> <span id="ge-title">Game Title</span>
+                </h3>
+                <div class="flex items-center gap-3">
+                    <span class="font-bold text-sm bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-3 py-1 rounded-lg border border-[var(--color-primary)]" id="ge-score">0 Pts</span>
+                    <button onclick="GameEngine.close()" class="p-2 btn-tap rounded-full bg-[var(--border-solid)] hover:bg-red-500 hover:text-white transition-colors"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+            </div>
+            <div class="flex-grow p-4 bg-[var(--bg-body)] flex flex-col items-center justify-center relative overflow-hidden" id="ge-canvas">
+                <!-- Injected via GameEngine -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-container" class="fixed top-24 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 pointer-events-none items-center w-[90%] max-w-sm"></div>
+
+    <!-- === JAVASCRIPT === -->
+    <script>
+        // ---------------- 0. ICONS SET (NO EMOJIS) ----------------
+        const Icons = {
+            calendar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
+            users: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
+            gallery: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`,
+            gamepad: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 12h4"></path><line x1="18" y1="12" x2="18.01" y2="12"></line></svg>`,
+            shop: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`,
+            broom: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`,
+            shirt: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>`,
+            settings: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`,
+            zap: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full text-yellow-500"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+            brain: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full text-pink-500"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"></path><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"></path></svg>`,
+            math: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full text-blue-500"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><line x1="8" y1="12" x2="16" y2="12"></line><line x1="12" y1="8" x2="12" y2="16"></line></svg>`,
+            target: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full text-red-500"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>`,
+            clock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full text-indigo-500"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
+            palette: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full text-purple-500"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c2 0 4-1 4-3a2 2 0 0 0-2-2H9c-1.1 0-2-.9-2-2s.9-2 2-2h10c1.1 0 2-.9 2-2C22 6.48 17.52 2 12 2z"></path></svg>`,
+            search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full text-teal-500"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`
+        };
+
+        // Haptic Feedback Helper
+        const Haptics = {
+            vibrate(pattern = 10) {
+                if (State.set.haptics && window.navigator && window.navigator.vibrate) {
+                    try { window.navigator.vibrate(pattern); } catch (e) {}
+                }
+            }
+        };
+
+        // ---------------- 1. DATA KELAS ----------------
+        const rawStudentsData = [
+            { no: 1, name: "ADE ROHMAT", nisn: "0103663188", nis: "262710004", g: "L", ig: "aderohmat" }, 
+            { no: 2, name: "AJENG PRATIWI", nisn: "0101234300", nis: "262710021", g: "P", ig: "ajengprtw" }, 
+            { no: 3, name: "ALBIAN REVAN FAUZAN", nisn: "0111940756", nis: "262710024", g: "L", ig: "albianrf" }, 
+            { no: 4, name: "APRILIANI NUR SABRINA", nisn: "0109308236", nis: "262710047", g: "P", ig: "apriliansbrna" }, 
+            { no: 5, name: "AYU WURININGSIH", nisn: "0099624618", nis: "262710063", g: "P", ig: "ayuwuri" }, 
+            { no: 6, name: "AZRI KAUTHAR ANSHAR", nisn: "0112909747", nis: "262710065", g: "L", ig: "azrikauthar" }, 
+            { no: 7, name: "CINTA AMELA NURCAHAYA", nisn: "0105227012", nis: "262710085", g: "P", ig: "cintaamela" }, 
+            { no: 8, name: "DEWI MUTIA", nisn: "0111203715", nis: "262710107", g: "P", ig: "dewimutia" }, 
+            { no: 9, name: "DIDAN AGUNG FIRMANSYAH", nisn: "0106517800", nis: "262710112", g: "L", ig: "didanagung" }, 
+            { no: 10, name: "ELISA FITRIYANI", nisn: "0107307969", nis: "262710127", g: "P", ig: "elisafit" }, 
+            { no: 11, name: "EVANDHER RAYHAN KURNICOVA", nisn: "0103038857", nis: "262710137", g: "L", ig: "evandherr" }, 
+            { no: 12, name: "FAREL MUHAMAD HISYAM", nisn: "0109363382", nis: "262710150", g: "L", ig: "farelhisyam" }, 
+            { no: 13, name: "FEYZHA RANU SALSABITHA", nisn: "0118340643", nis: "262710163", g: "P", ig: "feyzharanu" }, 
+            { no: 14, name: "FITROH DWI SUKMA", nisn: "0108206355", nis: "262710170", g: "P", ig: "fitrohds" }, 
+            { no: 15, name: "HANA SYAKIRA ANINDYTA", nisn: "0115239595", nis: "262710193", g: "P", ig: "hanasyakira" }, 
+            { no: 16, name: "IRIHMANA DZAKI", nisn: "0081509833", nis: "262710213", g: "L", ig: "irihmana" }, 
+            { no: 17, name: "JENISA LUTHFIAH", nisn: "0109747601", nis: "262710217", g: "P", ig: "jenisalfh" }, 
+            { no: 18, name: "KANDISA", nisn: "0114676581", nis: "262710223", g: "P", ig: "kandisa" }, 
+            { no: 19, name: "KHAYRA ADZKIA HAIFA", nisn: "0119789897", nis: "262710234", g: "P", ig: "khayrahaifa" }, 
+            { no: 20, name: "LUCIANA MEISYA PUTRI", nisn: "0116649260", nis: "262710246", g: "P", ig: "lucianamp" }, 
+            { no: 21, name: "M. ANDIKA KOSTRADNANDA", nisn: "0103247002", nis: "262710252", g: "L", ig: "andikakstrd" }, 
+            { no: 22, name: "MOCHAMMAD FAWWAZ", nisn: "0115206920", nis: "262710273", g: "L", ig: "fawwaz" }, 
+            { no: 23, name: "MUHAMAD FADLI", nisn: "0116363520", nis: "262710284", g: "L", ig: "fadli" }, 
+            { no: 24, name: "MUHAMMAD ARIF AL BADAR", nisn: "0112956308", nis: "262710296", g: "L", ig: "arifalbadar" }, 
+            { no: 25, name: "MUHAMMAD MUFTAHURROHMAN MUSTHOFA", nisn: "0113613860", nis: "262710308", g: "L", ig: "muftahur" }, 
+            { no: 26, name: "MUHAMMAD YUSRON AWLA", nisn: "0117685202", nis: "262710320", g: "L", ig: "yusronawla" }, 
+            { no: 27, name: "MYEISHA AZMI FAKHIRA", nisn: "0111287188", nis: "262710323", g: "P", ig: "myeisha" }, 
+            { no: 28, name: "NAILA LAILATUL RAMADHANI", nisn: "0105834945", nis: "262710335", g: "P", ig: "nailalrmdhn" }, 
+            { no: 29, name: "NAZWA ALGHUMAISHA", nisn: "0105940174", nis: "262710350", g: "P", ig: "nazwaalghmsh" }, 
+            { no: 30, name: "NOVI TRESNAWATI SUHERMAN", nisn: "0104968959", nis: "262710367", g: "P", ig: "novitrsn" }, 
+            { no: 31, name: "PRINCE EZHAD ALVARO SYAHPUTRA", nisn: "0104375031", nis: "262710377", g: "L", ig: "princeezhad" }, 
+            { no: 32, name: "RAHMA NADIRA YULIANTI", nisn: "0105245895", nis: "262710397", g: "P", ig: "rahmanadira" }, 
+            { no: 33, name: "RAIHAN ATAYA FADHILAH", nisn: "0085796070", nis: "262710398", g: "L", ig: "raihanataya" }, 
+            { no: 34, name: "RATU SYIFA OCTAVIANI", nisn: "0107046338", nis: "262710406", g: "P", ig: "ratusyifa" }, 
+            { no: 35, name: "RENITA KUSMAYANTI", nisn: "0105417307", nis: "262710419", g: "P", ig: "renitaksm" }, 
+            { no: 36, name: "REZKY RULLIAN NURHAFIZ", nisn: "0103611682", nis: "262710427", g: "L", ig: "rezkyrullian" }, 
+            { no: 37, name: "SAFIRA NAILA TABINA", nisn: "0111839155", nis: "262710454", g: "P", ig: "safiranaila" }, 
+            { no: 38, name: "SENDY AULIA RAHMA", nisn: "0106444245", nis: "262710466", g: "P", ig: "sendyaulia" }, 
+            { no: 39, name: "SILVANA NURAENI", nisn: "0119716409", nis: "262710477", g: "P", ig: "silvananuraeni" }, 
+            { no: 40, name: "STEFANY SHINTIARA PUTRI", nisn: "0108444319", nis: "262710490", g: "P", ig: "stefanysp" }, 
+            { no: 41, name: "SYAHRIZA ZIAN FIRDAUS", nisn: "0115426522", nis: "262710495", g: "L", ig: "syahrizazian" }, 
+            { no: 42, name: "TRI INDRAWATI", nisn: "0119357005", nis: "262710507", g: "P", ig: "triindrawati" }, 
+            { no: 43, name: "UFAIRAH ZAHRA", nisn: "3120660019", nis: "262710508", g: "P", ig: "ufairahzhr" }, 
+            { no: 44, name: "WINDYA SRI MULYATI OKTAYANI", nisn: "0109430514", nis: "262710522", g: "P", ig: "windyasri" }, 
+            { no: 45, name: "ZAHWA ANNISA SETIAWAN", nisn: "0105131980", nis: "262710539", g: "P", ig: "zahwannisa" }, 
+            { no: 46, name: "ZALPA CHAERUL AZAM", nisn: "0109912881", nis: "262710543", g: "L", ig: "zalpach" }
+        ];
+
+        const DB = {
+            students: rawStudentsData.map(s => ({ id: `S${s.no}`, ...s })),
+            roles: {
+                "TUTI TURSILAH, S.Pd.I.": "Wali Kelas", "TRESNA FUJIE LATIFAH, S.Pd.": "Konselor/BK", "FAHMI ARIZAL NUR FACHRUDIN, S.Pd.": "Koor. Projek",
+                "PRINCE EZHAD ALVARO SYAHPUTRA": "Ketua Murid", "CINTA AMELA NURCAHAYA": "Wakil KM",
+                "JENISA LUTHFIAH": "Sekretaris 1", "DEWI MUTIA": "Sekretaris 2",
+                "NAILA LAILATUL RAMADHANI": "Bendahara 1", "KANDISA": "Bendahara 2", "UFAIRAH ZAHRA": "Bendahara 3"
+            },
+            sections: {
+                "Keamanan": ["NOVI TRESNAWATI SUHERMAN", "MUHAMMAD ARIF AL BADAR"], "Olahraga": ["ZALPA CHAERUL AZAM", "SYAHRIZA ZIAN FIRDAUS"],
+                "Kerohanian": ["FEYZHA RANU SALSABITHA", "RAHMA NADIRA YULIANTI"], "Kebersihan": ["FAREL MUHAMAD HISYAM", "ELISA FITRIYANI"],
+                "Budi Pekerti": ["ZAHWA ANNISA SETIAWAN", "SAFIRA NAILA TABINA"]
+            },
+            schedule: {
+                "Senin": [{ t: "06.30-07.15", m: "Upacara / Perwalian", g: "TUTI TURSILAH" }, { t: "07.15-09.15", m: "Pend. Agama Islam", g: "TUTI TURSILAH" }, { t: "09.15-09.45", m: "Istirahat", br: true }, { t: "09.45-11.05", m: "Seni Rupa", g: "ADE FATURRACHMAN" }, { t: "11.05-11.45", m: "BK/B. Indonesia", g: "TRESNA FUJIE" }, { t: "11.45-12.20", m: "Istirahat", br: true }, { t: "12.20-13.00", m: "BK/B. Indonesia", g: "TRESNA FUJIE" }, { t: "13.00-15.00", m: "Sosiologi", g: "ADE LINA" }],
+                "Selasa": [{ t: "06.30-08.30", m: "Sejarah", g: "H. AGUS HERMAWAN" }, { t: "08.30-09.10", m: "Informatika", g: "CRISTY SRI OCTINA" }, { t: "09.10-09.40", m: "Istirahat", br: true }, { t: "09.40-10.20", m: "Informatika", g: "CRISTY SRI OCTINA" }, { t: "10.20-11.40", m: "Biologi", g: "Hj. YUYUN Y." }, { t: "11.40-12.20", m: "Istirahat", br: true }, { t: "12.20-13.00", m: "Biologi", g: "Hj. YUYUN Y." }, { t: "13.00-15.00", m: "BK/B. Indonesia", g: "TRESNA FUJIE" }],
+                "Rabu": [{ t: "06.30-08.45", m: "Kimia", g: "WULAN KAROLINA" }, { t: "08.45-09.30", m: "Geografi", g: "ANITA DEWI" }, { t: "09.30-09.50", m: "Istirahat", br: true }, { t: "09.50-11.20", m: "Geografi", g: "ANITA DEWI" }, { t: "11.20-12.05", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "12.05-12.45", m: "Istirahat", br: true }, { t: "12.45-13.30", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "13.30-15.00", m: "Koding & KA", g: "DEFI WULANDANI" }],
+                "Kamis": [{ t: "06.30-07.50", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "07.50-09.10", m: "Pend. Pancasila", g: "FAHMI ARIZAL" }, { t: "09.10-09.40", m: "Istirahat", br: true }, { t: "09.40-10.20", m: "Bahasa Sunda", g: "AEF SAEPUL" }, { t: "10.20-11.40", m: "Fisika", g: "Drs. AHMAD IBROHIM" }, { t: "11.40-12.20", m: "Istirahat", br: true }, { t: "12.20-13.00", m: "Fisika", g: "Drs. AHMAD IBROHIM" }, { t: "13.00-15.00", m: "Bahasa Inggris", g: "ENDAH RETNO" }],
+                "Jumat": [{ t: "06.30-07.10", m: "Keg. Keagamaan", g: "Guru Agama" }, { t: "07.10-09.10", m: "Ekonomi/PKWU", g: "TENNY SUKMARA" }, { t: "09.10-09.30", m: "Istirahat", br: true }, { t: "09.30-11.30", m: "PJOK", g: "NANTO KURNIANTO" }, { t: "13.00-15.30", m: "Pramuka", g: "Pembina Pramuka" }]
+            },
+            piket: {
+                "Senin": ["ADE ROHMAT", "AJENG PRATIWI", "ALBIAN REVAN FAUZAN", "APRILIANI NUR SABRINA", "AYU WURININGSIH", "AZRI KAUTHAR ANSHAR", "CINTA AMELA NURCAHAYA", "DEWI MUTIA", "DIDAN AGUNG FIRMANSYAH"],
+                "Selasa": ["ELISA FITRIYANI", "EVANDHER RAYHAN KURNICOVA", "FAREL MUHAMAD HISYAM", "FEYZHA RANU SALSABITHA", "FITROH DWI SUKMA", "HANA SYAKIRA ANINDYTA", "IRIHMANA DZAKI", "JENISA LUTHFIAH", "KANDISA"],
+                "Rabu": ["KHAYRA ADZKIA HAIFA", "LUCIANA MEISYA PUTRI", "M. ANDIKA KOSTRADNANDA", "MOCHAMMAD FAWWAZ", "MUHAMAD FADLI", "MUHAMMAD ARIF AL BADAR", "MUHAMMAD MUFTAHURROHMAN MUSTHOFA", "MUHAMMAD YUSRON AWLA", "MYEISHA AZMI FAKHIRA"],
+                "Kamis": ["NAILA LAILATUL RAMADHANI", "NAZWA ALGHUMAISHA", "NOVI TRESNAWATI SUHERMAN", "PRINCE EZHAD ALVARO SYAHPUTRA", "RAHMA NADIRA YULIANTI", "RAIHAN ATAYA FADHILAH", "RATU SYIFA OCTAVIANI", "RENITA KUSMAYANTI", "REZKY RULLIAN NURHAFIZ"],
+                "Jumat": ["SAFIRA NAILA TABINA", "SENDY AULIA RAHMA", "SILVANA NURAENI", "STEFANY SHINTIARA PUTRI", "SYAHRIZA ZIAN FIRDAUS", "TRI INDRAWATI", "UFAIRAH ZAHRA", "WINDYA SRI MULYATI OKTAYANI", "ZAHWA ANNISA SETIAWAN", "ZALPA CHAERUL AZAM"]
+            },
+            seragam: { "Senin": "PSAS Putih Abu", "Selasa": "PSAS Putih Abu", "Rabu": "Pramuka Lengkap", "Kamis": "Baju Muslim", "Jumat": "Pramuka Lengkap" },
+            
+            // IG ASSETS
+            igPosts: [
+                { id: 1, src: "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Postingan/kiri.webp", likes: 842, cap: "Vibes sunset premium. 🌅" },
+                { id: 2, src: "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Postingan/tengah.webp", likes: 756, cap: "Clean look local gallery. 📸" },
+                { id: 3, src: "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Postingan/kanan.webp", likes: 921, cap: "The final piece of the grid. ✨" }
+            ],
+            highlights: {
+                Bobo: ["https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Bobo/highlight%20bobo.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Bobo/higlight%20bobo.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Bobo/higlight%20bobo1.mp4"],
+                Boys: ["https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/highlight%20bobo.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/highlit%20biys.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/highlitg%20biys.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/highlti%20Boys.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/hightli%20bosy.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/higlight%20bobo.mp4"],
+                Girls: ["https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Cewe/highlight%20cewe.mp4", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Cewe/highlight%20cewe.webp", "https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Cewe/higlight%20bobo1.mp4"]
+            },
+            
+            shop: [
+                { id: 'theme_tropical', name: 'Tropical Premium', desc: 'Nuansa pantai cyan.', price: 0, type: 'Tema', icon: Icons.palette },
+                { id: 'theme_sunset', name: 'Sunset (Orange)', desc: 'Nuansa senja hangat.', price: 150, type: 'Tema', icon: Icons.palette },
+                { id: 'theme_coral', name: 'Coral Red', desc: 'Nuansa merah coral.', price: 250, type: 'Tema', icon: Icons.palette },
+                { id: 'badge_verified', name: 'Verified Badge', desc: 'Centang biru di sebelah namamu.', price: 500, type: 'Kosmetik', icon: Icons.zap },
+                { id: 'fx_superglass', name: 'Ultra Glass FX', desc: 'Efek blur kaca maksimal (Butuh HP kuat).', price: 350, type: 'Visual', icon: Icons.settings }
+            ],
+            
+            games: []
+        };
+
+        // ---------------- 2. 15 STAGES GAME GENERATOR (No Emojis) ----------------
+        const baseGames = [
+            { id: 'react', name: 'Refleks Kilat', icon: Icons.zap, desc: 'Uji kecepatan matamu! Sentuh tepat saat lampu menyala.' },
+            { id: 'mem', name: 'Pola Memori', icon: Icons.brain, desc: 'Ingat urutan kartu dan pasangkan semuanya.' },
+            { id: 'math', name: 'Hitung Cepat', icon: Icons.math, desc: 'Kalkulasi angka sebelum waktu habis. Jangan salah!' },
+            { id: 'color', name: 'Jebakan Warna', icon: Icons.palette, desc: 'Pilih warna teksnya, abaikan tulisannya.' },
+            { id: 'time', name: 'Stop Tepat', icon: Icons.clock, desc: 'Hentikan indikator tepat di garis target yang sempit.' }
+        ];
+        
+        // Generate 15 meaningful stages
+        for(let i=0; i<15; i++) {
+            let base = baseGames[i % 5];
+            let level = Math.floor(i / 5) + 1; // Lv 1 to 3
+            let diffDesc = level === 1 ? 'Mudah' : level === 2 ? 'Menantang' : 'Super Sulit';
+            DB.games.push({
+                id: `g_${i}`, logic: base.id, level: level,
+                name: `${base.name} (Lv.${level})`,
+                icon: base.icon, desc: `[${diffDesc}] ${base.desc}`
+            });
+        }
+
+        // ---------------- 3. STATE MANAGER ----------------
+        const State = {
+            coins: 50, xp: 0, level: 1, xpNext: 100,
+            inv: ['theme_tropical'],
+            eq: { theme: 'tropical', badge: false, fx: false },
+            set: { dark: true, lowEnd: true, haptics: true }, // Default low-end mode & dark mode on first visit for performance/looks
+            
+            init() {
+                try {
+                    let d = JSON.parse(localStorage.getItem('xl_v11'));
+                    if(d) { Object.assign(this, d); this.calcLevel(); }
+                } catch(e){}
+                this.apply();
+            },
+            save() { localStorage.setItem('xl_v11', JSON.stringify({coins:this.coins, xp:this.xp, inv:this.inv, eq:this.eq, set:this.set})); UI.updateHead(); },
+            addXP(v) { this.xp += v; this.calcLevel(); this.save(); },
+            calcLevel() {
+                let n = Math.floor(Math.sqrt(this.xp / 15)) + 1;
+                this.xpNext = 15 * Math.pow(n, 2);
+                if(n > this.level) { this.level = n; UI.toast(`Level Up! Kamu sekarang Lv.${n} 🎉`); Haptics.vibrate([100, 50, 100]); }
+            },
+            addCoin(v) { this.coins += v; if(v>0){ this.addXP(Math.ceil(v/2)); UI.toast(`+${v} Koin & XP!`); } this.save(); },
+            buy(id) {
+                let itm = DB.shop.find(x=>x.id===id);
+                if(this.inv.includes(id)) return;
+                if(this.coins < itm.price) return UI.toast('Koin tidak cukup! Main Arcade dulu.');
+                this.coins -= itm.price; this.inv.push(id); this.save();
+                UI.toast(`Berhasil beli ${itm.name}!`); UI.renderShop(); Haptics.vibrate(50);
+            },
+            equip(id) {
+                let itm = DB.shop.find(x=>x.id===id);
+                if(itm.type === 'Tema') this.eq.theme = id.replace('theme_','');
+                if(id === 'badge_verified') this.eq.badge = !this.eq.badge;
+                if(id === 'fx_superglass') this.eq.fx = !this.eq.fx;
+                this.save(); this.apply(); UI.renderShop(); Haptics.vibrate(30);
+            },
+            apply() {
+                document.documentElement.setAttribute('data-theme', this.eq.theme);
+                document.documentElement.classList.toggle('dark', this.set.dark);
+                document.body.classList.toggle('low-end', this.set.lowEnd);
+                
+                // Verified Badge logic
+                if (this.eq.badge) document.body.classList.add('badge-verified');
+                else document.body.classList.remove('badge-verified');
+                
+                // High Quality Glass
+                if (!this.set.lowEnd && this.eq.fx) {
+                    document.documentElement.style.setProperty('--glass-blur', 'blur(45px) saturate(220%)');
+                } else if (!this.set.lowEnd) {
+                    document.documentElement.style.setProperty('--glass-blur', 'blur(25px) saturate(180%)');
+                }
+            }
+        };
+
+        // ---------------- 4. UI CONTROLLER ----------------
+        const UI = {
+            modals: [],
+            igState: { curHighlight: '', deck: [], idx: 0, tmr: null },
+            
+            init() {
+                this.rtClock(); 
+                setInterval(()=>this.rtClock(), 10000); // Check every 10s for smooth countdowns
+                
+                this.renderGrid(); this.renderStudents('all'); this.renderSchedTabs(); this.renderPiketTabs();
+                this.renderUniforms(); this.renderOrg(); this.renderIG(); this.renderGames(); this.renderSet();
+                State.init(); this.updateHead();
+                
+                // Add click listener for all buttons to vibrate
+                document.querySelectorAll('.btn-tap').forEach(b => {
+                    b.addEventListener('click', () => Haptics.vibrate(15));
+                });
+                
+                document.addEventListener('keydown', e => {
+                    if((e.ctrlKey||e.metaKey) && e.key === 'k') { e.preventDefault(); this.toggleCmd(); }
+                    if(e.key === 'Escape' && this.modals.length) this.closeModal(this.modals[this.modals.length-1]);
+                });
+            },
+            
+            rtClock() {
+                const d = new Date();
+                const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                const mon = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+                const dn = days[d.getDay()];
+                document.getElementById('rt-date').innerText = `${d.getDate()} ${mon[d.getMonth()]}`;
+                document.getElementById('rt-time').innerText = d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+                
+                // Promotion Timer (Target: 20 June 2027)
+                const targetDate = new Date('2027-06-20T00:00:00');
+                const diffTime = targetDate - d;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                document.getElementById('rt-promotion-days').innerText = diffDays > 0 ? diffDays : "0";
+
+                // Subject Timer
+                let subj = "Bebas / Luar Jam";
+                let ms = d.getHours()*60 + d.getMinutes();
+                let nextStr = "-- min lagi";
+                let pct = 0;
+                
+                if(DB.schedule[dn]) {
+                    DB.schedule[dn].forEach(s => {
+                        let pts = s.t.split('-');
+                        let start = parseInt(pts[0].split('.')[0])*60 + parseInt(pts[0].split('.')[1]);
+                        let end = parseInt(pts[1].split('.')[0])*60 + parseInt(pts[1].split('.')[1]);
+                        if(ms >= start && ms < end) {
+                            subj = s.m;
+                            let remaining = end - ms;
+                            nextStr = `${remaining} min lagi`;
+                            pct = ((ms - start) / (end - start)) * 100;
+                        }
+                    });
+                }
+                document.getElementById('rt-subject').innerText = subj;
+                document.getElementById('rt-next-time').innerText = nextStr;
+                document.getElementById('rt-subject-progress').style.width = `${pct}%`;
+                
+                if(DB.piket[dn]) { document.getElementById('badge-piket').innerText = "HARI INI"; document.getElementById('desc-piket').innerText = DB.piket[dn].slice(0,3).join(', ') + "..."; }
+                else { document.getElementById('badge-piket').innerText = "LIBUR"; document.getElementById('desc-piket').innerText = "Tidak ada jadwal piket."; }
+                
+                document.getElementById('desc-uniform').innerText = DB.seragam[dn] || "Bebas/Libur";
+            },
+
+            updateHead() {
+                document.getElementById('header-coins').innerText = State.coins;
+                document.getElementById('shop-coins').innerText = State.coins;
+                document.getElementById('games-coin').innerText = State.coins;
+                document.getElementById('header-level').innerText = `Lv.${State.level}`;
+                
+                let pBase = 15 * Math.pow(State.level-1, 2);
+                let pct = ((State.xp - pBase) / (State.xpNext - pBase)) * 100;
+                document.getElementById('header-xp-bar').style.width = `${Math.min(100, Math.max(0, pct))}%`;
+            },
+
+            switchTab(id) {
+                document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+                const n = document.querySelector(`.nav-item[data-target="${id}"]`); if(n) n.classList.add('active');
+                
+                document.querySelectorAll('.view-section').forEach(e => { e.classList.add('hidden'); e.classList.remove('animate-fade-up'); });
+                const t = document.getElementById(`sec-${id}`);
+                if(t) { t.classList.remove('hidden'); void t.offsetWidth; t.classList.add('animate-fade-up'); window.scrollTo({top:0, behavior:'smooth'}); }
+                Haptics.vibrate(20);
+            },
+            
+            toggleDrawer() { document.getElementById('drawer').classList.toggle('active'); Haptics.vibrate(20); },
+            
+            showModal(id) {
+                const m = document.getElementById(id);
+                if(m) {
+                    m.classList.add('active'); 
+                    if(!this.modals.includes(id)) this.modals.push(id);
+                    if(id === 'cmd-palette') { document.getElementById('cmd-input').focus(); this.searchCmd(''); }
+                    if(id === 'modal-shop') this.renderShop();
+                }
+                Haptics.vibrate(20);
+            },
+            closeModal(id) {
+                const m = document.getElementById(id);
+                if(m) { m.classList.remove('active'); this.modals = this.modals.filter(x => x !== id); }
+                if(id === 'modal-highlight' && this.igState.tmr) { clearInterval(this.igState.tmr); document.getElementById('story-media-container').innerHTML = ''; }
+                Haptics.vibrate(10);
+            },
+            
+            toast(msg) {
+                const c = document.getElementById('toast-container');
+                const t = document.createElement('div');
+                t.className = "bg-[var(--text-primary)] text-[var(--bg-body)] px-5 py-3 rounded-full shadow-2xl font-bold text-sm transform transition-all translate-y-[-20px] opacity-0 text-center flex items-center gap-2";
+                t.innerHTML = `<svg class="w-4 h-4 text-[var(--color-primary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg> <span>${msg}</span>`; 
+                c.prepend(t);
+                requestAnimationFrame(() => { t.classList.remove('translate-y-[-20px]', 'opacity-0'); });
+                setTimeout(() => { t.classList.add('opacity-0'); setTimeout(()=>t.remove(), 300); }, 3000);
+            },
+
+            // --- Renders ---
+            renderGrid() {
+                const arr = [
+                    {i: Icons.calendar, t:'Jadwal', a:"UI.switchTab('schedule')", c: "text-blue-500"}, 
+                    {i: Icons.users, t:'Siswa', a:"UI.switchTab('students')", c: "text-purple-500"},
+                    {i: Icons.gallery, t:'Galeri', a:"UI.switchTab('gallery')", c: "text-pink-500"}, 
+                    {i: Icons.gamepad, t:'Arcade', a:"UI.switchTab('games')", c: "text-orange-500"},
+                    {i: Icons.shop, t:'Shop', a:"UI.showModal('modal-shop')", c: "text-yellow-500"}, 
+                    {i: Icons.broom, t:'Piket', a:"UI.showModal('modal-piket')", c: "text-emerald-500"},
+                    {i: Icons.shirt, t:'Seragam', a:"UI.showModal('modal-uniform')", c: "text-rose-500"}, 
+                    {i: Icons.settings, t:'Setting', a:"UI.switchTab('settings')", c: "text-gray-500"}
+                ];
+                document.getElementById('util-grid').innerHTML = arr.map(x => `
+                    <div class="flex flex-col items-center gap-2 cursor-pointer btn-tap group" onclick="${x.a}">
+                        <div class="w-14 h-14 bg-[var(--bg-surface)] border border-[var(--border-solid)] rounded-[1.2rem] flex items-center justify-center shadow-sm group-hover:border-[var(--color-primary)] transition-colors ${x.c}">
+                            <div class="w-6 h-6">${x.i}</div>
+                        </div>
+                        <span class="text-[9px] font-bold tracking-wide uppercase text-center">${x.t}</span>
+                    </div>
+                `).join('');
+            },
+
+            renderStudents(flt, q='') {
+                let l = DB.students;
+                if(flt !== 'all') l = l.filter(x => x.g === flt);
+                if(q) {
+                    q = q.toLowerCase();
+                    l = l.filter(x => x.name.toLowerCase().includes(q) || x.nis.includes(q) || (DB.roles[x.name] && DB.roles[x.name].toLowerCase().includes(q)));
+                }
+                document.getElementById('students-grid').innerHTML = l.length ? l.map((s,i) => `
+                    <div class="glass-panel p-4 flex items-center gap-4 card-hover cursor-pointer btn-tap relative overflow-hidden border-[var(--border-solid)]" style="animation-delay:${(i%10)*20}ms" onclick="UI.openStudentID('${s.id}')">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl shrink-0 ${s.g==='L'?'bg-blue-500/10 text-blue-500':'bg-pink-500/10 text-pink-500'}">${s.name.charAt(0)}</div>
+                        <div class="flex-grow min-w-0">
+                            <h4 class="font-bold text-sm truncate profile-badge">${s.name}</h4>
+                            <div class="text-[10px] opacity-70 truncate font-medium mt-0.5 text-[var(--color-primary)]">@${s.ig}</div>
+                            <div class="flex gap-2 mt-1.5">
+                                <span class="text-[9px] font-bold bg-[var(--bg-body)] px-2 py-0.5 rounded shadow-sm border border-[var(--border-solid)]">No.${s.no}</span>
+                                ${DB.roles[s.name] ? `<span class="text-[9px] font-bold bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-2 py-0.5 rounded">${DB.roles[s.name]}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('') : '<div class="col-span-full py-10 text-center opacity-50 font-bold">Tidak ditemukan.</div>';
+            },
+            filterStudents(f, btn) {
+                document.querySelectorAll('.filter-btn').forEach(b => { b.className = "px-5 py-2 rounded-full text-sm font-bold transition-all text-[var(--text-secondary)] filter-btn"; });
+                btn.className = "px-5 py-2 rounded-full text-sm font-bold transition-all bg-[var(--color-primary)] text-white filter-btn shadow-md";
+                this.renderStudents(f, document.getElementById('search-student').value);
+                Haptics.vibrate(15);
+            },
+            searchStudent(v) {
+                const a = document.querySelector('.filter-btn.bg-\\[var\\(--color-primary\\)\\]');
+                let f = a ? (a.innerText.includes('Semua') ? 'all' : (a.innerText==='Laki-laki' ? 'L' : 'P')) : 'all';
+                this.renderStudents(f, v);
+            },
+
+            // --- ID CARDS (Separate Logic) ---
+            openClassID() {
+                this.showModal('modal-class-id');
+            },
+            openSchoolID() {
+                // For this request, we keep it simple, or route it back to Class ID
+                this.showModal('modal-class-id');
+            },
+            openStudentID(id) {
+                const s = DB.students.find(x => x.id === id); if(!s) return;
+                
+                document.getElementById('sid-name').innerText = s.name;
+                document.getElementById('sid-role').innerText = DB.roles[s.name] || 'Siswa Reguler';
+                document.getElementById('sid-gender').innerText = s.g === 'L' ? 'LAKI-LAKI' : 'PEREMPUAN';
+                document.getElementById('sid-nis').innerText = `${s.nis} / ${s.nisn}`;
+                document.getElementById('sid-absen').innerText = s.no;
+                
+                document.getElementById('sid-ig-handle').innerText = `@${s.ig}`;
+                document.getElementById('sid-ig-btn').dataset.ig = s.ig;
+                
+                const c1 = s.g === 'L' ? 'bae6fd' : 'fbcfe8'; const c2 = s.g === 'L' ? '0284c7' : 'db2777';
+                const av = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=${c1}&color=${c2}&size=256&bold=true`;
+                document.getElementById('sid-photo').innerHTML = `<img src="${av}" class="w-full h-full object-cover" alt="">`;
+                
+                this.showModal('modal-student-id');
+            },
+
+            // --- SCHED & PIKET ---
+            renderSchedTabs() {
+                const days = ['Senin','Selasa','Rabu','Kamis','Jumat'];
+                let cd = new Date().getDay(); let td = cd>=1 && cd<=5 ? days[cd-1] : 'Senin';
+                document.getElementById('schedule-tabs').innerHTML = days.map(d => `
+                    <button class="px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] shadow-sm ${d===td?'bg-[var(--color-primary)] text-white':'bg-[var(--bg-surface-solid)]'}" onclick="UI.renderSchedDay('${d}', this)">${d}</button>
+                `).join('');
+                this.renderSchedDay(td, document.querySelector('#schedule-tabs .bg-\\[var\\(--color-primary\\)\\]'));
+            },
+            renderSchedDay(d, btn) {
+                if(btn) { document.querySelectorAll('#schedule-tabs button').forEach(b => b.className = "px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] shadow-sm bg-[var(--bg-surface-solid)]"); btn.className = "px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] shadow-sm bg-[var(--color-primary)] text-white"; Haptics.vibrate(10); }
+                
+                document.getElementById('sched-title').innerText = d;
+                let isT = d === ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][new Date().getDay()];
+                document.getElementById('sched-badge').style.display = isT ? 'block' : 'none';
+                
+                let s = DB.schedule[d];
+                if(!s) { document.getElementById('sched-timeline').innerHTML = '<p class="opacity-50 font-bold">Libur.</p>'; return; }
+                
+                let ms = new Date().getHours()*60 + new Date().getMinutes();
+                document.getElementById('sched-timeline').innerHTML = s.map(x => {
+                    let st = parseInt(x.t.split('-')[0].split('.')[0])*60 + parseInt(x.t.split('-')[0].split('.')[1]);
+                    let en = parseInt(x.t.split('-')[1].split('.')[0])*60 + parseInt(x.t.split('-')[1].split('.')[1]);
+                    let cur = isT && ms>=st && ms<en;
+                    
+                    return `
+                    <div class="relative ${isT && ms>=en ? 'opacity-40' : ''}">
+                        <div class="absolute -left-[1.95rem] top-4 w-4 h-4 rounded-full ${cur ? 'bg-[var(--color-primary)] animate-pulse' : x.br ? 'bg-amber-400' : 'bg-gray-300'} border-[3px] border-[var(--bg-surface)] z-10"></div>
+                        <div class="p-4 rounded-2xl bg-[var(--bg-surface-solid)] border ${cur ? 'border-[var(--color-primary)] shadow-md scale-[1.02]' : 'border-[var(--border-solid)]'} ${x.br ? 'bg-amber-500/10' : ''} transition-all">
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-bold text-base ${x.br ? 'text-amber-500' : ''}">${x.m}</h4>
+                                <span class="font-mono text-[10px] bg-[var(--bg-body)] px-2 py-0.5 rounded border border-[var(--border-solid)] font-bold">${x.t}</span>
+                            </div>
+                            ${x.g ? `<p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">${x.g}</p>` : ''}
+                        </div>
+                    </div>`;
+                }).join('');
+            },
+
+            renderPiketTabs() {
+                const days = ['Senin','Selasa','Rabu','Kamis','Jumat'];
+                let cd = new Date().getDay(); let td = cd>=1 && cd<=5 ? days[cd-1] : 'Senin';
+                document.getElementById('piket-tabs').innerHTML = days.map(d => `
+                    <button class="px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] ${d===td?'bg-[var(--color-primary)] text-white':'bg-[var(--bg-surface-solid)]'}" onclick="UI.renderPiketDay('${d}', this)">${d}</button>
+                `).join('');
+                this.renderPiketDay(td, document.querySelector('#piket-tabs .bg-\\[var\\(--color-primary\\)\\]'));
+            },
+            renderPiketDay(d, btn) {
+                if(btn) { document.querySelectorAll('#piket-tabs button').forEach(b => b.className = "px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] bg-[var(--bg-surface-solid)]"); btn.className = "px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] bg-[var(--color-primary)] text-white"; Haptics.vibrate(10); }
+                
+                let l = DB.piket[d] || [];
+                document.getElementById('piket-list').innerHTML = l.map((n, i) => `
+                    <div class="p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex items-center gap-3 cursor-pointer btn-tap hover:border-[var(--color-primary)] transition-colors" onclick="UI.openStudentID('${DB.students.find(x=>x.name===n)?.id}')">
+                        <div class="w-6 h-6 rounded-full bg-[var(--color-primary-glow)] text-[var(--color-primary)] flex items-center justify-center font-bold text-xs shrink-0">${i+1}</div>
+                        <div class="font-bold text-sm truncate">${n}</div>
+                    </div>
+                `).join('');
+            },
+
+            renderUniforms() {
+                let td = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][new Date().getDay()];
+                document.getElementById('uniform-list').innerHTML = Object.entries(DB.seragam).map(([d, u]) => `
+                    <div class="p-4 rounded-xl border ${d===td?'bg-[var(--color-primary-glow)] border-[var(--color-primary)]':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'} flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-sm">${d} ${d===td?'<span class="text-[9px] bg-[var(--color-primary)] text-white px-1.5 py-0.5 rounded uppercase ml-2 animate-pulse shadow-sm">Hari Ini</span>':''}</h4>
+                            <p class="text-xs opacity-80 mt-1 font-medium">${u}</p>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            renderOrg() {
+                const c = document.getElementById('content-org');
+                let h = `<div class="space-y-4">`;
+                
+                h += `<div><h4 class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2 pl-1">Dewan Pembina</h4><div class="space-y-2">`;
+                ["TUTI TURSILAH, S.Pd.I.", "TRESNA FUJIE LATIFAH, S.Pd.", "FAHMI ARIZAL NUR FACHRUDIN, S.Pd."].forEach(n => {
+                    h += `<div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-3 rounded-xl flex justify-between items-center shadow-sm"><span class="font-bold text-sm truncate">${n}</span><span class="text-[9px] font-bold bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-2 py-1 rounded whitespace-nowrap">${DB.roles[n]}</span></div>`;
+                });
+                
+                h += `</div></div><div><h4 class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2 pl-1 mt-4">Pengurus Inti</h4><div class="grid grid-cols-2 gap-2">`;
+                ["PRINCE EZHAD ALVARO SYAHPUTRA", "CINTA AMELA NURCAHAYA", "JENISA LUTHFIAH", "DEWI MUTIA", "NAILA LAILATUL RAMADHANI", "KANDISA"].forEach(n => {
+                    let id = DB.students.find(x=>x.name===n)?.id;
+                    h += `<div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-3 rounded-xl shadow-sm text-center cursor-pointer btn-tap flex flex-col justify-center min-h-[70px] hover:border-[var(--color-primary)] transition-colors" onclick="UI.openStudentID('${id}')"><div class="text-[9px] font-bold text-[var(--color-primary)] uppercase mb-1">${DB.roles[n]}</div><div class="font-bold text-xs leading-tight">${n}</div></div>`;
+                });
+                
+                h += `</div></div><div><h4 class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2 pl-1 mt-4">Seksi Bidang</h4><div class="space-y-2">`;
+                Object.entries(DB.sections).forEach(([sec, names]) => {
+                    h += `<div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-3 rounded-xl shadow-sm"><div class="font-bold text-xs text-[var(--text-secondary)] uppercase tracking-wider mb-2 border-b border-[var(--border-solid)] pb-1">${sec}</div><ul class="space-y-1.5">`;
+                    names.forEach(n => {
+                        let id = DB.students.find(x=>x.name===n)?.id;
+                        h += `<li class="text-sm font-bold cursor-pointer btn-tap flex items-center gap-2 truncate hover:text-[var(--color-primary)] transition-colors" onclick="UI.openStudentID('${id}')"><div class="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]"></div>${n}</li>`;
+                    });
+                    h += `</ul></div>`;
+                });
+                
+                c.innerHTML = h + `</div></div>`;
+            },
+
+            // --- IG CLONE (With specific links & working Highlights) ---
+            renderIG() {
+                const h = Object.keys(DB.highlights);
+                document.getElementById('ig-highlights').innerHTML = h.map((k,i) => `
+                    <div class="flex flex-col items-center gap-1 cursor-pointer btn-tap" onclick="UI.openHighlight('${k}')">
+                        <div class="w-16 h-16 rounded-full border border-[#262626] p-0.5 bg-black ig-story-ring">
+                            <div class="w-full h-full rounded-full border-2 border-black flex items-center justify-center text-white font-black text-xs shadow-inner" style="background: linear-gradient(135deg, hsl(${(i*120)%360} 70% 50%), hsl(${(i*120+60)%360} 70% 30%));">
+                                ${k.toUpperCase()}
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-medium opacity-90 tracking-wide">${k}</span>
+                    </div>
+                `).join('');
+
+                document.getElementById('ig-grid').innerHTML = DB.igPosts.map(p => `
+                    <div class="ig-item group" onclick="UI.openIGPost(${p.id})">
+                        <img src="${p.src}" loading="lazy" alt="">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-white font-bold text-sm backdrop-blur-[2px]">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> ${p.likes}
+                        </div>
+                    </div>
+                `).join('');
+            },
+            
+            openIGPost(id) {
+                let p = DB.igPosts.find(x=>x.id===id); if(!p) return;
+                document.getElementById('ig-detail-img').src = p.src;
+                document.getElementById('ig-detail-likes').innerText = p.likes;
+                document.getElementById('ig-detail-cap').innerText = p.cap;
+                
+                const svg = document.getElementById('ig-detail-like');
+                svg.setAttribute('fill', 'none'); svg.classList.remove('text-red-500');
+                
+                this.showModal('modal-ig-post');
+            },
+            toggleIGLike() {
+                const s = document.getElementById('ig-detail-like');
+                let l = parseInt(document.getElementById('ig-detail-likes').innerText);
+                if(s.getAttribute('fill') === 'none') { s.setAttribute('fill', 'currentColor'); s.classList.add('text-red-500'); document.getElementById('ig-detail-likes').innerText = l+1; }
+                else { s.setAttribute('fill', 'none'); s.classList.remove('text-red-500'); document.getElementById('ig-detail-likes').innerText = l-1; }
+            },
+
+            // Auto-playing Highlight Engine
+            openHighlight(name) {
+                const deck = DB.highlights[name]; if(!deck) return;
+                this.igState = { curHighlight: name, deck: deck, idx: 0, tmr: null };
+                document.getElementById('story-title').innerText = name;
+                this.renderStoryFrame();
+                this.showModal('modal-highlight');
+            },
+            renderStoryFrame() {
+                const s = this.igState;
+                if(!s.deck[s.idx]) return this.closeModal('modal-highlight');
+                
+                const c = document.getElementById('story-media-container');
+                let src = s.deck[s.idx];
+                let isVid = src.includes('.mp4');
+                
+                if(isVid) {
+                    c.innerHTML = `<video src="${src}" class="absolute inset-0 w-full h-full object-cover" autoplay playsinline muted></video>`;
+                    let v = c.querySelector('video');
+                    v.onended = () => this.nextStory();
+                } else {
+                    c.innerHTML = `<img src="${src}" class="absolute inset-0 w-full h-full object-cover" alt="Image">`;
+                    if(s.tmr) clearTimeout(s.tmr);
+                    s.tmr = setTimeout(() => this.nextStory(), 5000);
+                }
+                
+                document.getElementById('story-progress-container').innerHTML = s.deck.map((_, i) => `
+                    <div class="flex-1 h-0.5 rounded-full bg-white/30 overflow-hidden">
+                        <div class="h-full bg-white ${i===s.idx && !isVid ? 'animate-progress' : ''}" style="width: ${i<s.idx ? '100%' : i>s.idx ? '0%' : isVid ? '100%' : '0'}; ${i===s.idx && !isVid ? 'animation-duration: 5s;' : ''}"></div>
+                    </div>
+                `).join('');
+            },
+            nextStory() {
+                if(this.igState.tmr) clearTimeout(this.igState.tmr);
+                if(this.igState.idx < this.igState.deck.length - 1) {
+                    this.igState.idx++; this.renderStoryFrame();
+                } else {
+                    let keys = Object.keys(DB.highlights);
+                    let currKeyIdx = keys.indexOf(this.igState.curHighlight);
+                    if(currKeyIdx >= 0 && currKeyIdx < keys.length - 1) {
+                        this.openHighlight(keys[currKeyIdx + 1]);
+                    } else {
+                        this.closeModal('modal-highlight');
+                    }
+                }
+            },
+            prevStory() {
+                if(this.igState.tmr) clearTimeout(this.igState.tmr);
+                if(this.igState.idx > 0) {
+                    this.igState.idx--; this.renderStoryFrame();
+                }
+            },
+
+            // --- ARCADE GAMES ---
+            renderGames() {
+                document.getElementById('games-grid').innerHTML = DB.games.map(g => `
+                    <div class="glass-panel p-4 text-center flex flex-col items-center justify-between card-hover cursor-pointer btn-tap border-[var(--border-solid)] relative group" onclick="GameEngine.start('${g.logic}', ${g.level}, '${g.name}', \`${g.icon}\`)">
+                        <div class="absolute top-2 right-2 flex gap-1">
+                            ${g.level === 3 ? `<span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>` : ''}
+                        </div>
+                        <div class="w-14 h-14 rounded-2xl bg-[var(--color-primary-glow)] text-[var(--color-primary)] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-inner">
+                            <div class="w-8 h-8">${g.icon}</div>
+                        </div>
+                        <h4 class="font-bold text-sm w-full mb-1 leading-tight">${g.name}</h4>
+                        <div class="text-[10px] opacity-70 leading-snug min-h-[30px] mb-3 px-1">${g.desc}</div>
+                        <button class="w-full py-2 bg-[var(--color-primary)] text-white text-[10px] font-bold rounded-xl tracking-widest uppercase shadow-md">Mainkan</button>
+                    </div>
+                `).join('');
+            },
+
+            // --- SHOP & SETTINGS ---
+            renderShop() {
+                document.getElementById('shop-grid').innerHTML = DB.shop.map(s => {
+                    let owned = State.inv.includes(s.id);
+                    let eq = (s.type==='Tema' && State.eq.theme===s.id.replace('theme_','')) || 
+                             (s.type==='Kosmetik' && State.eq.badge) || 
+                             (s.type==='Visual' && State.eq.fx);
+                    
+                    let btn = '';
+                    if(!owned) btn = `<button class="w-full py-2 bg-[var(--color-primary)] text-white font-bold rounded-xl btn-tap active:scale-95 shadow-md" onclick="State.buy('${s.id}')">Beli (${s.price} 🪙)</button>`;
+                    else if(eq) btn = `<button class="w-full py-2 bg-emerald-500 text-white font-bold rounded-xl cursor-default shadow-md">Terpasang ✔️</button>`;
+                    else btn = `<button class="w-full py-2 bg-[var(--bg-surface-solid)] border border-[var(--color-primary)] text-[var(--color-primary)] font-bold rounded-xl btn-tap active:scale-95" onclick="State.equip('${s.id}')">Gunakan</button>`;
+
+                    return `
+                    <div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-4 rounded-2xl flex flex-col justify-between shadow-sm hover:border-[var(--color-primary)] transition-colors">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="w-12 h-12 rounded-xl bg-[var(--bg-body)] border border-[var(--border-solid)] flex items-center justify-center text-[var(--text-secondary)] shadow-inner">
+                                    <div class="w-6 h-6">${s.icon}</div>
+                                </div>
+                                <span class="text-[8px] font-bold bg-[var(--border-solid)] px-2 py-1 rounded uppercase tracking-widest text-[var(--text-secondary)]">${s.type}</span>
+                            </div>
+                            <h4 class="font-bold text-base mb-1">${s.name}</h4>
+                            <p class="text-xs opacity-70 mb-5 leading-snug">${s.desc}</p>
+                        </div>
+                        ${btn}
+                    </div>`;
+                }).join('');
+            },
+
+            renderSet() {
+                const conf = [
+                    { id: 'dark', l: 'Dark Mode', d: 'Tampilan elegan warna gelap.' },
+                    { id: 'lowEnd', l: 'Mode Hemat Performa', d: 'Matikan partikel & blur. Wajib untuk HP kentang.' },
+                    { id: 'haptics', l: 'Getaran (Haptics)', d: 'Efek getar premium saat klik tombol.' }
+                ];
+                
+                let h = `<div class="glass-panel overflow-hidden border-[var(--border-solid)] divide-y divide-[var(--border-solid)] shadow-md">`;
+                conf.forEach(c => {
+                    h += `
+                    <label class="flex justify-between items-center p-5 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                        <div>
+                            <div class="font-bold text-sm">${c.l}</div>
+                            <div class="text-[10px] opacity-70 mt-1 uppercase tracking-widest font-medium">${c.d}</div>
+                        </div>
+                        <div class="relative shrink-0 ml-4">
+                            <input type="checkbox" class="sr-only peer" ${State.set[c.id]?'checked':''} onchange="State.set['${c.id}']=this.checked; State.save(); State.apply(); Haptics.vibrate(20);">
+                            <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-[var(--color-primary)] transition-colors shadow-inner"></div>
+                            <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5 shadow-md"></div>
+                        </div>
+                    </label>`;
+                });
+                h += `</div>
+                <div class="mt-6 flex flex-col gap-3">
+                    <button class="w-full py-3.5 glass-panel border-[var(--border-solid)] font-bold text-sm btn-tap hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors shadow-sm" onclick="State.addCoin(50)">Claim 50 Koin Harian 🎁</button>
+                    <button class="w-full py-3.5 bg-red-50 text-red-500 border border-red-200 dark:bg-red-900/20 dark:border-red-900/50 font-bold text-sm rounded-2xl btn-tap shadow-sm" onclick="if(confirm('Reset semua data lokal? Kamu akan kehilangan koin dan item.')) { localStorage.clear(); location.reload(); }">Reset Semua Data ⚠️</button>
+                </div>`;
+                document.getElementById('settings-container').innerHTML = h;
+            },
+
+            // --- COMMAND PALETTE (AI) ---
+            cmds: [
+                {k: "Home / Dashboard", a: "UI.switchTab('home')"}, {k: "Jadwal Pelajaran", a: "UI.switchTab('schedule')"},
+                {k: "Direktori Siswa", a: "UI.switchTab('students')"}, {k: "Instagram Gallery", a: "UI.switchTab('gallery')"},
+                {k: "Arcade Games v11", a: "UI.switchTab('games')"}, {k: "Pengaturan & Performa", a: "UI.switchTab('settings')"},
+                {k: "Premium Shop", a: "UI.showModal('modal-shop')"}, {k: "Struktur Organisasi", a: "UI.showModal('modal-org')"},
+                {k: "Jadwal Kebersihan (Piket)", a: "UI.showModal('modal-piket')"}, {k: "Aturan Seragam", a: "UI.showModal('modal-uniform')"}
+            ],
+            searchCmd(q) {
+                let ai = document.getElementById('cmd-ai-text');
+                q = q.toLowerCase();
+                
+                if(q.includes('game')||q.includes('main')) ai.innerText = "Saran: Buka Arcade. Ada 15 Premium Stage untuk XP.";
+                else if(q.includes('jadwal')||q.includes('piket')||q.includes('baju')) ai.innerText = "Saran: Buka menu Piket / Seragam / Jadwal.";
+                else if(q.includes('foto')||q.includes('ig')) ai.innerText = "Saran: Buka IG Gallery. Auto-play video tersedia.";
+                else if(q.includes('beli')||q.includes('koin')||q.includes('tema')) ai.innerText = "Saran: Buka Premium Shop.";
+                else if(q.includes('lemot')||q.includes('lag')) ai.innerText = "Saran: Buka Setting, nyalakan Mode Hemat Performa.";
+                else ai.innerText = "Ketik fitur, masalah, atau menu yang ingin dicari...";
+
+                let f = this.cmds.filter(x => x.k.toLowerCase().includes(q));
+                document.getElementById('cmd-results').innerHTML = f.length ? f.map(x => `
+                    <div class="p-3 border-b border-[var(--border-solid)] flex items-center gap-3 cursor-pointer hover:bg-[var(--color-primary-glow)] rounded-xl transition-colors btn-tap group" onclick="${x.a}; UI.closeModal('cmd-palette')">
+                        <svg class="w-4 h-4 opacity-50 group-hover:text-[var(--color-primary)] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        <span class="font-bold text-sm group-hover:text-[var(--color-primary)] transition-colors">${x.k}</span>
+                    </div>
+                `).join('') : '<div class="p-6 text-center opacity-50 font-bold text-sm">Hmm, tidak ditemukan. Coba kata lain.</div>';
+            },
+            toggleCmd() {
+                if(document.getElementById('cmd-palette').classList.contains('active')) this.closeModal('cmd-palette');
+                else this.showModal('cmd-palette');
+            }
+        };
+
+        // ---------------- 5. GAME ENGINE (NO EMOJIS, NO GRINDING) ----------------
+        const GameEngine = {
+            c: null, tmr: null, pts: 0,
+            
+            close() {
+                clearInterval(this.tmr); clearTimeout(this.tmr);
+                UI.closeModal('modal-game'); this.c.innerHTML = '';
+            },
+            
+            initUI(title, icon) {
+                this.c = document.getElementById('ge-canvas');
+                document.getElementById('ge-title').innerText = title;
+                document.getElementById('ge-icon').innerHTML = icon;
+                this.pts = 0; this.updatePts();
+                clearInterval(this.tmr); clearTimeout(this.tmr);
+                UI.showModal('modal-game');
+            },
+            
+            updatePts() { document.getElementById('ge-score').innerText = `${this.pts} Pts`; },
+            
+            end(msg, cb) {
+                clearInterval(this.tmr); clearTimeout(this.tmr);
+                let coins = Math.ceil(this.pts / 20); // Balanced reward
+                if(coins > 0) State.addCoin(coins);
+                Haptics.vibrate([100, 50, 200]);
+                
+                this.c.innerHTML = `
+                    <div class="w-20 h-20 mb-4 bg-[var(--color-primary-glow)] rounded-full flex items-center justify-center text-[var(--color-primary)] animate-pulse shadow-inner">
+                        <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </div>
+                    <div class="font-serif font-black text-3xl mb-2 text-center leading-tight tracking-tight">${msg}</div>
+                    <div class="text-sm font-bold text-[var(--color-primary)] mb-8 text-center bg-[var(--color-primary-glow)] px-5 py-3 rounded-2xl border border-[var(--color-primary)] shadow-sm">
+                        Total Skor: ${this.pts} Pts<br>
+                        <span class="text-[var(--text-primary)] text-xs mt-1 block">Reward: +${coins} Koin / XP</span>
+                    </div>
+                    <button class="px-10 py-3.5 bg-[var(--color-primary)] text-white rounded-full font-bold shadow-lg btn-tap active:scale-95 text-sm uppercase tracking-widest border-2 border-[var(--border-glass)]" id="ge-replay">Main Lagi</button>
+                `;
+                document.getElementById('ge-replay').onclick = cb;
+            },
+
+            start(logic, level, title, icon) {
+                this.initUI(title, icon);
+                if(logic === 'react') this.playReact(level, title, icon);
+                else if(logic === 'mem') this.playMem(level, title, icon);
+                else if(logic === 'math') this.playMath(level, title, icon);
+                else if(logic === 'color') this.playColor(level, title, icon);
+                else if(logic === 'time') this.playTime(level, title, icon);
+            },
+
+            // 1. REFLEX (Wait for Green)
+            playReact(lv, t, ic) {
+                let waitTimeMax = Math.max(1000, 4000 - (lv * 500));
+                let pWin = 10 + (lv * 5);
+                
+                this.c.innerHTML = `<button id="gr-btn" class="w-56 h-56 rounded-full bg-red-500 text-white font-black text-2xl shadow-2xl shadow-red-500/30 active:scale-95 transition-all select-none flex flex-col items-center justify-center gap-3 border-8 border-white/10 uppercase tracking-widest"><svg class="w-12 h-12 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>Tunggu</button>`;
+                let b = document.getElementById('gr-btn'), state = 'wait', startT;
+                
+                const loop = () => {
+                    state = 'wait'; b.className = "w-56 h-56 rounded-full bg-red-500 text-white font-black text-2xl shadow-2xl shadow-red-500/30 select-none flex flex-col items-center justify-center gap-3 border-8 border-white/10 uppercase tracking-widest"; 
+                    b.innerHTML = '<svg class="w-12 h-12 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>Tunggu';
+                    clearTimeout(this.tmr);
+                    this.tmr = setTimeout(() => {
+                        state = 'go'; b.className = "w-56 h-56 rounded-full bg-emerald-500 text-white font-black text-3xl shadow-2xl shadow-emerald-500/50 active:scale-90 transition-transform select-none flex flex-col items-center justify-center gap-3 border-8 border-white/20 uppercase tracking-widest"; 
+                        b.innerHTML = '<svg class="w-12 h-12 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>Ketuk!';
+                        startT = Date.now();
+                        Haptics.vibrate(50);
+                    }, Math.random() * waitTimeMax + 1000);
+                };
+                
+                b.onmousedown = () => {
+                    if(state === 'wait') { clearTimeout(this.tmr); this.pts = Math.max(0, this.pts - 5); this.updatePts(); UI.toast("Terlalu cepat! -5 Pts"); Haptics.vibrate([50, 50, 50]); loop(); }
+                    else if(state === 'go') {
+                        let ms = Date.now() - startT;
+                        let threshold = Math.max(200, 500 - (lv*50));
+                        Haptics.vibrate(20);
+                        if(ms < threshold) { this.pts += pWin; UI.toast(`⚡ ${ms}ms (+${pWin} Pts)`); }
+                        else { this.pts += Math.floor(pWin/2); UI.toast(`Lambat ${ms}ms (+${Math.floor(pWin/2)} Pts)`); }
+                        this.updatePts();
+                        if(this.pts >= pWin*5) return this.end("Refleks Dewa!", ()=>this.start('react', lv, t, ic));
+                        loop();
+                    }
+                }; loop();
+            },
+
+            // 2. MEMORY CARDS (Using Shapes/Colors instead of Emojis)
+            playMem(lv, t, ic) {
+                let cols = lv === 1 ? 3 : lv === 2 ? 4 : 4;
+                let rows = lv === 1 ? 2 : lv === 2 ? 3 : 4;
+                let pairs = Math.floor((cols*rows)/2);
+                
+                // SVG shapes arrays
+                const shapes = [
+                    `<circle cx="12" cy="12" r="8" fill="#ef4444"/>`, `<rect x="5" y="5" width="14" height="14" fill="#3b82f6"/>`, 
+                    `<polygon points="12 4 20 20 4 20" fill="#10b981"/>`, `<polygon points="12 2 15 8 22 9 17 14 18 21 12 17 6 21 7 14 2 9 9 8" fill="#eab308"/>`,
+                    `<rect x="7" y="7" width="10" height="10" rx="3" fill="#8b5cf6"/>`, `<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#ec4899"/>`,
+                    `<circle cx="12" cy="12" r="8" fill="none" stroke="#14b8a6" stroke-width="4"/>`, `<rect x="5" y="5" width="14" height="14" fill="none" stroke="#f97316" stroke-width="4"/>`
+                ].slice(0, pairs);
+                
+                let deck = [...shapes, ...shapes].sort(()=>Math.random()-0.5);
+                
+                this.c.innerHTML = `<div id="gm-grid" class="grid gap-3 w-full max-w-[320px] mx-auto" style="grid-template-columns: repeat(${cols}, minmax(0, 1fr));"></div>`;
+                let g = document.getElementById('gm-grid'), first = null, lock = false, match = 0;
+                
+                deck.forEach(svgStr => {
+                    let b = document.createElement('button');
+                    b.className = "aspect-square bg-[var(--bg-surface)] border-2 border-[var(--border-solid)] rounded-2xl flex items-center justify-center btn-tap shadow-sm";
+                    b.innerHTML = `<svg viewBox="0 0 24 24" class="w-3/5 h-3/5 opacity-0 scale-50 transition-all duration-300 pointer-events-none">${svgStr}</svg>`;
+                    b.onclick = () => {
+                        if(lock || b.dataset.o==='1' || b===first) return;
+                        Haptics.vibrate(10);
+                        b.dataset.o='1'; b.classList.add('bg-[var(--color-primary-glow)]', 'border-[var(--color-primary)]'); b.firstChild.classList.remove('opacity-0', 'scale-50');
+                        if(!first) { first = b; return; }
+                        lock = true;
+                        
+                        // Compare innerHTML
+                        if(first.innerHTML === b.innerHTML) {
+                            match++; this.pts += (lv*10); this.updatePts();
+                            first.classList.replace('bg-[var(--color-primary-glow)]','bg-emerald-500/20'); b.classList.replace('bg-[var(--color-primary-glow)]','bg-emerald-500/20');
+                            first.classList.replace('border-[var(--color-primary)]','border-emerald-500'); b.classList.replace('border-[var(--color-primary)]','border-emerald-500');
+                            first = null; lock = false; Haptics.vibrate([30,30]);
+                            if(match === pairs) setTimeout(()=>this.end("Ingatan Super!", ()=>this.start('mem', lv, t, ic)), 600);
+                        } else {
+                            setTimeout(() => {
+                                first.dataset.o='0'; b.dataset.o='0';
+                                first.classList.remove('bg-[var(--color-primary-glow)]', 'border-[var(--color-primary)]'); b.classList.remove('bg-[var(--color-primary-glow)]', 'border-[var(--color-primary)]');
+                                first.firstChild.classList.add('opacity-0', 'scale-50'); b.firstChild.classList.add('opacity-0', 'scale-50');
+                                first = null; lock = false;
+                            }, 800 - (lv*150));
+                        }
+                    }; g.appendChild(b);
+                });
+            },
+
+            // 3. MATH SPEED
+            playMath(lv, t, ic) {
+                let maxNum = lv * 15;
+                let ops = lv === 1 ? ['+','-'] : lv === 2 ? ['+','-','*'] : ['+','-','*'];
+                let timeLimit = Math.max(3, 8 - lv);
+                
+                this.c.innerHTML = `
+                    <div class="w-full max-w-[300px] bg-[var(--border-solid)] h-3 rounded-full mb-10 relative overflow-hidden shadow-inner"><div id="gmt-bar" class="absolute top-0 left-0 h-full bg-[var(--color-primary)]"></div></div>
+                    <div id="gmt-q" class="text-6xl font-black mb-10 drop-shadow-md font-mono tracking-tighter text-center"></div>
+                    <div id="gmt-opts" class="grid grid-cols-2 gap-4 w-full max-w-[300px]"></div>
+                `;
+                
+                const nextQ = () => {
+                    clearInterval(this.tmr);
+                    let op = ops[Math.floor(Math.random()*ops.length)];
+                    let a = Math.floor(Math.random()*maxNum)+1, b = Math.floor(Math.random()*maxNum)+1, ans;
+                    if(op==='+') ans=a+b; else if(op==='-'){ if(b>a) [a,b]=[b,a]; ans=a-b; } else { b = Math.floor(b/3)+1; ans=a*b; } // Keep multiplication sane
+                    
+                    document.getElementById('gmt-q').innerText = `${a} ${op} ${b}`;
+                    let arr = [ans, ans+Math.floor(Math.random()*10)+1, ans-Math.floor(Math.random()*10)-1, ans+10].sort(()=>Math.random()-0.5);
+                    
+                    document.getElementById('gmt-opts').innerHTML = arr.map(x => `
+                        <button class="py-5 bg-[var(--bg-surface)] border-2 border-[var(--border-solid)] rounded-2xl font-black text-2xl shadow-sm btn-tap hover:border-[var(--color-primary)] transition-colors" onclick="GameEngine.ansMath(${x}, ${ans}, ${lv}, '${t}', \`${ic}\`)">${x}</button>
+                    `).join('');
+                    
+                    let w = 100;
+                    this.tmr = setInterval(() => {
+                        w -= (100 / (timeLimit*10)); document.getElementById('gmt-bar').style.width = `${w}%`;
+                        if(w<=30) document.getElementById('gmt-bar').classList.add('bg-red-500');
+                        if(w<=0) { clearInterval(this.tmr); this.end("Waktu Habis!", ()=>this.start('math', lv, t, ic)); }
+                    }, 100);
+                }; nextQ();
+                this.ansMath = (sel, ans, lv, t, ic) => {
+                    Haptics.vibrate(10);
+                    if(sel === ans) { this.pts += (lv*5); this.updatePts(); if(this.pts >= lv*40) this.end("Kalkulator Hidup!", ()=>this.start('math', lv, t, ic)); else nextQ(); }
+                    else { clearInterval(this.tmr); Haptics.vibrate([100,50,100]); this.end("Salah Hitung!", ()=>this.start('math', lv, t, ic)); }
+                };
+            },
+
+            // 4. COLOR TRICK
+            playColor(lv, t, ic) {
+                const cols = [{n:'MERAH',c:'#ef4444'},{n:'BIRU',c:'#3b82f6'},{n:'HIJAU',c:'#10b981'},{n:'KUNING',c:'#eab308'}];
+                if(lv>1) cols.push({n:'UNGU',c:'#a855f7'});
+                if(lv>2) cols.push({n:'ORANYE',c:'#f97316'});
+                let tLmt = Math.max(10, 30 - (lv*5));
+                
+                this.c.innerHTML = `
+                    <div class="flex justify-between w-full max-w-[320px] font-bold text-sm mb-6"><span class="text-red-500 flex items-center gap-1"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <span id="gc-t">${tLmt}</span>s</span></div>
+                    <div class="text-[10px] font-bold opacity-60 mb-2 uppercase tracking-widest text-center">Pilih warnanya, abaikan tulisannya!</div>
+                    <div id="gc-w" class="text-5xl font-black mb-10 tracking-widest drop-shadow-md text-center"></div>
+                    <div id="gc-opts" class="grid grid-cols-2 gap-4 w-full max-w-[320px]"></div>
+                `;
+                
+                let target;
+                const next = () => {
+                    let w = cols[Math.floor(Math.random()*cols.length)]; 
+                    target = cols[Math.floor(Math.random()*cols.length)];
+                    let el = document.getElementById('gc-w'); el.innerText = w.n; el.style.color = target.c;
+                    
+                    let opts = [...cols].sort(()=>Math.random()-0.5);
+                    document.getElementById('gc-opts').innerHTML = opts.map(o => `
+                        <button class="py-5 rounded-2xl text-white font-black shadow-md btn-tap active:scale-95 text-sm tracking-widest border-2 border-black/10 uppercase" style="background:${o.c}" onclick="GameEngine.ansCol('${o.c}', '${target.c}', ${lv}, '${t}', \`${ic}\`)">${o.n}</button>
+                    `).join('');
+                };
+                
+                this.tmr = setInterval(() => { tLmt--; document.getElementById('gc-t').innerText=tLmt; if(tLmt<=0) { clearInterval(this.tmr); this.end("Kehabisan Waktu", ()=>this.start('color', lv, t, ic)); } }, 1000);
+                
+                this.ansCol = (sel, tgt, lv, t, ic) => {
+                    Haptics.vibrate(10);
+                    if(sel === tgt) { this.pts += (lv*3); this.updatePts(); if(this.pts >= lv*30) { clearInterval(this.tmr); this.end("Fokus Sempurna!", ()=>this.start('color', lv, t, ic)); } else next(); }
+                    else { clearInterval(this.tmr); Haptics.vibrate([100,50,100]); this.end("Terkecoh Otak!", ()=>this.start('color', lv, t, ic)); }
+                }; next();
+            },
+
+            // 5. PERFECT TIMING
+            playTime(lv, t, ic) {
+                let speed = 2 + (lv * 1);
+                let tgtW = Math.max(8, 30 - (lv * 6));
+                
+                this.c.innerHTML = `
+                    <div class="text-[10px] font-bold opacity-60 mb-8 uppercase tracking-widest text-center">Ketuk STOP saat titik merah berada di area hijau</div>
+                    <div class="w-full max-w-[320px] h-12 bg-[var(--border-solid)] rounded-full relative overflow-hidden border-2 border-black/10 shadow-inner">
+                        <div class="absolute top-0 bottom-0 bg-emerald-500/40" style="left: 50%; width: ${tgtW}%; transform: translateX(-50%); border-left: 3px solid #10b981; border-right: 3px solid #10b981;"></div>
+                        <div id="gt-line" class="absolute top-0 bottom-0 w-3 bg-red-500 shadow-[0_0_15px_red] rounded-full" style="left: 0%;"></div>
+                    </div>
+                    <button id="gt-btn" class="mt-14 w-36 h-36 rounded-full bg-[var(--color-primary)] text-white font-black text-2xl shadow-xl border-8 border-white/20 active:scale-90 transition-transform btn-tap uppercase tracking-widest">STOP!</button>
+                `;
+                
+                let p = 0, d = 1, run = true;
+                this.tmr = setInterval(() => {
+                    if(!run) return;
+                    p += (speed * d); if(p>=97 || p<=0) d *= -1;
+                    document.getElementById('gt-line').style.left = `${p}%`;
+                }, 20);
+                
+                document.getElementById('gt-btn').onclick = () => {
+                    if(!run) return; run = false; Haptics.vibrate(30);
+                    let tgtCenter = 50, halfTgt = tgtW/2;
+                    let diff = Math.abs(p - tgtCenter);
+                    if(diff <= halfTgt) {
+                        let gain = Math.floor((halfTgt - diff + 1) * (lv*2));
+                        this.pts += gain; this.updatePts(); UI.toast(`Tepat! +${gain} Pts`);
+                        if(this.pts >= lv*40) { clearInterval(this.tmr); return this.end("Akurasi Sniper!", ()=>this.start('time', lv, t, ic)); }
+                        setTimeout(()=>{ run=true; }, 600);
+                    } else {
+                        clearInterval(this.tmr); Haptics.vibrate([100,50,100]); this.end("Meleset Jauh!", ()=>this.start('time', lv, t, ic));
+                    }
+                };
+            }
+        };
+
+        // ---------------- 6. INITIALIZATION ----------------
+        document.addEventListener('DOMContentLoaded', () => UI.init());
+
+    </script>
+</body>
+</html>
