@@ -2,19 +2,86 @@
 <html lang="id" class="scroll-smooth antialiased">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
     <title>X.Luminance | SMAN 2 MAJALENGKA</title>
-    <meta name="description" content="Website Resmi Kelas 10 L SMA Negeri 2 Majalengka.">
+    <meta name="description" content="Website Resmi Informasi Kelas 10 L SMAN 2 Majalengka">
+    <meta name="theme-color" content="#0284c7">
     
-    <!-- Tailwind CSS (Optimized usage) -->
+    <!-- PWA & Mobile Capabilities -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     
     <script>
+        // State Initialization - Executed early to prevent FOUC (Flash of Unstyled Content)
+        const State = {
+            data: { 
+                darkMode: true, 
+                dataSaver: false, 
+                reducedMotion: false, 
+                compactMode: false, 
+                glassEffect: 'normal',
+                tvMode: 'auto',
+                fontSize: 'normal'
+            },
+            init() {
+                try { 
+                    const saved = JSON.parse(localStorage.getItem('xl_luminance_state_v2')); 
+                    if (saved) Object.assign(this.data, saved); 
+                } catch(e) { console.warn("Local storage unavailable."); }
+                
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && !localStorage.getItem('xl_luminance_state_v2')) {
+                    this.data.reducedMotion = true;
+                }
+                
+                this.apply();
+            },
+            save() { 
+                try { localStorage.setItem('xl_luminance_state_v2', JSON.stringify(this.data)); } catch(e) {}
+                this.apply(); 
+            },
+            update(key, value) { 
+                this.data[key] = value; 
+                this.save(); 
+                if(window.UI && typeof window.UI.updateSettingsUI === 'function') {
+                    window.UI.updateSettingsUI();
+                }
+            },
+            apply() {
+                const s = this.data;
+                const html = document.documentElement;
+                
+                html.classList.toggle('dark', s.darkMode);
+                html.dataset.tv = s.tvMode;
+                html.dataset.font = s.fontSize;
+                
+                const applyBody = () => {
+                    const body = document.body;
+                    if(!body) return;
+                    body.classList.toggle('data-saver', s.dataSaver);
+                    body.classList.toggle('reduced-motion', s.reducedMotion);
+                    body.classList.toggle('compact-mode', s.compactMode);
+                    body.dataset.glass = s.glassEffect;
+                };
+                
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', applyBody);
+                } else {
+                    applyBody();
+                }
+            }
+        };
+        State.init();
+
+        // Tailwind Custom Theme Configuration
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -24,17 +91,30 @@
                         serif: ['Playfair Display', 'serif'],
                     },
                     colors: {
-                        theme: {
-                            primary: 'var(--color-primary)',
-                            surface: 'var(--bg-surface-solid)',
+                        ocean: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            950: '#082f49',
                         }
                     },
                     animation: {
-                        'fade-up': 'fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-                        'pop-in': 'popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+                        'wave-slow': 'wave 12s linear infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                        'fade-up': 'fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pop-in': 'popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
                     },
                     keyframes: {
-                        fadeUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        wave: { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
+                        pulseGlow: { '0%, 100%': { opacity: '0.4' }, '50%': { opacity: '0.8' } },
+                        fadeUp: { '0%': { opacity: '0', transform: 'translateY(12px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
                         popIn: { '0%': { opacity: '0', transform: 'scale(0.95)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
                     }
                 }
@@ -43,692 +123,680 @@
     </script>
 
     <style>
-        /* === CORE VARIABLES === */
+        /* === OCEAN THEME COLOR VARIABLES === */
         :root {
-            --color-primary: #0ea5e9;
-            --color-primary-glow: rgba(14, 165, 233, 0.15);
+            --color-ocean-primary: #0284c7;
+            --color-ocean-cyan: #06b6d4;
+            --color-ocean-glow: rgba(14, 165, 233, 0.2);
             
-            --bg-body: #F4F4F9; 
-            --bg-surface: rgba(255, 255, 255, 0.75);
-            --bg-surface-solid: #FFFFFF;
-            --text-primary: #1C1C1E;
-            --text-secondary: #6B7280;
-            --border-glass: rgba(0, 0, 0, 0.08);
-            --border-solid: rgba(0, 0, 0, 0.1);
+            --bg-body: #e0f2fe; 
+            --bg-surface: rgba(255, 255, 255, 0.85);
+            --bg-surface-solid: #ffffff;
+            --text-primary: #0c4a6e;
+            --text-secondary: #0369a1;
+            --border-glass: rgba(14, 165, 233, 0.25);
+            --border-solid: rgba(14, 165, 233, 0.15);
+            
             --glass-blur: blur(16px);
-            --shadow-glass: 0 8px 30px rgba(0, 0, 0, 0.05);
-            --overlay-bg: rgba(0,0,0,0.4);
+            --shadow-ocean: 0 10px 30px -5px rgba(2, 132, 199, 0.12);
+            --overlay-bg: rgba(8, 47, 73, 0.5);
+            --hero-gradient: linear-gradient(180deg, rgba(8,47,73,0.85) 0%, rgba(3,105,161,0.6) 60%, rgba(2,132,199,0.95) 100%);
         }
 
         .dark {
-            --bg-body: #0a0a0a;
-            --bg-surface: rgba(24, 24, 27, 0.75);
-            --bg-surface-solid: #18181b;
-            --text-primary: #F3F4F6;
-            --text-secondary: #9CA3AF;
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --border-solid: rgba(255, 255, 255, 0.12);
-            --glass-blur: blur(16px);
-            --shadow-glass: 0 8px 30px rgba(0, 0, 0, 0.3);
-            --overlay-bg: rgba(0,0,0,0.7);
+            --bg-body: #031e38; 
+            --bg-surface: rgba(12, 74, 110, 0.65);
+            --bg-surface-solid: #082f49;
+            --text-primary: #f0f9ff;
+            --text-secondary: #7dd3fc;
+            --border-glass: rgba(56, 189, 248, 0.25);
+            --border-solid: rgba(255, 255, 255, 0.1);
+            
+            --shadow-ocean: 0 12px 35px -5px rgba(0, 0, 0, 0.5);
+            --overlay-bg: rgba(3, 14, 26, 0.75);
+            --hero-gradient: linear-gradient(180deg, rgba(3,30,56,0.9) 0%, rgba(8,47,73,0.7) 60%, rgba(3,30,56,0.98) 100%);
         }
 
-        /* Glass Effect Modes */
-        body[data-glass="low"] {
-            --glass-blur: blur(4px);
-            --bg-surface: rgba(255, 255, 255, 0.95);
-        }
-        .dark body[data-glass="low"] {
-            --bg-surface: rgba(24, 24, 27, 0.95);
-        }
+        /* Glassmorphism Controls */
+        body[data-glass="low"] { --glass-blur: blur(6px); --bg-surface: rgba(255, 255, 255, 0.95); }
+        .dark body[data-glass="low"] { --bg-surface: rgba(8, 47, 73, 0.95); }
         body[data-glass="off"], body.data-saver {
             --glass-blur: blur(0px);
             --bg-surface: var(--bg-surface-solid);
             --border-glass: var(--border-solid);
         }
 
-        /* Base Styles */
-        body { background-color: var(--bg-body); color: var(--text-primary); transition: background-color 0.3s ease, color 0.3s ease; -webkit-tap-highlight-color: transparent; }
+        /* Base Reset & Ocean Ambience */
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-primary); 
+            transition: background-color 0.3s ease, color 0.3s ease; 
+            -webkit-tap-highlight-color: transparent; 
+            font-size: 14px; 
+            min-height: 100dvh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Font Size Scaling */
+        html[data-font="large"] body { font-size: 16px; }
+        html[data-tv="tv"] body { font-size: 18px; }
+        html[data-tv="tv"] .bottom-nav-container { display: none !important; }
+
+        /* Ambient Wave Backgrounds */
+        .ocean-bg { 
+            position: fixed; inset: 0; z-index: -2; 
+            background: radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.15) 0%, transparent 40%),
+                        linear-gradient(180deg, var(--bg-body) 0%, var(--bg-body) 100%);
+            pointer-events: none; 
+        }
         
-        /* Mobile Scroll Locking */
-        body.overflow-hidden { overflow: hidden; overscroll-behavior-y: none; }
+        .ocean-waves {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 180px; z-index: -1; pointer-events: none; opacity: 0.25;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%20%230284c7' fill-opacity='1' d='M0,192L48,197.3C96,203,192,213,288,192C384,171,480,117,576,112C672,107,768,149,864,165.3C960,181,1056,171,1152,149.3C1248,128,1344,96,1392,80L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") repeat-x bottom;
+            background-size: 1440px 180px;
+        }
 
-        /* Ambient Backgrounds */
-        .ambient-bg { position: fixed; inset: 0; z-index: -2; background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&fm=webp&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: 0.15; pointer-events: none; transition: background 1s ease; }
-        .dark .ambient-bg { opacity: 0.1; filter: brightness(0.6) contrast(1.2); }
-        .ambient-gradient { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at top right, var(--color-primary-glow), transparent 60%); pointer-events: none; }
+        body.data-saver .ocean-waves, body.data-saver .ocean-bg { display: none !important; }
 
-        /* Data Saver / Reduced Motion / Compact */
-        body.data-saver .ambient-bg, body.data-saver .ambient-gradient { display: none !important; }
-        body.reduced-motion *, @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; transform: none !important; } }
-        body.compact-mode .glass-panel { padding: 1rem !important; }
-        body.compact-mode .view-section { padding-top: 1rem !important; gap: 1rem !important; }
+        /* Glass Panel Card */
+        .glass-panel { 
+            background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); 
+            box-shadow: var(--shadow-ocean); border: 1px solid var(--border-glass); border-radius: 1.5rem; 
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
 
-        /* Structural Classes */
-        .glass-panel { background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); box-shadow: var(--shadow-glass); border: 1px solid var(--border-glass); border-radius: 1.5rem; transition: background-color 0.3s, border-color 0.3s; }
-        .glass-nav { background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-glass); }
-        
-        /* Interactions */
-        .btn-tap { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease; cursor: pointer; }
-        .btn-tap:active { transform: scale(0.95); opacity: 0.8; }
-        .card-hover:hover { border-color: var(--color-primary); }
+        .btn-tap { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, background-color 0.2s; cursor: pointer; }
+        .btn-tap:active { transform: scale(0.95); opacity: 0.9; }
 
-        /* Modals & Drawers */
-        .drawer-overlay { position: fixed; inset: 0; background: var(--overlay-bg); backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 1000; }
+        @media (hover: hover) {
+            .card-hover:hover { border-color: var(--color-ocean-cyan); transform: translateY(-3px); box-shadow: 0 15px 30px -10px rgba(6, 182, 212, 0.25); }
+        }
+
+        /* Modals and Drawers */
+        .drawer-overlay { 
+            position: fixed; inset: 0; background: var(--overlay-bg); backdrop-filter: blur(4px); 
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 1000; 
+        }
         .drawer-overlay.active { opacity: 1; pointer-events: auto; }
-        .drawer-content { position: fixed; top: 0; left: 0; height: 100vh; width: 300px; max-width: 85vw; background: var(--bg-surface-solid); border-right: 1px solid var(--border-glass); transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); z-index: 1001; display: flex; flex-direction: column; }
+        .drawer-content { 
+            position: fixed; top: 0; left: 0; height: 100dvh; width: 310px; max-width: 85vw; 
+            background: var(--bg-surface-solid); border-right: 1px solid var(--border-glass); 
+            transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
+            z-index: 1001; display: flex; flex-direction: column; 
+        }
         .drawer-overlay.active .drawer-content { transform: translateX(0); }
 
-        .modal-overlay { position: fixed; inset: 0; background: var(--overlay-bg); backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 2000; }
+        .modal-overlay { 
+            position: fixed; inset: 0; background: var(--overlay-bg); backdrop-filter: blur(8px); 
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; 
+            display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 2000; 
+        }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-overlay.stacked { z-index: 2010; }
-        .modal-content { background: var(--bg-surface-solid); border: 1px solid var(--border-solid); border-radius: 2rem; width: 100%; max-height: 85vh; overflow-y: auto; transform: scale(0.95) translateY(20px); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; z-index: 2001; }
+        .modal-content { 
+            background: var(--bg-surface-solid); border: 1px solid var(--border-glass); border-radius: 2rem; 
+            width: 100%; max-height: 88dvh; overflow-y: auto; 
+            transform: scale(0.94) translateY(15px); transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); position: relative; z-index: 2001; 
+        }
         .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
 
-        /* Navigation Bubble */
-        .bottom-nav-container { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 900; width: 90%; max-width: 380px; pointer-events: none; }
-        .bubble-nav { pointer-events: auto; background: var(--bg-surface); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-glass); border-radius: 99px; box-shadow: var(--shadow-glass); display: flex; justify-content: space-around; padding: 0.5rem; }
-        .nav-item { width: 3.5rem; height: 3.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 50%; color: var(--text-secondary); transition: all 0.3s ease; }
-        .nav-item.active { color: #fff; background: var(--color-primary); box-shadow: 0 8px 20px var(--color-primary-glow); transform: translateY(-4px); border: 2px solid var(--border-glass); }
+        /* Floating Bubble Bottom Nav */
+        .bottom-nav-container { 
+            position: fixed; bottom: env(safe-area-inset-bottom, 12px); left: 50%; transform: translateX(-50%); 
+            z-index: 900; width: 92%; max-width: 420px; pointer-events: none; margin-bottom: 6px;
+        }
+        .bubble-nav { 
+            pointer-events: auto; background: var(--bg-surface); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1.5px solid var(--border-glass); border-radius: 999px; box-shadow: 0 15px 35px rgba(2, 132, 199, 0.25); 
+            display: flex; justify-content: space-around; padding: 0.4rem; align-items: center;
+        }
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            width: 3.2rem; height: 3.2rem; border-radius: 50%; color: var(--text-secondary); 
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative;
+        }
+        .nav-item.active { 
+            color: #ffffff; background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); 
+            box-shadow: 0 8px 20px rgba(6, 182, 212, 0.4); transform: translateY(-8px); border: 2px solid rgba(255,255,255,0.4); 
+        }
         .nav-item svg { width: 22px; height: 22px; stroke-width: 2.2; fill: none; stroke: currentColor; }
 
-        /* Utilities */
-        ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border-solid); border-radius: 10px; }
+        /* Calendar Grid */
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .cal-cell { 
+            aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            border-radius: 0.8rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; position: relative;
+            background: var(--bg-surface-solid); border: 1px solid var(--border-solid); transition: all 0.2s;
+        }
+        .cal-cell:hover { border-color: var(--color-ocean-cyan); background: var(--color-ocean-glow); }
+        .cal-cell.today { background: linear-gradient(135deg, #0284c7, #06b6d4); color: #ffffff !important; border-color: transparent; box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4); }
+        .cal-cell.dim { opacity: 0.3; pointer-events: none; background: transparent; border-color: transparent; }
+        .cal-dot { width: 5px; height: 5px; border-radius: 50%; position: absolute; bottom: 3px; }
+        .cal-dot.holiday { background-color: #ef4444; }
+        .cal-dot.leave { background-color: #f59e0b; }
+        
+        /* Utility Scrollbars */
+        ::-webkit-scrollbar { width: 6px; height: 6px; } 
+        ::-webkit-scrollbar-track { background: transparent; } 
+        ::-webkit-scrollbar-thumb { background: var(--border-solid); border-radius: 10px; }
         .hide-scroll::-webkit-scrollbar { display: none; } .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-        .icon-svg { width: 1.5rem; height: 1.5rem; stroke-width: 2; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .icon-svg { width: 1.4em; height: 1.4em; stroke-width: 2; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     </style>
-    <!-- Vercel Web Analytics -->
-    <script>
-        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-
-    <script>
-        // State Initialization - Dieksekusi paling awal untuk mencegah berkedip (FOUC)
-        const State = {
-            settings: { darkMode: true, dataSaver: false, reducedMotion: false, compactMode: false, glassEffect: 'normal' },
-            init() {
-                try { 
-                    const saved = JSON.parse(localStorage.getItem('xl_settings_v12')); 
-                    if (saved) Object.assign(this.settings, saved); 
-                } catch(e) {}
-                this.apply();
-            },
-            save() { 
-                localStorage.setItem('xl_settings_v12', JSON.stringify(this.settings)); 
-                this.apply(); 
-            },
-            update(key, value) { 
-                this.settings[key] = value; 
-                this.save(); 
-            },
-            apply() {
-                const s = this.settings;
-                document.documentElement.classList.toggle('dark', s.darkMode);
-                document.body.classList.toggle('data-saver', s.dataSaver);
-                document.body.classList.toggle('reduced-motion', s.reducedMotion);
-                document.body.classList.toggle('compact-mode', s.compactMode);
-                document.body.dataset.glass = s.glassEffect;
-            },
-            updateUI() {
-                // Mensinkronkan UI Toggle dengan Data Asli
-                const check = (id, key) => { const el = document.getElementById(id); if(el) el.checked = this.settings[key]; };
-                check('set-dark', 'darkMode'); check('set-ds', 'dataSaver'); check('set-rm', 'reducedMotion'); check('set-cm', 'compactMode');
-                
-                document.querySelectorAll('.glass-btn').forEach(b => {
-                    if(b.dataset.val === this.settings.glassEffect) {
-                        b.classList.add('bg-[var(--color-primary)]', 'text-white', 'border-[var(--color-primary)]');
-                        b.classList.remove('bg-[var(--bg-surface-solid)]', 'text-[var(--text-primary)]');
-                    } else {
-                        b.classList.remove('bg-[var(--color-primary)]', 'text-white', 'border-[var(--color-primary)]');
-                        b.classList.add('bg-[var(--bg-surface-solid)]', 'text-[var(--text-primary)]');
-                    }
-                });
-            }
-        };
-        State.init(); // Jalankan sinkronisasi tema gelap/terang segera
-    </script>
 </head>
-<body class="pb-32 text-sm sm:text-base">
+<body class="pb-28 pt-16 md:pt-20">
 
-    <!-- Ambient Backgrounds -->
-    <div class="ambient-bg"></div>
-    <div class="ambient-gradient"></div>
+    <!-- Ocean Ambient Layer -->
+    <div class="ocean-bg" aria-hidden="true"></div>
+    <div class="ocean-waves" aria-hidden="true"></div>
 
     <!-- HEADER -->
-    <header class="fixed top-0 left-0 right-0 z-50 glass-nav">
-        <div class="px-4 py-3 flex justify-between items-center">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg-surface)] backdrop-blur-md border-b border-[var(--border-glass)]">
+        <div class="px-4 py-3 flex justify-between items-center max-w-6xl mx-auto">
             <div class="flex items-center gap-3">
-                <button aria-label="Menu Navigasi" class="p-2 -ml-2 rounded-full hover:bg-[var(--border-solid)] transition-colors btn-tap" onclick="UI.toggleDrawer()">
+                <button type="button" aria-label="Buka Menu" class="p-2 -ml-2 rounded-full hover:bg-[var(--border-solid)] btn-tap text-[var(--text-primary)]" onclick="UI.toggleDrawer()">
                     <svg class="icon-svg" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="15" y2="6"></line><line x1="3" y1="18" x2="18" y2="18"></line></svg>
                 </button>
                 
-                <div class="flex items-center group relative">
-                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-10 h-10 rounded-full border border-[var(--border-solid)] shadow-sm cursor-pointer btn-tap z-10 object-cover bg-white" onclick="UI.showModal('modal-class-id')" alt="Logo Kelas">
-                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-10 h-10 rounded-full border border-[var(--bg-body)] shadow-sm cursor-pointer btn-tap -ml-4 z-0 object-contain bg-white p-1" onclick="UI.showModal('modal-class-id')" alt="Logo Sekolah">
+                <div class="flex items-center cursor-pointer btn-tap" onclick="UI.showModal('modal-class-id')">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-9 h-9 rounded-full border-2 border-cyan-400 shadow-md z-10 object-cover bg-white" alt="Logo XL">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-9 h-9 rounded-full border-2 border-[var(--bg-body)] shadow-sm -ml-3 z-0 object-contain bg-white p-0.5" alt="Logo SMA">
                 </div>
                 
                 <div class="ml-1 leading-tight">
-                    <h1 class="font-serif font-bold text-lg text-[var(--text-primary)]">X.Luminance</h1>
-                    <p class="text-[10px] font-bold text-[var(--color-primary)] uppercase tracking-widest mt-0.5">Gen 26/27</p>
+                    <h1 class="font-serif font-bold text-base md:text-lg text-[var(--text-primary)] flex items-center gap-1.5">
+                        X.Luminance
+                        <span class="text-[9px] font-sans font-extrabold bg-cyan-500 text-white px-1.5 py-0.2 rounded-md uppercase tracking-wider">10 L</span>
+                    </h1>
+                    <p class="text-[10px] font-bold text-[var(--text-secondary)] tracking-wider">SMAN 2 Majalengka</p>
                 </div>
             </div>
             
-            <button aria-label="Cari" class="w-10 h-10 rounded-full bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] flex items-center justify-center btn-tap shadow-sm text-[var(--color-primary)]" onclick="UI.toggleSearch()">
-                <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </button>
+            <div class="flex items-center gap-1.5">
+                <button type="button" aria-label="Kalender Akademik" class="p-2 rounded-full hover:bg-[var(--border-solid)] text-[var(--text-primary)] btn-tap" onclick="UI.switchTab('calendar')">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </button>
+                <button type="button" aria-label="Pencarian Global" class="p-2 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 border border-cyan-500/20 btn-tap" onclick="UI.showModal('modal-search')">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
         </div>
     </header>
 
     <!-- SIDEBAR DRAWER -->
-    <div id="drawer" class="drawer-overlay" onclick="if(event.target===this) UI.toggleDrawer()">
+    <div id="drawer" class="drawer-overlay" role="dialog" aria-modal="true" aria-label="Menu Utama" onclick="if(event.target===this) UI.toggleDrawer()">
         <div class="drawer-content p-6">
-            <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-[var(--border-solid)]">
                 <div class="flex items-center gap-3">
-                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-12 h-12 rounded-xl object-cover border border-[var(--border-solid)] shadow-sm" alt="Logo">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-11 h-11 rounded-xl object-cover border border-cyan-400 shadow-md" alt="Logo">
                     <div>
-                        <div class="font-serif font-bold text-lg text-[var(--text-primary)]">Menu Navigasi</div>
-                        <div class="text-[10px] font-bold uppercase tracking-widest text-[var(--color-primary)]">SMAN 2 Majalengka</div>
+                        <div class="font-serif font-bold text-base text-[var(--text-primary)]">X.Luminance</div>
+                        <div class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest">Website Info Kelas 10 L</div>
                     </div>
                 </div>
-                <button aria-label="Tutup Menu" class="p-2 btn-tap rounded-full bg-[var(--border-solid)] z-10" onclick="UI.toggleDrawer()">
+                <button type="button" aria-label="Tutup Menu" class="p-2 btn-tap rounded-full bg-[var(--border-solid)]" onclick="UI.toggleDrawer()">
                     <svg class="icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
             
-            <nav class="space-y-2 flex-grow overflow-y-auto hide-scroll pb-4">
-                <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest px-2 mb-2">Halaman Utama</div>
-                <a href="#" onclick="UI.switchTab('home'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-blue-500" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg> Beranda</a>
-                <a href="#" onclick="UI.switchTab('schedule'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-emerald-500" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Jadwal Pelajaran</a>
-                <a href="#" onclick="UI.switchTab('students'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-purple-500" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Direktori Siswa</a>
-                <a href="#" onclick="UI.switchTab('gallery'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-pink-500" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle></svg> Galeri Kelas</a>
+            <nav class="space-y-1.5 flex-grow overflow-y-auto hide-scroll">
+                <div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest px-2 mb-2">Navigasi Utama</div>
+                <button type="button" onclick="UI.switchTab('home'); UI.toggleDrawer()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap text-left"><svg class="icon-svg text-cyan-500" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg> Beranda</button>
+                <button type="button" onclick="UI.switchTab('schedule'); UI.toggleDrawer()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap text-left"><svg class="icon-svg text-blue-500" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Jadwal Pelajaran</button>
+                <button type="button" onclick="UI.switchTab('students'); UI.toggleDrawer()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap text-left"><svg class="icon-svg text-sky-500" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Direktori Siswa</button>
+                <button type="button" onclick="UI.switchTab('calendar'); UI.toggleDrawer()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap text-left"><svg class="icon-svg text-teal-500" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Kalender 2026</button>
+                <button type="button" onclick="UI.switchTab('gallery'); UI.toggleDrawer()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap text-left"><svg class="icon-svg text-indigo-500" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle></svg> Galeri Kelas</button>
                 
-                <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest px-2 mb-2 mt-6">Informasi</div>
-                <a href="#" onclick="UI.showModal('modal-piket'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-amber-500" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Jadwal Kebersihan</a>
-                <a href="#" onclick="UI.showModal('modal-uniform'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-rose-500" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg> Aturan Seragam</a>
-                <a href="#" onclick="UI.showModal('modal-org'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-2.5 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap"><svg class="icon-svg text-indigo-500" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg> Struktur Organisasi</a>
+                <div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest px-2 mb-2 mt-6">Akses Informasi</div>
+                <button type="button" onclick="UI.showModal('modal-piket'); UI.toggleDrawer()" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap text-left"><svg class="icon-svg text-amber-500" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Jadwal Kebersihan</button>
+                <button type="button" onclick="UI.showModal('modal-uniform'); UI.toggleDrawer()" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap text-left"><svg class="icon-svg text-rose-500" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg> Aturan Seragam</button>
+                <button type="button" onclick="UI.showModal('modal-org'); UI.toggleDrawer()" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap text-left"><svg class="icon-svg text-cyan-500" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg> Struktur Organisasi</button>
             </nav>
             
-            <div class="mt-auto pt-4 border-t border-[var(--border-solid)]">
-                <a href="#" onclick="UI.switchTab('settings'); UI.toggleDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-[var(--border-solid)] transition-colors font-bold text-sm btn-tap">
-                    <svg class="icon-svg text-[var(--text-secondary)]" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Pengaturan
-                </a>
+            <div class="pt-4 mt-auto border-t border-[var(--border-solid)]">
+                <button type="button" onclick="UI.switchTab('settings'); UI.toggleDrawer()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap text-left">
+                    <svg class="icon-svg text-[var(--text-secondary)]" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Pengaturan & Performa
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="max-w-4xl mx-auto px-4 pt-24 relative z-10 min-h-screen">
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-6xl mx-auto px-4 relative z-10 min-h-[85dvh]">
         
-        <!-- === HOME SECTION === -->
+        <!-- SECTION 1: BERANDA -->
         <section id="sec-home" class="view-section animate-fade-up space-y-6">
             
-            <!-- Hero Banner -->
-            <div class="glass-panel p-6 sm:p-8 relative overflow-hidden flex flex-col justify-end min-h-[200px] sm:min-h-[240px] rounded-[2rem] group cursor-pointer btn-tap border-[var(--border-glass)]" onclick="UI.showModal('modal-class-id')">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10 pointer-events-none"></div>
-                <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1200&fm=webp&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover z-0 opacity-90 group-hover:scale-105 transition-transform duration-700" alt="Hero">
+            <!-- Hero Banner Ocean Theme -->
+            <div class="glass-panel p-6 sm:p-8 relative overflow-hidden flex flex-col justify-end min-h-[230px] sm:min-h-[280px] rounded-[2rem] group cursor-pointer btn-tap border-cyan-500/30 shadow-xl" onclick="UI.showModal('modal-class-id')">
+                <div class="absolute inset-0 bg-[var(--hero-gradient)] z-10 pointer-events-none"></div>
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&fm=webp&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover z-0 opacity-80 group-hover:scale-105 transition-transform duration-1000" alt="Hero Ocean">
                 
                 <div class="relative z-20 text-white">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-xs font-bold mb-3 border border-white/20">
-                        <span class="w-2 h-2 rounded-full bg-green-400"></span> Tahun Ajaran 2026/2027
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/60 backdrop-blur-md rounded-full text-xs font-bold mb-3 border border-cyan-400/30">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> SMAN 2 Majalengka
                     </div>
-                    <h2 class="font-serif text-4xl sm:text-5xl font-bold leading-tight mb-1 text-white">X.Luminance</h2>
-                    <p class="text-sm opacity-90 font-medium tracking-wide">SMAN 2 Majalengka • Kelas 10 L</p>
+                    <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-none mb-2 text-white drop-shadow-lg">X.Luminance</h2>
+                    <p class="text-xs sm:text-sm font-medium tracking-wider text-cyan-100 opacity-95">Website Resmi Informasi & Komunitas Kelas 10 L</p>
                 </div>
             </div>
 
-            <!-- Realtime Status -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <!-- Real-time Lesson Info & Status -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <!-- Date -->
+                <button type="button" class="glass-panel p-4 flex flex-col justify-center items-center text-center card-hover btn-tap outline-none" onclick="UI.switchTab('calendar')">
+                    <svg class="icon-svg text-cyan-500 mb-1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+                    <div class="font-extrabold text-sm sm:text-base text-[var(--text-primary)]" id="rt-date">-- --- 2026</div>
+                    <div class="text-[10px] text-[var(--text-secondary)] font-semibold mt-0.5">Buka Kalender &rarr;</div>
+                </button>
+
+                <!-- Clock -->
                 <div class="glass-panel p-4 flex flex-col justify-center items-center text-center">
-                    <svg class="icon-svg text-blue-500 mb-2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
-                    <div class="font-bold text-sm" id="rt-date">--</div>
+                    <svg class="icon-svg text-blue-500 mb-1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <div class="font-mono font-extrabold text-2xl sm:text-3xl text-cyan-600 dark:text-cyan-300 tracking-tight" id="rt-time">--:--</div>
                 </div>
-                <!-- Time -->
-                <div class="glass-panel p-4 flex flex-col justify-center items-center text-center relative overflow-hidden">
-                    <svg class="icon-svg text-emerald-500 mb-2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <div class="font-bold text-xl sm:text-2xl text-[var(--color-primary)] font-mono tracking-tight" id="rt-time">00:00</div>
-                </div>
-                <!-- Current Subject -->
-                <div class="glass-panel p-4 col-span-2 card-hover cursor-pointer btn-tap flex flex-col justify-center relative" onclick="UI.switchTab('schedule')">
-                    <div class="flex justify-between items-start mb-1">
-                        <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">Aktivitas Saat Ini</div>
-                        <div class="text-[10px] font-bold bg-[var(--color-primary)] text-white px-2 py-0.5 rounded shadow-sm" id="rt-next-time">--</div>
+
+                <!-- Current Lesson & Smooth Progress Bar -->
+                <button type="button" class="glass-panel p-4 col-span-2 card-hover btn-tap flex flex-col justify-between text-left outline-none relative overflow-hidden" onclick="UI.switchTab('schedule')">
+                    <div class="flex justify-between items-center w-full mb-1">
+                        <span class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest">Pelajaran Sekarang</span>
+                        <span class="text-[10px] font-extrabold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 px-2 py-0.5 rounded border border-cyan-500/30" id="rt-next-time">--</span>
                     </div>
-                    <div class="font-bold text-lg truncate text-[var(--color-primary)]" id="rt-subject">Mengecek Jadwal...</div>
-                    <div class="w-full h-1 bg-[var(--border-solid)] mt-2 rounded-full overflow-hidden">
-                        <div id="rt-subject-progress" class="h-full bg-[var(--color-primary)] transition-all duration-1000" style="width: 0%"></div>
+                    <div class="font-extrabold text-base sm:text-lg truncate text-[var(--text-primary)]" id="rt-subject">Mengecek Jadwal...</div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="w-full h-2 bg-cyan-950/20 dark:bg-cyan-100/10 rounded-full overflow-hidden mt-3 p-0.5 border border-cyan-500/20">
+                        <div id="rt-subject-progress" class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-1000 ease-linear" style="width: 0%"></div>
                     </div>
-                </div>
+                </button>
             </div>
 
-            <!-- Quick Access Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="glass-panel p-5 card-hover btn-tap cursor-pointer flex flex-col justify-between h-full" onclick="UI.switchTab('schedule')">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-2.5 bg-blue-500/10 text-blue-500 rounded-xl"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
-                        <span class="text-[10px] font-bold border border-[var(--border-solid)] px-2 py-1 rounded uppercase tracking-widest">Jadwal</span>
-                    </div>
-                    <div><h3 class="font-bold text-base mb-1">Jadwal Pelajaran</h3><p class="text-xs text-[var(--text-secondary)] font-medium">Lihat aktivitas akademik</p></div>
-                </div>
-                
-                <div class="glass-panel p-5 card-hover btn-tap cursor-pointer flex flex-col justify-between h-full" onclick="UI.showModal('modal-piket')">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-2.5 bg-amber-500/10 text-amber-500 rounded-xl"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
-                        <span class="text-[10px] font-bold border border-[var(--border-solid)] text-amber-600 px-2 py-1 rounded uppercase tracking-widest" id="badge-piket">--</span>
-                    </div>
-                    <div><h3 class="font-bold text-base mb-1">Jadwal Piket</h3><p class="text-xs text-[var(--text-secondary)] truncate font-medium" id="desc-piket">Daftar petugas harian</p></div>
-                </div>
-                
-                <div class="glass-panel p-5 card-hover btn-tap cursor-pointer flex flex-col justify-between h-full" onclick="UI.showModal('modal-uniform')">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-2.5 bg-rose-500/10 text-rose-500 rounded-xl"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg></div>
-                        <span class="text-[10px] font-bold border border-[var(--border-solid)] px-2 py-1 rounded uppercase tracking-widest">Aturan</span>
-                    </div>
-                    <div><h3 class="font-bold text-base mb-1">Seragam Hari Ini</h3><p class="text-xs text-[var(--color-primary)] font-bold truncate" id="desc-uniform">Mengecek...</p></div>
-                </div>
-            </div>
-
-            <!-- Utilities Grid -->
+            <!-- Quick Access Buttons -->
             <div>
-                <h3 class="font-serif font-bold text-xl mb-4 pl-1">Akses Pintar</h3>
-                <div class="grid grid-cols-4 sm:grid-cols-6 gap-3" id="util-grid">
-                    <!-- JS Rendered -->
+                <h3 class="font-serif font-bold text-lg sm:text-xl mb-3 pl-1 text-[var(--text-primary)]">Akses Pintar</h3>
+                <div class="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-8 gap-3" id="util-grid">
+                    <!-- Rendered JS -->
+                </div>
+            </div>
+
+            <!-- Agenda & Tugas Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Agenda Card -->
+                <div class="glass-panel p-5 flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="font-bold text-base flex items-center gap-2"><svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Agenda Kelas</h4>
+                        <span class="text-[10px] bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold px-2 py-0.5 rounded">2 Agenda</span>
+                    </div>
+                    <div class="space-y-2.5" id="home-agenda-list">
+                        <!-- JS Rendered -->
+                    </div>
+                </div>
+
+                <!-- Tugas Card -->
+                <div class="glass-panel p-5 flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="font-bold text-base flex items-center gap-2"><svg class="w-5 h-5 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Tugas & Deadline</h4>
+                        <span class="text-[10px] bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold px-2 py-0.5 rounded">2 Tugas</span>
+                    </div>
+                    <div class="space-y-2.5" id="home-tugas-list">
+                        <!-- JS Rendered -->
+                    </div>
                 </div>
             </div>
             
-            <!-- Information Banner -->
-            <div class="glass-panel p-6 flex flex-col sm:flex-row justify-between items-center bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] relative overflow-hidden text-center sm:text-left">
-                <div class="mb-4 sm:mb-0 z-10">
-                    <h4 class="font-bold text-lg text-[var(--color-primary)]">Sistem Informasi Kelas</h4>
-                    <div class="text-xs font-medium text-[var(--text-secondary)] mt-1 max-w-sm">Gunakan website ini untuk mengecek jadwal harian, melihat struktur organisasi, dan mengakses galeri kelas.</div>
+            <!-- Quick Status Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="glass-panel p-4 flex items-center justify-between cursor-pointer btn-tap" onclick="UI.showModal('modal-piket')">
+                    <div class="flex items-center gap-3">
+                        <div class="p-3 bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 rounded-xl"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                        <div>
+                            <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Petugas Kebersihan Hari Ini</div>
+                            <div class="font-extrabold text-sm text-[var(--text-primary)] mt-0.5" id="home-piket-text">Mengecek...</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-cyan-600 dark:text-cyan-400">&rarr;</span>
                 </div>
-                <div class="z-10 flex items-center justify-center gap-2 text-sm font-bold bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-4 py-2.5 rounded-xl border border-[var(--color-primary)] border-opacity-20 shadow-sm cursor-pointer btn-tap" onclick="UI.showModal('modal-org')">
-                    <svg class="icon-svg w-5 h-5" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg> Susunan Organisasi
+
+                <div class="glass-panel p-4 flex items-center justify-between cursor-pointer btn-tap" onclick="UI.showModal('modal-uniform')">
+                    <div class="flex items-center gap-3">
+                        <div class="p-3 bg-blue-500/10 text-blue-600 dark:text-blue-300 rounded-xl"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg></div>
+                        <div>
+                            <div class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Seragam Hari Ini</div>
+                            <div class="font-extrabold text-sm text-[var(--text-primary)] mt-0.5" id="home-uniform-text">Mengecek...</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-blue-600 dark:text-blue-400">&rarr;</span>
                 </div>
             </div>
         </section>
 
-        <!-- === STUDENTS SECTION === -->
-        <section id="sec-students" class="view-section hidden animate-fade-up space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="font-serif text-3xl font-bold">Direktori Siswa</h2>
-                    <p class="text-sm text-[var(--text-secondary)] mt-1">Daftar lengkap 46 siswa/i X.Luminance.</p>
-                </div>
-                <div class="flex gap-2 bg-[var(--bg-surface-solid)] p-1.5 rounded-full border border-[var(--border-solid)] shadow-sm">
-                    <button class="px-5 py-2 rounded-full text-sm font-bold transition-colors bg-[var(--color-primary)] text-white filter-btn shadow-md" onclick="UI.filterStudents('all', this)">Semua (46)</button>
-                    <button class="px-5 py-2 rounded-full text-sm font-bold transition-colors text-[var(--text-secondary)] filter-btn hover:bg-[var(--border-solid)]" onclick="UI.filterStudents('L', this)">Laki-laki</button>
-                    <button class="px-5 py-2 rounded-full text-sm font-bold transition-colors text-[var(--text-secondary)] filter-btn hover:bg-[var(--border-solid)]" onclick="UI.filterStudents('P', this)">Perempuan</button>
-                </div>
-            </div>
-            
-            <div class="relative">
-                <input type="text" id="search-student" placeholder="Cari nama, absen, atau jabatan..." class="w-full glass-panel py-4 pl-12 pr-4 outline-none focus:border-[var(--color-primary)] font-medium shadow-sm transition-colors" onkeyup="UI.searchStudent(this.value)">
-                <svg class="icon-svg absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="students-grid">
-                <!-- JS Rendered -->
-            </div>
-        </section>
-
-        <!-- === SCHEDULE SECTION === -->
+        <!-- SECTION 2: JADWAL PELAJARAN -->
         <section id="sec-schedule" class="view-section hidden animate-fade-up space-y-6">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 class="font-serif text-3xl font-bold">Jadwal Pelajaran</h2>
-                    <p class="text-sm text-[var(--text-secondary)] mt-1">Tahun Ajaran 2026/2027</p>
+                    <p class="text-xs sm:text-sm text-[var(--text-secondary)] mt-1">Kelas 10 L SMAN 2 Majalengka • Tahun Ajaran 2026/2027</p>
                 </div>
-                <div class="flex gap-2 overflow-x-auto hide-scroll w-full md:w-auto pb-2" id="schedule-tabs">
+                <div class="flex gap-2 overflow-x-auto hide-scroll w-full md:w-auto pb-2" id="schedule-tabs" role="tablist">
                     <!-- JS Rendered -->
                 </div>
             </div>
+
             <div class="glass-panel p-6">
                 <div class="flex justify-between items-center border-b border-[var(--border-solid)] pb-4 mb-6">
-                    <h3 class="font-bold text-2xl text-[var(--color-primary)]" id="sched-title">Senin</h3>
-                    <span class="text-[10px] px-3 py-1 bg-[var(--color-primary)] text-white rounded-full font-bold tracking-widest hidden uppercase shadow-sm" id="sched-badge">Hari Ini</span>
+                    <h3 class="font-bold text-2xl text-cyan-600 dark:text-cyan-400" id="sched-title">Senin</h3>
+                    <span class="text-[10px] px-3 py-1 bg-cyan-600 text-white rounded-full font-extrabold uppercase tracking-widest hidden shadow-md" id="sched-badge">Hari Ini</span>
                 </div>
-                <div class="relative pl-6 border-l-2 border-[var(--border-solid)] space-y-6" id="sched-timeline">
+                <div class="relative pl-6 border-l-2 border-cyan-500/30 space-y-6" id="sched-timeline">
                     <!-- JS Rendered -->
                 </div>
             </div>
         </section>
 
-        <!-- === GALLERY SECTION === -->
-        <section id="sec-gallery" class="view-section hidden animate-fade-up space-y-6">
-            <div>
-                <h2 class="font-serif text-3xl font-bold">Galeri Kelas</h2>
-                <p class="text-sm text-[var(--text-secondary)] mt-1">Dokumentasi momen berharga kelas kita.</p>
+        <!-- SECTION 3: DIREKTORI SISWA -->
+        <section id="sec-students" class="view-section hidden animate-fade-up space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="font-serif text-3xl font-bold">Direktori Siswa</h2>
+                    <p class="text-xs sm:text-sm text-[var(--text-secondary)] mt-1">Daftar LENGKAP 46 siswa/i X.Luminance SMAN 2 Majalengka.</p>
+                </div>
+                <div class="flex gap-1.5 bg-[var(--bg-surface-solid)] p-1.5 rounded-2xl border border-[var(--border-solid)] shadow-sm w-full md:w-auto overflow-x-auto hide-scroll">
+                    <button type="button" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all bg-cyan-600 text-white filter-btn shadow-md whitespace-nowrap" onclick="UI.filterStudents('all', this)">Semua (46)</button>
+                    <button type="button" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all text-[var(--text-secondary)] filter-btn hover:bg-[var(--border-solid)] whitespace-nowrap" onclick="UI.filterStudents('L', this)">Laki-laki</button>
+                    <button type="button" class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all text-[var(--text-secondary)] filter-btn hover:bg-[var(--border-solid)] whitespace-nowrap" onclick="UI.filterStudents('P', this)">Perempuan</button>
+                    <button type="button" class="px-3 py-2 rounded-xl text-xs font-extrabold transition-all text-[var(--text-secondary)] border-l border-[var(--border-solid)] hover:bg-[var(--border-solid)] whitespace-nowrap ml-1" onclick="UI.toggleStudentSort()" title="Urutkan A-Z / Z-A">
+                        <svg class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15l4 4 4-4M7 19V5M21 9l-4-4-4 4M17 5v14"></path></svg>
+                    </button>
+                </div>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4" id="gallery-grid">
+
+            <div class="relative">
+                <input type="text" id="search-student" placeholder="Cari nama, nomor absen, jabatan, atau IG..." class="w-full glass-panel py-3.5 pl-11 pr-4 outline-none focus:border-cyan-500 font-medium text-sm transition-colors" oninput="UI.searchStudent(this.value)">
+                <svg class="icon-svg absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4" id="students-grid">
                 <!-- JS Rendered -->
             </div>
         </section>
 
-        <!-- === SETTINGS SECTION === -->
-        <section id="sec-settings" class="view-section hidden animate-fade-up max-w-2xl mx-auto space-y-6">
-            <div class="pl-2">
-                <h2 class="font-serif text-3xl font-bold">Pengaturan</h2>
-                <p class="text-sm text-[var(--text-secondary)] mt-1">Sesuaikan preferensi tampilan dan performa website.</p>
+        <!-- SECTION 4: KALENDER 2026 (NEW FULL TAB) -->
+        <section id="sec-calendar" class="view-section hidden animate-fade-up space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="font-serif text-3xl font-bold">Kalender 2026</h2>
+                    <p class="text-xs sm:text-sm text-[var(--text-secondary)] mt-1">Lengkap 17 Libur Nasional & 8 Cuti Bersama 2026.</p>
+                </div>
+                <button type="button" class="px-4 py-2 bg-cyan-600 text-white rounded-xl text-xs font-extrabold shadow-md btn-tap" onclick="App.Calendar.goToday()">
+                    Ke Hari Ini
+                </button>
             </div>
-            
-            <div class="glass-panel p-1 border-[var(--border-solid)] shadow-sm">
-                <!-- Dark Mode -->
+
+            <div class="glass-panel p-5 sm:p-6">
+                <!-- Month Controls -->
+                <div class="flex justify-between items-center mb-6 bg-[var(--bg-surface-solid)] p-3 rounded-2xl border border-[var(--border-solid)] shadow-sm">
+                    <button type="button" class="p-2 hover:bg-[var(--border-solid)] rounded-xl btn-tap" onclick="App.Calendar.prevMonth()"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                    <h3 class="font-bold text-lg sm:text-xl text-[var(--text-primary)]" id="cal-tab-month-year">Januari 2026</h3>
+                    <button type="button" class="p-2 hover:bg-[var(--border-solid)] rounded-xl btn-tap" onclick="App.Calendar.nextMonth()"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                </div>
+
+                <!-- Days Name -->
+                <div class="cal-grid mb-3 text-center text-xs font-extrabold uppercase tracking-wider text-[var(--text-secondary)]">
+                    <div class="text-rose-500">Sen</div>
+                    <div>Sel</div>
+                    <div>Rab</div>
+                    <div>Kam</div>
+                    <div>Jum</div>
+                    <div class="text-sky-500">Sab</div>
+                    <div class="text-rose-500">Min</div>
+                </div>
+
+                <!-- Days Grid -->
+                <div class="cal-grid" id="cal-tab-days-grid">
+                    <!-- JS Rendered -->
+                </div>
+
+                <!-- Selected Date Info Banner -->
+                <div class="mt-6 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-2xl p-4 shadow-sm min-h-[90px] flex flex-col justify-center" id="cal-tab-info-panel">
+                    <div class="text-center opacity-60 text-xs font-semibold">Klik salah satu tanggal untuk melihat keterangan libur/jadwal.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: GALERI KELAS -->
+        <section id="sec-gallery" class="view-section hidden animate-fade-up space-y-6">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h2 class="font-serif text-3xl font-bold">Galeri Kelas</h2>
+                    <p class="text-xs sm:text-sm text-[var(--text-secondary)] mt-1">Dokumentasi momen berharga X.Luminance.</p>
+                </div>
+                <span class="text-xs font-extrabold text-[var(--text-secondary)] bg-[var(--border-solid)] px-3 py-1.5 rounded-lg" id="gallery-count">0 Item</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4" id="gallery-grid">
+                <!-- JS Rendered -->
+            </div>
+        </section>
+
+        <!-- SECTION 6: PENGATURAN -->
+        <section id="sec-settings" class="view-section hidden animate-fade-up max-w-2xl mx-auto space-y-6">
+            <div>
+                <h2 class="font-serif text-3xl font-bold">Pengaturan</h2>
+                <p class="text-xs sm:text-sm text-[var(--text-secondary)] mt-1">Kustomisasi performa dan preferensi tampilan.</p>
+            </div>
+
+            <div class="glass-panel p-2 space-y-1">
                 <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--border-solid)] rounded-xl transition-colors">
                     <div>
                         <div class="font-bold text-sm">Mode Gelap (Dark Mode)</div>
-                        <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">Tampilan elegan yang ramah di mata.</div>
+                        <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">Tampilan Ocean Deep Navy.</div>
                     </div>
-                    <div class="relative inline-flex items-center">
-                        <input type="checkbox" id="set-dark" class="sr-only peer" onchange="State.update('darkMode', this.checked)">
-                        <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-[var(--color-primary)] transition-colors shadow-inner"></div>
-                        <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5 shadow-sm"></div>
-                    </div>
+                    <input type="checkbox" id="set-dark" class="w-5 h-5 accent-cyan-600" onchange="State.update('darkMode', this.checked)">
                 </label>
-                
-                <div class="w-full h-px bg-[var(--border-solid)] mx-4 w-[calc(100%-2rem)]"></div>
-                
-                <!-- Data Saver -->
+
+                <div class="h-px bg-[var(--border-solid)] mx-4"></div>
+
                 <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--border-solid)] rounded-xl transition-colors">
                     <div>
                         <div class="font-bold text-sm">Mode Hemat Performa</div>
-                        <div class="text-[11px] text-[var(--text-secondary)] mt-0.5 max-w-[200px]">Mematikan efek visual berat. Cocok untuk perangkat spesifikasi sederhana.</div>
+                        <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">Mematikan background wave dan efek berat.</div>
                     </div>
-                    <div class="relative inline-flex items-center">
-                        <input type="checkbox" id="set-ds" class="sr-only peer" onchange="State.update('dataSaver', this.checked)">
-                        <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-[var(--color-primary)] transition-colors shadow-inner"></div>
-                        <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5 shadow-sm"></div>
-                    </div>
+                    <input type="checkbox" id="set-ds" class="w-5 h-5 accent-cyan-600" onchange="State.update('dataSaver', this.checked)">
                 </label>
-                
-                <div class="w-full h-px bg-[var(--border-solid)] mx-4 w-[calc(100%-2rem)]"></div>
-                
-                <!-- Reduced Motion -->
+
+                <div class="h-px bg-[var(--border-solid)] mx-4"></div>
+
                 <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--border-solid)] rounded-xl transition-colors">
                     <div>
                         <div class="font-bold text-sm">Kurangi Animasi</div>
-                        <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">Mematikan transisi dan efek gerak.</div>
+                        <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">Mematikan transisi bergerak.</div>
                     </div>
-                    <div class="relative inline-flex items-center">
-                        <input type="checkbox" id="set-rm" class="sr-only peer" onchange="State.update('reducedMotion', this.checked)">
-                        <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-[var(--color-primary)] transition-colors shadow-inner"></div>
-                        <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5 shadow-sm"></div>
-                    </div>
-                </label>
-                
-                <div class="w-full h-px bg-[var(--border-solid)] mx-4 w-[calc(100%-2rem)]"></div>
-                
-                <!-- Compact Mode -->
-                <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--border-solid)] rounded-xl transition-colors">
-                    <div>
-                        <div class="font-bold text-sm">Tampilan Padat (Compact)</div>
-                        <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">Mengurangi jarak dan margin elemen.</div>
-                    </div>
-                    <div class="relative inline-flex items-center">
-                        <input type="checkbox" id="set-cm" class="sr-only peer" onchange="State.update('compactMode', this.checked)">
-                        <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-[var(--color-primary)] transition-colors shadow-inner"></div>
-                        <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5 shadow-sm"></div>
-                    </div>
+                    <input type="checkbox" id="set-rm" class="w-5 h-5 accent-cyan-600" onchange="State.update('reducedMotion', this.checked)">
                 </label>
             </div>
-            
-            <div class="glass-panel p-5 border-[var(--border-solid)] shadow-sm">
-                <div class="font-bold text-sm mb-1">Efek Kaca (Glassmorphism)</div>
-                <div class="text-[11px] text-[var(--text-secondary)] mb-4">Intensitas blur latar belakang. (Diabaikan jika Mode Hemat aktif).</div>
+
+            <div class="glass-panel p-5">
+                <div class="font-bold text-sm mb-1">Mode Layar TV / Proyektor</div>
+                <div class="text-xs text-[var(--text-secondary)] mb-3">Tampilan kontras tinggi dengan teks lebih besar.</div>
                 <div class="flex gap-2">
-                    <button class="flex-1 py-2 rounded-lg border border-[var(--border-solid)] font-bold text-sm transition-colors btn-tap glass-btn" data-val="off" onclick="State.update('glassEffect', 'off')">Mati</button>
-                    <button class="flex-1 py-2 rounded-lg border border-[var(--border-solid)] font-bold text-sm transition-colors btn-tap glass-btn" data-val="low" onclick="State.update('glassEffect', 'low')">Rendah</button>
-                    <button class="flex-1 py-2 rounded-lg border border-[var(--border-solid)] font-bold text-sm transition-colors btn-tap glass-btn" data-val="normal" onclick="State.update('glassEffect', 'normal')">Normal</button>
+                    <button type="button" class="flex-1 py-2 rounded-xl border border-[var(--border-solid)] font-bold text-xs btn-tap tv-btn" data-val="auto" onclick="State.update('tvMode', 'auto')">Auto</button>
+                    <button type="button" class="flex-1 py-2 rounded-xl border border-[var(--border-solid)] font-bold text-xs btn-tap tv-btn" data-val="tv" onclick="State.update('tvMode', 'tv')">Mode TV</button>
                 </div>
             </div>
 
-            <!-- Footer -->
-            <div class="pt-8 pb-4 opacity-60 flex flex-col items-center">
-                <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-12 h-12 rounded-xl grayscale mb-3 opacity-80 border border-[var(--border-solid)]" alt="Logo">
-                <p class="text-xs font-bold tracking-widest uppercase mb-1 text-[var(--text-primary)]">X.Luminance</p>
-                <p class="text-[10px] mt-1 text-center max-w-xs">© 2026/2027 Kelas 10 L - SMAN 2 Majalengka.<br>Clean & Modern Class Website.</p>
+            <!-- About Footer -->
+            <div class="text-center pt-8 opacity-80 space-y-2">
+                <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-12 h-12 rounded-xl mx-auto border border-cyan-400" alt="Logo">
+                <div class="font-serif font-bold text-base">Dibuat Oleh AK ᡕᠵデᡁ᠊╾━</div>
+                <div class="text-xs text-[var(--text-secondary)]">Web X.Luminance Version 8.9 Unstable</div>
             </div>
         </section>
 
     </main>
 
-    <!-- FLOATING BUBBLE BOTTOM NAV -->
+    <!-- FLOATING BUBBLE BOTTOM NAVIGATION -->
     <div class="bottom-nav-container">
-        <nav class="bubble-nav overflow-x-auto hide-scroll">
-            <button aria-label="Beranda" class="nav-item active btn-tap" data-target="home" onclick="UI.switchTab('home')">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <nav class="bubble-nav">
+            <button type="button" aria-label="Beranda" class="nav-item active btn-tap" data-target="home" onclick="UI.switchTab('home')">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
             </button>
-            <button aria-label="Jadwal" class="nav-item btn-tap" data-target="schedule" onclick="UI.switchTab('schedule')">
-                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <button type="button" aria-label="Jadwal" class="nav-item btn-tap" data-target="schedule" onclick="UI.switchTab('schedule')">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
             </button>
-            <button aria-label="Siswa" class="nav-item btn-tap" data-target="students" onclick="UI.switchTab('students')">
-                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <button type="button" aria-label="Siswa" class="nav-item btn-tap" data-target="students" onclick="UI.switchTab('students')">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
             </button>
-            <button aria-label="Galeri" class="nav-item btn-tap" data-target="gallery" onclick="UI.switchTab('gallery')">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <button type="button" aria-label="Kalender" class="nav-item btn-tap" data-target="calendar" onclick="UI.switchTab('calendar')">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             </button>
-            <button aria-label="Pengaturan" class="nav-item btn-tap" data-target="settings" onclick="UI.switchTab('settings')">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <button type="button" aria-label="Galeri" class="nav-item btn-tap" data-target="gallery" onclick="UI.switchTab('gallery')">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle></svg>
             </button>
         </nav>
     </div>
 
-    <!-- === MODALS === -->
-    
+    <!-- MODALS -->
+
     <!-- 1. CLASS ID MODAL -->
     <div id="modal-class-id" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-class-id')">
         <div class="flex flex-col items-center relative z-10 w-full max-w-sm animate-pop-in">
-            <div class="bg-[#0f4c81] w-full rounded-[2rem] overflow-hidden shadow-2xl border border-[var(--border-solid)] relative">
-                <!-- Background Pattern -->
-                <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none z-0">
-                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-64 h-64 object-contain grayscale" alt="">
-                </div>
-                
-                <!-- Header -->
-                <div class="p-6 pb-2 text-center relative z-10 text-white">
-                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-16 h-16 bg-white rounded-full p-1.5 shadow-lg mx-auto mb-3 object-contain" alt="">
+            <div class="bg-cyan-900 w-full rounded-[2.2rem] overflow-hidden shadow-2xl border border-cyan-400/40 relative">
+                <div class="p-6 text-center relative z-10 text-white">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-16 h-16 bg-white rounded-full p-1.5 shadow-md mx-auto mb-3 object-contain" alt="SMA Logo">
                     <h3 class="font-bold text-xl uppercase tracking-widest">Kelas 10 L</h3>
-                    <p class="text-[10px] uppercase tracking-[0.2em] opacity-80 mt-1">SMA Negeri 2 Majalengka</p>
+                    <p class="text-[10px] uppercase tracking-[0.2em] opacity-80 mt-0.5">SMA Negeri 2 Majalengka</p>
                 </div>
-                
-                <!-- Body -->
-                <div class="bg-[var(--bg-surface-solid)] text-[var(--text-primary)] p-6 flex flex-col items-center relative z-10 mt-4 rounded-t-[2rem]">
-                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-28 h-28 rounded-full border-4 border-[var(--bg-surface-solid)] shadow-xl -mt-14 mb-4 object-cover bg-white" alt="">
+
+                <div class="bg-[var(--bg-surface-solid)] text-[var(--text-primary)] p-6 flex flex-col items-center relative z-10 mt-2 rounded-t-[2rem]">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-24 h-24 rounded-full border-4 border-[var(--bg-surface-solid)] shadow-xl -mt-14 mb-3 object-cover bg-white" alt="XL Logo">
                     <h2 class="font-serif font-bold text-2xl mb-1">X.Luminance</h2>
-                    <p class="text-xs font-bold text-[var(--text-secondary)] mb-6 text-center leading-relaxed">Solidaritas, Kreativitas, dan<br>Semangat Belajar.</p>
-                    
-                    <!-- Social Links (Only Real Ones) -->
-                    <div class="w-full border-t border-[var(--border-solid)] pt-6 flex justify-center">
-                        <a href="https://www.instagram.com/x.luminance4us?igsh=eGM4bW5qc2hlbnhk" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center gap-2 btn-tap group">
-                            <div class="w-14 h-14 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center group-hover:bg-pink-600 group-hover:text-white transition-colors shadow-sm border border-pink-100">
-                                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    <p class="text-xs font-semibold text-[var(--text-secondary)] text-center mb-5">Solidaritas, Kreativitas, dan Prestasi.</p>
+
+                    <div class="w-full border-t border-[var(--border-solid)] pt-4 flex justify-center gap-3">
+                        <a href="https://www.instagram.com/x.luminance4us?igsh=eGM4bW5qc2hlbnhk" target="_blank" rel="noopener" class="flex flex-col items-center gap-1.5 btn-tap group">
+                            <div class="w-12 h-12 rounded-full bg-pink-500/10 text-pink-500 flex items-center justify-center shadow-sm border border-pink-500/20 group-hover:bg-pink-500 group-hover:text-white transition-colors">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path></svg>
                             </div>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-primary)]">Instagram Resmi</span>
+                            <span class="text-[10px] font-bold text-[var(--text-primary)]">Instagram</span>
                         </a>
+                        <button type="button" class="flex flex-col items-center gap-1.5 btn-tap group" onclick="UI.shareWebsite()">
+                            <div class="w-12 h-12 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shadow-sm border border-cyan-500/20 group-hover:bg-cyan-600 group-hover:text-white transition-colors">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                            </div>
+                            <span class="text-[10px] font-bold text-[var(--text-primary)]">Bagikan</span>
+                        </button>
                     </div>
                 </div>
             </div>
-            <button aria-label="Tutup Modal" class="mt-6 w-12 h-12 rounded-full glass-panel flex items-center justify-center btn-tap shadow-lg hover:bg-red-500 hover:text-white transition-colors relative z-10 pointer-events-auto" onclick="UI.closeModal('modal-class-id')">
-                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <button type="button" aria-label="Tutup" class="mt-4 w-10 h-10 rounded-full glass-panel flex items-center justify-center btn-tap hover:bg-rose-500 hover:text-white transition-colors" onclick="UI.closeModal('modal-class-id')">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
     </div>
 
-    <!-- 2. STUDENT ID MODAL (Privacy Focused) -->
+    <!-- 2. STUDENT ID MODAL -->
     <div id="modal-student-id" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-student-id')">
-        <div class="flex flex-col items-center relative w-full max-w-sm animate-pop-in z-10 pointer-events-auto">
-            <div class="bg-[var(--bg-surface-solid)] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-[var(--border-solid)] relative">
-                
-                <div class="h-28 bg-[var(--color-primary)] relative overflow-hidden">
-                    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 20px 20px;"></div>
-                    <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[var(--bg-surface-solid)] to-transparent"></div>
+        <div class="flex flex-col items-center relative w-full max-w-sm animate-pop-in">
+            <div class="bg-[var(--bg-surface-solid)] w-full rounded-[2.2rem] overflow-hidden shadow-2xl border border-[var(--border-solid)]">
+                <div class="h-24 bg-gradient-to-r from-cyan-600 to-blue-600 relative overflow-hidden" id="sid-header-bg">
+                    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 16px 16px;"></div>
                 </div>
 
                 <div class="p-6 pt-0 flex flex-col items-center relative">
-                    <div class="w-24 h-24 rounded-full border-4 border-[var(--bg-surface-solid)] shadow-md overflow-hidden -mt-16 mb-4 bg-[var(--bg-body)]" id="sid-photo"></div>
+                    <div class="w-24 h-24 rounded-full border-4 border-[var(--bg-surface-solid)] shadow-lg overflow-hidden -mt-12 mb-3 bg-[var(--bg-body)]" id="sid-photo"></div>
+                    <h2 class="font-bold text-lg uppercase tracking-wide text-center leading-tight break-words w-full" id="sid-name">NAMA SISWA</h2>
                     
-                    <!-- Memastikan nama panjang wrap ke baris baru -->
-                    <h2 class="font-bold text-lg uppercase tracking-wide text-center leading-tight min-h-[48px] flex items-center break-words w-full justify-center px-2" id="sid-name">NAMA SISWA</h2>
-                    
-                    <div class="flex gap-2 mt-2 mb-6">
-                        <span class="text-[10px] font-bold bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm" id="sid-role">Siswa</span>
-                        <span class="text-[10px] font-bold bg-[var(--border-solid)] text-[var(--text-secondary)] px-3 py-1.5 rounded-full uppercase tracking-widest" id="sid-gender">L</span>
+                    <div class="flex gap-2 mt-2 mb-5">
+                        <span class="text-[10px] font-extrabold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 px-3 py-1 rounded-full uppercase tracking-wider" id="sid-role">Siswa</span>
+                        <span class="text-[10px] font-extrabold bg-[var(--border-solid)] text-[var(--text-secondary)] px-3 py-1 rounded-full uppercase tracking-wider" id="sid-gender">L</span>
                     </div>
 
-                    <div class="w-full flex items-center justify-between bg-[var(--bg-body)] rounded-2xl p-4 border border-[var(--border-solid)] mb-6">
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">Nomor Absen</span>
-                        <span class="font-mono font-bold text-lg text-[var(--color-primary)]" id="sid-absen">00</span>
+                    <div class="w-full flex items-center justify-between bg-[var(--bg-body)] rounded-2xl p-3.5 border border-[var(--border-solid)] mb-5">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Nomor Absen</span>
+                        <span class="font-mono font-extrabold text-xl text-cyan-600 dark:text-cyan-400" id="sid-absen">00</span>
                     </div>
 
-                    <a href="#" id="sid-ig-btn" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 rounded-xl bg-[var(--border-solid)] text-[var(--text-primary)] hover:bg-[var(--color-primary-glow)] hover:text-[var(--color-primary)] font-bold text-sm flex items-center justify-center gap-2 btn-tap transition-colors">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    <a href="#" id="sid-ig-btn" target="_blank" rel="noopener" class="w-full py-3 rounded-xl bg-pink-500/10 text-pink-600 dark:text-pink-400 font-bold text-xs flex items-center justify-center gap-2 btn-tap border border-pink-500/20 hover:bg-pink-500 hover:text-white transition-colors">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path></svg>
                         <span id="sid-ig-handle">@username</span>
                     </a>
                 </div>
             </div>
-            
-            <button aria-label="Tutup Modal" class="mt-6 w-12 h-12 rounded-full glass-panel flex items-center justify-center btn-tap shadow-lg hover:bg-red-500 hover:text-white transition-colors relative z-10 pointer-events-auto" onclick="UI.closeModal('modal-student-id')">
-                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <button type="button" aria-label="Tutup" class="mt-4 w-10 h-10 rounded-full glass-panel flex items-center justify-center btn-tap hover:bg-rose-500 hover:text-white transition-colors" onclick="UI.closeModal('modal-student-id')">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
     </div>
 
-    <!-- 3. LIGHTBOX GALLERY MODAL -->
-    <div id="modal-lightbox" class="modal-overlay stacked" onclick="if(event.target===this) UI.closeModal('modal-lightbox')">
-        <div class="relative w-full max-w-4xl flex flex-col items-center justify-center p-2 sm:p-4 h-full pointer-events-none">
-            
-            <button aria-label="Tutup Galeri" class="absolute top-4 right-4 text-white bg-black/60 p-2.5 rounded-full z-50 hover:bg-red-600 pointer-events-auto transition-colors shadow-lg btn-tap" onclick="UI.closeModal('modal-lightbox')">
+    <!-- 3. SEARCH MODAL -->
+    <div id="modal-search" class="modal-overlay items-start pt-[12dvh]" onclick="if(event.target===this) UI.closeModal('modal-search')">
+        <div class="modal-content p-0 max-w-xl shadow-2xl">
+            <div class="p-4 flex items-center gap-3 border-b border-[var(--border-solid)] bg-[var(--bg-surface-solid)]">
+                <svg class="w-5 h-5 text-[var(--text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="global-search-input" placeholder="Cari siswa, pelajaran, guru, piket, fitur..." class="flex-grow bg-transparent border-none outline-none text-sm font-medium text-[var(--text-primary)]" oninput="UI.globalSearch(this.value)">
+                <button type="button" class="text-[10px] font-bold bg-[var(--border-solid)] px-2 py-1 rounded text-[var(--text-secondary)]" onclick="UI.closeModal('modal-search')">ESC</button>
+            </div>
+            <div class="max-h-[55dvh] overflow-y-auto p-3 space-y-1" id="global-search-results">
+                <div class="p-6 text-center text-xs opacity-50 font-bold">Ketik kata kunci untuk mulai mencari...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. LIGHTBOX MODAL -->
+    <div id="modal-lightbox" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-lightbox')">
+        <div class="relative w-full max-w-4xl flex flex-col items-center justify-center p-2 h-full">
+            <button type="button" aria-label="Tutup" class="absolute top-4 right-4 text-white bg-black/60 p-2.5 rounded-full z-50 hover:bg-rose-600 transition-colors shadow-lg btn-tap" onclick="UI.closeModal('modal-lightbox')">
                 <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-            
-            <div id="lightbox-content" class="w-full max-h-[85vh] flex items-center justify-center pointer-events-auto">
-                <!-- JS Rendered Media -->
+            <div id="lightbox-content" class="w-full max-h-[85dvh] flex items-center justify-center">
+                <!-- JS Media -->
             </div>
-            
-            <div class="absolute inset-y-0 left-2 sm:left-6 flex items-center pointer-events-auto">
-                <button aria-label="Media Sebelumnya" class="bg-black/60 text-white p-3 sm:p-4 rounded-full hover:bg-black transition-colors shadow-lg btn-tap" onclick="UI.prevMedia(event)">
-                    <svg class="w-6 h-6 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-            </div>
-            <div class="absolute inset-y-0 right-2 sm:right-6 flex items-center pointer-events-auto">
-                <button aria-label="Media Selanjutnya" class="bg-black/60 text-white p-3 sm:p-4 rounded-full hover:bg-black transition-colors shadow-lg btn-tap" onclick="UI.nextMedia(event)">
-                    <svg class="w-6 h-6 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
-            </div>
-            
         </div>
     </div>
 
-    <!-- 4. ORGANIZATION MODAL -->
-    <div id="modal-org" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-org')">
-        <div class="modal-content p-0 max-w-lg z-[2001]">
-            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10 rounded-t-2xl">
-                <h3 class="font-bold text-lg">Struktur Organisasi</h3>
-                <button aria-label="Tutup" onclick="UI.closeModal('modal-org')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)] hover:bg-red-500 hover:text-white transition-colors pointer-events-auto"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-            </div>
-            <div class="p-5 sm:p-6 bg-[var(--bg-body)]" id="content-org"></div>
-        </div>
-    </div>
-
-    <!-- 5. SCHEDULE MODALS (Piket & Uniform) -->
+    <!-- 5. PIKET & UNIFORM & ORG MODALS -->
     <div id="modal-piket" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-piket')">
-        <div class="modal-content p-0 max-w-sm z-[2001]">
-            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10 rounded-t-2xl">
-                <h3 class="font-bold text-lg">Jadwal Kebersihan</h3>
-                <button aria-label="Tutup" onclick="UI.closeModal('modal-piket')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)] hover:bg-red-500 hover:text-white transition-colors pointer-events-auto"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <div class="modal-content p-0 max-w-sm">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
+                <h3 class="font-bold text-base">Jadwal Kebersihan</h3>
+                <button type="button" onclick="UI.closeModal('modal-piket')" class="p-1.5 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
             </div>
-            <div class="p-5 bg-[var(--bg-body)]">
-                <div class="flex gap-2 overflow-x-auto hide-scroll pb-4" id="piket-tabs"></div>
-                <div id="piket-list" class="space-y-2 mt-2"></div>
+            <div class="p-4 space-y-3">
+                <div class="flex gap-1.5 overflow-x-auto hide-scroll pb-2" id="piket-tabs"></div>
+                <div id="piket-list" class="space-y-1.5"></div>
             </div>
         </div>
     </div>
 
     <div id="modal-uniform" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-uniform')">
-        <div class="modal-content p-0 max-w-sm z-[2001]">
-            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10 rounded-t-2xl">
-                <h3 class="font-bold text-lg">Aturan Seragam</h3>
-                <button aria-label="Tutup" onclick="UI.closeModal('modal-uniform')" class="p-2 btn-tap rounded-full bg-[var(--border-solid)] hover:bg-red-500 hover:text-white transition-colors pointer-events-auto"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <div class="modal-content p-0 max-w-sm">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
+                <h3 class="font-bold text-base">Aturan Seragam</h3>
+                <button type="button" onclick="UI.closeModal('modal-uniform')" class="p-1.5 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
             </div>
-            <div class="p-5 bg-[var(--bg-body)] space-y-2" id="uniform-list"></div>
+            <div class="p-4 space-y-2" id="uniform-list"></div>
         </div>
     </div>
 
-    <!-- 6. SEARCH MODAL -->
-    <div id="modal-search" class="modal-overlay items-start pt-[12vh] stacked" onclick="if(event.target===this) UI.closeModal('modal-search')">
-        <div class="modal-content p-0 max-w-xl shadow-2xl z-[2011]">
-            <div class="p-4 flex items-center gap-3 border-b border-[var(--border-solid)] bg-[var(--bg-surface-solid)] relative rounded-t-2xl">
-                <svg class="w-6 h-6 text-[var(--text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="search-input" placeholder="Cari menu, jadwal, atau informasi..." class="flex-grow bg-transparent border-none outline-none text-base font-medium w-full text-[var(--text-primary)]" onkeyup="UI.searchMenu(this.value)">
-                <button aria-label="Tutup Pencarian" class="text-[10px] font-bold bg-[var(--border-solid)] px-2 py-1 rounded text-[var(--text-secondary)] hover:bg-red-500 hover:text-white transition-colors pointer-events-auto" onclick="UI.closeModal('modal-search')">ESC</button>
+    <div id="modal-org" class="modal-overlay" onclick="if(event.target===this) UI.closeModal('modal-org')">
+        <div class="modal-content p-0 max-w-md">
+            <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
+                <h3 class="font-bold text-base">Struktur Organisasi</h3>
+                <button type="button" onclick="UI.closeModal('modal-org')" class="p-1.5 btn-tap rounded-full bg-[var(--border-solid)]"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
             </div>
-            <div class="max-h-[50vh] overflow-y-auto p-2 bg-[var(--bg-body)]" id="search-results"></div>
+            <div class="p-5" id="content-org"></div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
+    <!-- Toast Container -->
     <div id="toast-container" class="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 pointer-events-none items-center w-[90%] max-w-sm"></div>
 
-    <!-- === JAVASCRIPT === -->
     <script>
-        const Icons = {
-            calendar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
-            users: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
-            gallery: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`,
-            broom: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`,
-            shirt: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>`,
-            settings: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`
-        };
-
+        // Database X.Luminance
         const DB = {
             students: [
-                { no: 1, name: "ADE ROHMAT", g: "L", ig: "aderohmat" }, 
-                { no: 2, name: "AJENG PRATIWI", g: "P", ig: "ajengprtw" }, 
-                { no: 3, name: "ALBIAN REVAN FAUZAN", g: "L", ig: "albianrf" }, 
-                { no: 4, name: "APRILIANI NUR SABRINA", g: "P", ig: "apriliansbrna" }, 
-                { no: 5, name: "AYU WURININGSIH", g: "P", ig: "ayuwuri" }, 
-                { no: 6, name: "AZRI KAUTHAR ANSHAR", g: "L", ig: "azrikauthar" }, 
-                { no: 7, name: "CINTA AMELA NURCAHAYA", g: "P", ig: "cintaamela" }, 
-                { no: 8, name: "DEWI MUTIA", g: "P", ig: "dewimutia" }, 
-                { no: 9, name: "DIDAN AGUNG FIRMANSYAH", g: "L", ig: "didanagung" }, 
-                { no: 10, name: "ELISA FITRIYANI", g: "P", ig: "elisafit" }, 
-                { no: 11, name: "EVANDHER RAYHAN KURNICOVA", g: "L", ig: "evandherr" }, 
-                { no: 12, name: "FAREL MUHAMAD HISYAM", g: "L", ig: "farelhisyam" }, 
-                { no: 13, name: "FEYZHA RANU SALSABITHA", g: "P", ig: "feyzharanu" }, 
-                { no: 14, name: "FITROH DWI SUKMA", g: "L", ig: "fitrohds" }, 
-                { no: 15, name: "HANA SYAKIRA ANINDYTA", g: "P", ig: "hanasyakira" }, 
-                { no: 16, name: "IRIHMANA DZAKI", g: "L", ig: "irihmana" }, 
-                { no: 17, name: "JENISA LUTHFIAH", g: "P", ig: "jenisalfh" }, 
-                { no: 18, name: "KANDISA", g: "P", ig: "kandisa" }, 
-                { no: 19, name: "KHAYRA ADZKIA HAIFA", g: "P", ig: "khayrahaifa" }, 
-                { no: 20, name: "LUCIANA MEISYA PUTRI", g: "P", ig: "lucianamp" }, 
-                { no: 21, name: "M. ANDIKA KOSTRADNANDA", g: "L", ig: "andikakstrd" }, 
-                { no: 22, name: "MOCHAMMAD FAWWAZ", g: "L", ig: "fawwaz" }, 
-                { no: 23, name: "MUHAMAD FADLI", g: "L", ig: "fadli" }, 
-                { no: 24, name: "MUHAMMAD ARIF AL BADAR", g: "L", ig: "arifalbadar" }, 
-                { no: 25, name: "MUHAMMAD MUFTAHURROHMAN MUSTHOFA", g: "L", ig: "muftahur" }, 
-                { no: 26, name: "MUHAMMAD YUSRON AWLA", g: "L", ig: "yusronawla" }, 
-                { no: 27, name: "MYEISHA AZMI FAKHIRA", g: "P", ig: "myeisha" }, 
-                { no: 28, name: "NAILA LAILATUL RAMADHANI", g: "P", ig: "nailalrmdhn" }, 
-                { no: 29, name: "NAZWA ALGHUMAISHA", g: "P", ig: "nazwaalghmsh" }, 
-                { no: 30, name: "NOVI TRESNAWATI SUHERMAN", g: "P", ig: "novitrsn" }, 
-                { no: 31, name: "PRINCE EZHAD ALVARO SYAHPUTRA", g: "L", ig: "princeezhad" }, 
-                { no: 32, name: "RAHMA NADIRA YULIANTI", g: "P", ig: "rahmanadira" }, 
-                { no: 33, name: "RAIHAN ATAYA FADHILAH", g: "L", ig: "raihanataya" }, 
-                { no: 34, name: "RATU SYIFA OCTAVIANI", g: "P", ig: "ratusyifa" }, 
-                { no: 35, name: "RENITA KUSMAYANTI", g: "P", ig: "renitaksm" }, 
-                { no: 36, name: "REZKY RULLIAN NURHAFIZ", g: "L", ig: "rezkyrullian" }, 
-                { no: 37, name: "SAFIRA NAILA TABINA", g: "P", ig: "safiranaila" }, 
-                { no: 38, name: "SENDY AULIA RAHMA", g: "P", ig: "sendyaulia" }, 
-                { no: 39, name: "SILVANA NURAENI", g: "P", ig: "silvananuraeni" }, 
-                { no: 40, name: "STEFANY SHINTIARA PUTRI", g: "P", ig: "stefanysp" }, 
-                { no: 41, name: "SYAHRIZA ZIAN FIRDAUS", g: "L", ig: "syahrizazian" }, 
-                { no: 42, name: "TRI INDRAWATI", g: "P", ig: "triindrawati" }, 
-                { no: 43, name: "UFAIRAH ZAHRA", g: "P", ig: "ufairahzhr" }, 
-                { no: 44, name: "WINDYA SRI MULYATI OKTAYANI", g: "P", ig: "windyasri" }, 
-                { no: 45, name: "ZAHWA ANNISA SETIAWAN", g: "P", ig: "zahwannisa" }, 
-                { no: 46, name: "ZALPA CHAERUL AZAM", g: "L", ig: "zalpach" }
+                { no: 1, name: "ADE ROHMAT", g: "L", ig: "aderohmat" }, { no: 2, name: "AJENG PRATIWI", g: "P", ig: "ajengprtw" }, { no: 3, name: "ALBIAN REVAN FAUZAN", g: "L", ig: "albianrf" }, { no: 4, name: "APRILIANI NUR SABRINA", g: "P", ig: "apriliansbrna" }, { no: 5, name: "AYU WURININGSIH", g: "P", ig: "ayuwuri" }, { no: 6, name: "AZRI KAUTHAR ANSHAR", g: "L", ig: "azrikauthar" }, { no: 7, name: "CINTA AMELA NURCAHAYA", g: "P", ig: "cintaamela" }, { no: 8, name: "DEWI MUTIA", g: "P", ig: "dewimutia" }, { no: 9, name: "DIDAN AGUNG FIRMANSYAH", g: "L", ig: "didanagung" }, { no: 10, name: "ELISA FITRIYANI", g: "P", ig: "elisafit" }, { no: 11, name: "EVANDHER RAYHAN KURNICOVA", g: "L", ig: "evandherr" }, { no: 12, name: "FAREL MUHAMAD HISYAM", g: "L", ig: "farelhisyam" }, { no: 13, name: "FEYZHA RANU SALSABITHA", g: "P", ig: "feyzharanu" }, { no: 14, name: "FITROH DWI SUKMA", g: "L", ig: "fitrohds" }, { no: 15, name: "HANA SYAKIRA ANINDYTA", g: "P", ig: "hanasyakira" }, { no: 16, name: "IRIHMANA DZAKI", g: "L", ig: "irihmana" }, { no: 17, name: "JENISA LUTHFIAH", g: "P", ig: "jenisalfh" }, { no: 18, name: "KANDISA", g: "P", ig: "kandisa" }, { no: 19, name: "KHAYRA ADZKIA HAIFA", g: "P", ig: "khayrahaifa" }, { no: 20, name: "LUCIANA MEISYA PUTRI", g: "P", ig: "lucianamp" }, { no: 21, name: "M. ANDIKA KOSTRADNANDA", g: "L", ig: "andikakstrd" }, { no: 22, name: "MOCHAMMAD FAWWAZ", g: "L", ig: "fawwaz" }, { no: 23, name: "MUHAMAD FADLI", g: "L", ig: "fadli" }, { no: 24, name: "MUHAMMAD ARIF AL BADAR", g: "L", ig: "arifalbadar" }, { no: 25, name: "MUHAMMAD MUFTAHURROHMAN MUSTHOFA", g: "L", ig: "muftahur" }, { no: 26, name: "MUHAMMAD YUSRON AWLA", g: "L", ig: "yusronawla" }, { no: 27, name: "MYEISHA AZMI FAKHIRA", g: "P", ig: "myeisha" }, { no: 28, name: "NAILA LAILATUL RAMADHANI", g: "P", ig: "nailalrmdhn" }, { no: 29, name: "NAZWA ALGHUMAISHA", g: "P", ig: "nazwaalghmsh" }, { no: 30, name: "NOVI TRESNAWATI SUHERMAN", g: "P", ig: "novitrsn" }, { no: 31, name: "PRINCE EZHAD ALVARO SYAHPUTRA", g: "L", ig: "princeezhad" }, { no: 32, name: "RAHMA NADIRA YULIANTI", g: "P", ig: "rahmanadira" }, { no: 33, name: "RAIHAN ATAYA FADHILAH", g: "L", ig: "raihanataya" }, { no: 34, name: "RATU SYIFA OCTAVIANI", g: "P", ig: "ratusyifa" }, { no: 35, name: "RENITA KUSMAYANTI", g: "P", ig: "renitaksm" }, { no: 36, name: "REZKY RULLIAN NURHAFIZ", g: "L", ig: "rezkyrullian" }, { no: 37, name: "SAFIRA NAILA TABINA", g: "P", ig: "safiranaila" }, { no: 38, name: "SENDY AULIA RAHMA", g: "P", ig: "sendyaulia" }, { no: 39, name: "SILVANA NURAENI", g: "P", ig: "silvananuraeni" }, { no: 40, name: "STEFANY SHINTIARA PUTRI", g: "P", ig: "stefanysp" }, { no: 41, name: "SYAHRIZA ZIAN FIRDAUS", g: "L", ig: "syahrizazian" }, { no: 42, name: "TRI INDRAWATI", g: "P", ig: "triindrawati" }, { no: 43, name: "UFAIRAH ZAHRA", g: "P", ig: "ufairahzhr" }, { no: 44, name: "WINDYA SRI MULYATI OKTAYANI", g: "P", ig: "windyasri" }, { no: 45, name: "ZAHWA ANNISA SETIAWAN", g: "P", ig: "zahwannisa" }, { no: 46, name: "ZALPA CHAERUL AZAM", g: "L", ig: "zalpach" }
             ].map(s => ({ id: `S${s.no}`, ...s })),
             
             roles: {
@@ -743,11 +811,11 @@
                 "Budi Pekerti": ["ZAHWA ANNISA SETIAWAN", "SAFIRA NAILA TABINA"]
             },
             schedule: {
-                "Senin": [{ t: "06.30-07.15", m: "Upacara / Perwalian", g: "TUTI TURSILAH" }, { t: "07.15-09.15", m: "Pend. Agama Islam", g: "TUTI TURSILAH" }, { t: "09.15-09.45", m: "Istirahat", br: true }, { t: "09.45-11.05", m: "Seni Rupa", g: "ADE FATURRACHMAN" }, { t: "11.05-11.45", m: "BK/B. Indonesia", g: "TRESNA FUJIE" }, { t: "11.45-12.20", m: "Istirahat", br: true }, { t: "12.20-13.00", m: "BK/B. Indonesia", g: "TRESNA FUJIE" }, { t: "13.00-15.00", m: "Sosiologi", g: "ADE LINA" }],
-                "Selasa": [{ t: "06.30-08.30", m: "Sejarah", g: "H. AGUS HERMAWAN" }, { t: "08.30-09.10", m: "Informatika", g: "CRISTY SRI OCTINA" }, { t: "09.10-09.40", m: "Istirahat", br: true }, { t: "09.40-10.20", m: "Informatika", g: "CRISTY SRI OCTINA" }, { t: "10.20-11.40", m: "Biologi", g: "Hj. YUYUN Y." }, { t: "11.40-12.20", m: "Istirahat", br: true }, { t: "12.20-13.00", m: "Biologi", g: "Hj. YUYUN Y." }, { t: "13.00-15.00", m: "BK/B. Indonesia", g: "TRESNA FUJIE" }],
-                "Rabu": [{ t: "06.30-08.45", m: "Kimia", g: "WULAN KAROLINA" }, { t: "08.45-09.30", m: "Geografi", g: "ANITA DEWI" }, { t: "09.30-09.50", m: "Istirahat", br: true }, { t: "09.50-11.20", m: "Geografi", g: "ANITA DEWI" }, { t: "11.20-12.05", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "12.05-12.45", m: "Istirahat", br: true }, { t: "12.45-13.30", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "13.30-15.00", m: "Koding & KA", g: "DEFI WULANDANI" }],
-                "Kamis": [{ t: "06.30-07.50", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "07.50-09.10", m: "Pend. Pancasila", g: "FAHMI ARIZAL" }, { t: "09.10-09.40", m: "Istirahat", br: true }, { t: "09.40-10.20", m: "Bahasa Sunda", g: "AEF SAEPUL" }, { t: "10.20-11.40", m: "Fisika", g: "Drs. AHMAD IBROHIM" }, { t: "11.40-12.20", m: "Istirahat", br: true }, { t: "12.20-13.00", m: "Fisika", g: "Drs. AHMAD IBROHIM" }, { t: "13.00-15.00", m: "Bahasa Inggris", g: "ENDAH RETNO" }],
-                "Jumat": [{ t: "06.30-07.10", m: "Keg. Keagamaan", g: "Guru Agama" }, { t: "07.10-09.10", m: "Ekonomi/PKWU", g: "TENNY SUKMARA" }, { t: "09.10-09.30", m: "Istirahat", br: true }, { t: "09.30-11.30", m: "PJOK", g: "NANTO KURNIANTO" }, { t: "13.00-15.30", m: "Pramuka", g: "Pembina Pramuka" }]
+                "Senin": [{ t: "06.30-07.15", m: "Upacara / Perwalian", g: "TUTI TURSILAH" }, { t: "07.15-09.15", m: "Pend. Agama Islam", g: "TUTI TURSILAH" }, { t: "09.15-09.45", m: "Istirahat Pertama", br: true }, { t: "09.45-11.05", m: "Seni Rupa", g: "ADE FATURRACHMAN" }, { t: "11.05-11.45", m: "BK / B. Indonesia", g: "TRESNA FUJIE" }, { t: "11.45-12.20", m: "Istirahat Kedua", br: true }, { t: "12.20-13.00", m: "BK / B. Indonesia", g: "TRESNA FUJIE" }, { t: "13.00-15.00", m: "Sosiologi", g: "ADE LINA" }],
+                "Selasa": [{ t: "06.30-08.30", m: "Sejarah", g: "H. AGUS HERMAWAN" }, { t: "08.30-09.10", m: "Informatika", g: "CRISTY SRI OCTINA" }, { t: "09.10-09.40", m: "Istirahat", br: true }, { t: "09.40-10.20", m: "Informatika", g: "CRISTY SRI OCTINA" }, { t: "10.20-11.40", m: "Biologi", g: "Hj. YUYUN Y." }, { t: "11.40-12.20", m: "Istirahat Kedua", br: true }, { t: "12.20-13.00", m: "Biologi", g: "Hj. YUYUN Y." }, { t: "13.00-15.00", m: "Bahasa Indonesia", g: "TRESNA FUJIE" }],
+                "Rabu": [{ t: "06.30-08.45", m: "Kimia", g: "WULAN KAROLINA" }, { t: "08.45-09.30", m: "Geografi", g: "ANITA DEWI" }, { t: "09.30-09.50", m: "Istirahat", br: true }, { t: "09.50-11.20", m: "Geografi", g: "ANITA DEWI" }, { t: "11.20-12.05", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "12.05-12.45", m: "Istirahat Kedua", br: true }, { t: "12.45-13.30", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "13.30-15.00", m: "Koding & K.A", g: "DEFI WULANDANI" }],
+                "Kamis": [{ t: "06.30-07.50", m: "Matematika", g: "ARDI ARIYANTO" }, { t: "07.50-09.10", m: "Pend. Pancasila", g: "FAHMI ARIZAL" }, { t: "09.10-09.40", m: "Istirahat", br: true }, { t: "09.40-10.20", m: "Bahasa Sunda", g: "AEF SAEPUL" }, { t: "10.20-11.40", m: "Fisika", g: "Drs. AHMAD IBROHIM" }, { t: "11.40-12.20", m: "Istirahat Kedua", br: true }, { t: "12.20-13.00", m: "Fisika", g: "Drs. AHMAD IBROHIM" }, { t: "13.00-15.00", m: "Bahasa Inggris", g: "ENDAH RETNO" }],
+                "Jumat": [{ t: "06.30-07.10", m: "Kegiatan Keagamaan", g: "Guru Agama" }, { t: "07.10-09.10", m: "Ekonomi / PKWU", g: "TENNY SUKMARA" }, { t: "09.10-09.30", m: "Istirahat", br: true }, { t: "09.30-11.30", m: "PJOK", g: "NANTO KURNIANTO" }, { t: "13.00-15.30", m: "Pramuka", g: "Pembina Pramuka" }]
             },
             piket: {
                 "Senin": ["ADE ROHMAT", "AJENG PRATIWI", "ALBIAN REVAN FAUZAN", "APRILIANI NUR SABRINA", "AYU WURININGSIH", "AZRI KAUTHAR ANSHAR", "CINTA AMELA NURCAHAYA", "DEWI MUTIA", "DIDAN AGUNG FIRMANSYAH"],
@@ -756,9 +824,7 @@
                 "Kamis": ["NAILA LAILATUL RAMADHANI", "NAZWA ALGHUMAISHA", "NOVI TRESNAWATI SUHERMAN", "PRINCE EZHAD ALVARO SYAHPUTRA", "RAHMA NADIRA YULIANTI", "RAIHAN ATAYA FADHILAH", "RATU SYIFA OCTAVIANI", "RENITA KUSMAYANTI", "REZKY RULLIAN NURHAFIZ"],
                 "Jumat": ["SAFIRA NAILA TABINA", "SENDY AULIA RAHMA", "SILVANA NURAENI", "STEFANY SHINTIARA PUTRI", "SYAHRIZA ZIAN FIRDAUS", "TRI INDRAWATI", "UFAIRAH ZAHRA", "WINDYA SRI MULYATI OKTAYANI", "ZAHWA ANNISA SETIAWAN", "ZALPA CHAERUL AZAM"]
             },
-            seragam: { "Senin": "PSAS Putih Abu", "Selasa": "PSAS Putih Abu", "Rabu": "Pramuka Lengkap", "Kamis": "Pangsi/Kebaya", "Jumat": "Baju Muslim" },
-            
-            // Menggunakan raw URL dari GitHub seperti yang diminta
+            seragam: { "Senin": "PSAS Putih Abu Lengkap", "Selasa": "PSAS Putih Abu", "Rabu": "Pramuka Lengkap", "Kamis": "Pangsi/Kebaya", "Jumat": "Baju Muslim " },
             gallery: [
                 { type: 'img', src: 'https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Postingan/kiri.webp' },
                 { type: 'img', src: 'https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Postingan/tengah.webp' },
@@ -767,269 +833,470 @@
                 { type: 'vid', src: 'https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Boy/highlit%20biys.mp4' },
                 { type: 'vid', src: 'https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Cewe/highlight%20cewe.mp4' },
                 { type: 'img', src: 'https://raw.githubusercontent.com/Andikakostradnanda/Profile-10L/b3f6771ca4b5319bf689ba0efcbadb9a6ebc6f98/Foto%20Khusus%20Web/Highlight.Sorotan/Cewe/highlight%20cewe.webp' }
-            ]
+            ],
+            agenda: [
+                { date: "2026-10-15", title: "Testing Rapat Pengurus Kelas", type: "Rapat", desc: "Evaluasi kas dan persiapan porseni sekolah." },
+                { date: "2026-11-01", title: "Testing Saja Iuran Kas Bulanan", type: "Penting", desc: "Batas pembayaran kas bulan November ke Bendahara." }
+            ],
+            tugas: [
+                { subject: "Matematika", title: "Tes ajaLatihan Soal Halaman 45-47", deadline: "Besok, 07:00", status: "Belum" },
+                { subject: "Bahasa Inggris", title: " Tes Juga Video Percakapan Kelompok", deadline: "Jumat, 23:59", status: "Dikerjakan" }
+            ],
+            // Data Resmi Kalender 2026
+            calendar2026: {
+                "2026-01-01": { type: "national_holiday", name: "Tahun Baru Masehi 2026" },
+                "2026-01-16": { type: "national_holiday", name: "Isra Mikraj Nabi Muhammad SAW" },
+                "2026-02-16": { type: "collective_leave", name: "Cuti Bersama Tahun Baru Imlek" },
+                "2026-02-17": { type: "national_holiday", name: "Tahun Baru Imlek 2577 Kongzili" },
+                "2026-03-18": { type: "collective_leave", name: "Cuti Bersama Hari Suci Nyepi" },
+                "2026-03-19": { type: "national_holiday", name: "Hari Suci Nyepi, Tahun Baru Saka 1948" },
+                "2026-03-20": { type: "collective_leave", name: "Cuti Bersama Idulfitri" },
+                "2026-03-21": { type: "national_holiday", name: "Hari Raya Idulfitri 1447 H" },
+                "2026-03-22": { type: "national_holiday", name: "Hari Raya Idulfitri 1447 H" },
+                "2026-03-23": { type: "collective_leave", name: "Cuti Bersama Idulfitri" },
+                "2026-03-24": { type: "collective_leave", name: "Cuti Bersama Idulfitri" },
+                "2026-04-03": { type: "national_holiday", name: "Wafat Yesus Kristus" },
+                "2026-04-05": { type: "national_holiday", name: "Hari Kebangkitan Yesus Kristus / Paskah" },
+                "2026-05-01": { type: "national_holiday", name: "Hari Buruh Internasional" },
+                "2026-05-14": { type: "national_holiday", name: "Kenaikan Yesus Kristus" },
+                "2026-05-15": { type: "collective_leave", name: "Cuti Bersama Kenaikan Yesus Kristus" },
+                "2026-05-27": { type: "national_holiday", name: "Hari Raya Iduladha 1447 H" },
+                "2026-05-28": { type: "collective_leave", name: "Cuti Bersama Iduladha" },
+                "2026-05-31": { type: "national_holiday", name: "Hari Raya Waisak 2570 BE" },
+                "2026-06-01": { type: "national_holiday", name: "Hari Lahir Pancasila" },
+                "2026-06-16": { type: "national_holiday", name: "Tahun Baru Islam 1448 H" },
+                "2026-08-17": { type: "national_holiday", name: "Hari Kemerdekaan Republik Indonesia" },
+                "2026-08-25": { type: "national_holiday", name: "Maulid Nabi Muhammad SAW" },
+                "2026-12-24": { type: "collective_leave", name: "Cuti Bersama Natal" },
+                "2026-12-25": { type: "national_holiday", name: "Hari Raya Natal" }
+            }
+        };
+
+        const App = {
+            init() {
+                UI.init();
+                this.Calendar.init();
+                setInterval(() => this.rtClock(), 15000);
+                this.rtClock();
+            },
+
+            parseTime(tStr) {
+                const [h, m] = tStr.split('.').map(Number);
+                return h * 60 + m;
+            },
+
+            rtClock() {
+                const d = new Date();
+                const ms = d.getHours() * 60 + d.getMinutes();
+                const dayIdx = d.getDay();
+                const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                const dn = days[dayIdx];
+                const isSchoolDay = dayIdx >= 1 && dayIdx <= 5;
+                
+                const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                document.getElementById('rt-date').innerText = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+                document.getElementById('rt-time').innerText = d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+
+                // Check 2026 holiday
+                const dStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+                const hol = DB.calendar2026[dStr];
+
+                let subj = "Luar Jam Pelajaran";
+                let nextStr = "Bebas";
+                let pct = 0;
+
+                if(hol && (hol.type === 'national_holiday' || hol.type === 'collective_leave')) {
+                    subj = hol.name;
+                    nextStr = "Libur";
+                } else if(isSchoolDay && DB.schedule[dn]) {
+                    const sched = DB.schedule[dn];
+                    for(let i = 0; i < sched.length; i++) {
+                        let s = sched[i];
+                        let [stStr, enStr] = s.t.split('-');
+                        let st = App.parseTime(stStr);
+                        let en = App.parseTime(enStr);
+
+                        if(ms >= st && ms < en) {
+                            subj = s.m;
+                            let rem = en - ms;
+                            nextStr = `${rem} menit lagi`;
+                            pct = ((ms - st) / (en - st)) * 100;
+                            break;
+                        } else if(ms < st) {
+                            if(i === 0) {
+                                subj = "Persiapan Belajar";
+                                nextStr = `Mulai ${stStr}`;
+                            }
+                            break;
+                        }
+                    }
+                } else {
+                    subj = "Hari Libur Sekolah";
+                    nextStr = "Bebas";
+                }
+
+                document.getElementById('rt-subject').innerText = subj;
+                document.getElementById('rt-next-time').innerText = nextStr;
+                document.getElementById('rt-subject-progress').style.width = `${Math.min(100, Math.max(0, pct))}%`;
+
+                // Quick Piket & Uniform Status
+                document.getElementById('home-piket-text').innerText = DB.piket[dn] ? DB.piket[dn].slice(0, 3).join(', ') + "..." : "Libur Piket";
+                document.getElementById('home-uniform-text').innerText = DB.seragam[dn] || "Bebas";
+            },
+
+            Calendar: {
+                currentDate: new Date(),
+                selectedDate: new Date(),
+
+                init() {
+                    if(this.currentDate.getFullYear() !== 2026) {
+                        this.currentDate.setFullYear(2026);
+                    }
+                    this.render();
+                },
+
+                goToday() {
+                    this.currentDate = new Date();
+                    if(this.currentDate.getFullYear() !== 2026) this.currentDate.setFullYear(2026);
+                    this.selectedDate = new Date(this.currentDate);
+                    this.render();
+                    this.showInfo(this.selectedDate);
+                },
+
+                prevMonth() { this.currentDate.setMonth(this.currentDate.getMonth() - 1); this.render(); },
+                nextMonth() { this.currentDate.setMonth(this.currentDate.getMonth() + 1); this.render(); },
+
+                render() {
+                    const y = this.currentDate.getFullYear();
+                    const m = this.currentDate.getMonth();
+                    const monNames = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+                    document.getElementById('cal-tab-month-year').innerText = `${monNames[m]} ${y}`;
+
+                    const firstDay = new Date(y, m, 1).getDay();
+                    const daysInMonth = new Date(y, m + 1, 0).getDate();
+                    const prevDays = new Date(y, m, 0).getDate();
+
+                    let html = '';
+                    let offset = firstDay === 0 ? 6 : firstDay - 1; // Start Monday
+
+                    for (let i = offset; i > 0; i--) {
+                        html += `<div class="cal-cell dim">${prevDays - i + 1}</div>`;
+                    }
+
+                    const realToday = new Date();
+
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const dStr = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                        const hol = DB.calendar2026[dStr];
+                        const dateObj = new Date(y, m, i);
+                        const isSun = dateObj.getDay() === 0;
+
+                        let cls = 'cal-cell btn-tap';
+                        if (y === realToday.getFullYear() && m === realToday.getMonth() && i === realToday.getDate()) {
+                            cls += ' today';
+                        } else if (isSun || (hol && hol.type === 'national_holiday')) {
+                            cls += ' text-rose-500';
+                        } else if (hol && hol.type === 'collective_leave') {
+                            cls += ' text-amber-500';
+                        }
+
+                        let dot = '';
+                        if(hol) {
+                            if(hol.type === 'national_holiday') dot = `<div class="cal-dot holiday"></div>`;
+                            else if(hol.type === 'collective_leave') dot = `<div class="cal-dot leave"></div>`;
+                        }
+
+                        html += `<div class="${cls}" onclick="App.Calendar.select(${y},${m},${i})">${i}${dot}</div>`;
+                    }
+
+                    document.getElementById('cal-tab-days-grid').innerHTML = html;
+                },
+
+                select(y, m, d) {
+                    this.selectedDate = new Date(y, m, d);
+                    this.showInfo(this.selectedDate);
+                },
+
+                showInfo(date) {
+                    const dStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+                    const hol = DB.calendar2026[dStr];
+                    const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                    const dayName = days[date.getDay()];
+                    const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                    const fDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+
+                    const panel = document.getElementById('cal-tab-info-panel');
+                    let badge = ''; let title = '';
+
+                    if(hol) {
+                        title = hol.name;
+                        if(hol.type === 'national_holiday') badge = '<span class="bg-rose-500 text-white px-2 py-0.5 rounded text-[10px] font-extrabold">LIBUR NASIONAL</span>';
+                        else if(hol.type === 'collective_leave') badge = '<span class="bg-amber-500 text-white px-2 py-0.5 rounded text-[10px] font-extrabold">CUTI BERSAMA</span>';
+                    } else if (date.getDay() === 0) {
+                        title = "Hari Libur Akhir Pekan";
+                        badge = '<span class="bg-slate-500 text-white px-2 py-0.5 rounded text-[10px] font-extrabold">HARI MINGGU</span>';
+                    } else {
+                        title = "Hari Efektif Sekolah";
+                        badge = '<span class="bg-cyan-600 text-white px-2 py-0.5 rounded text-[10px] font-extrabold">HARI SEKOAH</span>';
+                    }
+
+                    panel.innerHTML = `
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold text-[var(--text-secondary)]">${dayName}, ${fDate}</span>
+                            ${badge}
+                        </div>
+                        <div class="font-extrabold text-base text-[var(--text-primary)]">${title}</div>
+                        ${date.getDay() >= 1 && date.getDay() <= 5 && !hol ? `<div class="mt-2 text-xs font-extrabold text-cyan-600 dark:text-cyan-400 cursor-pointer" onclick="UI.switchTab('schedule')">Lihat Jadwal Pelajaran Hari ${dayName} &rarr;</div>` : ''}
+                    `;
+                }
+            }
         };
 
         const UI = {
             modals: [],
             currentMediaIdx: 0,
-            
+            sortStudentDesc: false,
+
             init() {
-                // UI update untuk memastikan toggle switch sama dengan State yang sedang berjalan
-                State.updateUI(); 
-                
-                this.rtClock(); 
-                setInterval(() => this.rtClock(), 10000); 
-                
-                this.renderGrid(); 
-                this.renderStudents('all'); 
-                this.renderSchedTabs(); 
+                this.updateSettingsUI();
+                this.renderGrid();
+                this.renderStudents('all');
+                this.renderSchedTabs();
                 this.renderPiketTabs();
-                this.renderUniforms(); 
-                this.renderOrg(); 
+                this.renderUniforms();
+                this.renderOrg();
                 this.renderGallery();
-                
-                document.querySelectorAll('.btn-tap').forEach(b => {
-                    b.addEventListener('click', () => { /* Optional generic click logic */ });
-                });
-                
+                this.renderHomeInfo();
+
                 document.addEventListener('keydown', e => {
                     if((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); this.toggleSearch(); }
-                    if(e.key === 'Escape' && this.modals.length) this.closeModal(this.modals[this.modals.length-1]);
+                    if(e.key === 'Escape' && this.modals.length) {
+                        this.closeModal(this.modals[this.modals.length-1]);
+                    }
                 });
             },
-            
-            rtClock() {
-                const d = new Date();
-                const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-                const mon = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
-                const dn = days[d.getDay()];
-                
-                const elDate = document.getElementById('rt-date');
-                if(elDate) elDate.innerText = `${d.getDate()} ${mon[d.getMonth()]}`;
-                
-                const elTime = document.getElementById('rt-time');
-                if(elTime) elTime.innerText = d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
-                
-                let subj = "Luar Jam Pelajaran";
-                let ms = d.getHours() * 60 + d.getMinutes();
-                let nextStr = "Bebas";
-                let pct = 0;
-                
-                if(DB.schedule[dn]) {
-                    DB.schedule[dn].forEach(s => {
-                        let pts = s.t.split('-');
-                        let start = parseInt(pts[0].split('.')[0])*60 + parseInt(pts[0].split('.')[1]);
-                        let end = parseInt(pts[1].split('.')[0])*60 + parseInt(pts[1].split('.')[1]);
-                        if(ms >= start && ms < end) {
-                            subj = s.m;
-                            let remaining = end - ms;
-                            nextStr = `${remaining} menit lagi`;
-                            pct = ((ms - start) / (end - start)) * 100;
-                        }
-                    });
-                }
-                
-                const elSubj = document.getElementById('rt-subject');
-                if(elSubj) elSubj.innerText = subj;
-                
-                const elNext = document.getElementById('rt-next-time');
-                if(elNext) elNext.innerText = nextStr;
-                
-                const elProg = document.getElementById('rt-subject-progress');
-                if(elProg) elProg.style.width = `${pct}%`;
-                
-                const badgePiket = document.getElementById('badge-piket');
-                const descPiket = document.getElementById('desc-piket');
-                if(badgePiket && descPiket) {
-                    if(DB.piket[dn]) { 
-                        badgePiket.innerText = "HARI INI"; 
-                        descPiket.innerText = DB.piket[dn].slice(0,2).join(', ') + "..."; 
-                    } else { 
-                        badgePiket.innerText = "LIBUR"; 
-                        descPiket.innerText = "Tidak ada jadwal."; 
-                    }
-                }
-                
-                const elUniform = document.getElementById('desc-uniform');
-                if(elUniform) elUniform.innerText = DB.seragam[dn] || "Bebas/Libur";
+
+            updateSettingsUI() {
+                const check = (id, key) => { const el = document.getElementById(id); if(el) el.checked = State.data[key]; };
+                check('set-dark', 'darkMode'); check('set-ds', 'dataSaver'); check('set-rm', 'reducedMotion');
+
+                document.querySelectorAll('.tv-btn').forEach(b => {
+                    if(b.dataset.val === State.data.tvMode) b.classList.add('bg-cyan-600', 'text-white');
+                    else b.classList.remove('bg-cyan-600', 'text-white');
+                });
             },
 
             switchTab(id) {
                 document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
-                const n = document.querySelector(`.nav-item[data-target="${id}"]`); if(n) n.classList.add('active');
-                
-                document.querySelectorAll('.view-section').forEach(e => { e.classList.add('hidden'); e.classList.remove('animate-fade-up'); });
-                const t = document.getElementById(`sec-${id}`);
-                if(t) { 
-                    t.classList.remove('hidden'); 
-                    void t.offsetWidth; // trigger reflow
-                    t.classList.add('animate-fade-up'); 
-                    window.scrollTo({top:0, behavior:'smooth'}); 
+                const navBtn = document.querySelector(`.nav-item[data-target="${id}"]`);
+                if(navBtn) navBtn.classList.add('active');
+
+                document.querySelectorAll('.view-section').forEach(e => e.classList.add('hidden'));
+                const target = document.getElementById(`sec-${id}`);
+                if(target) {
+                    target.classList.remove('hidden');
+                    window.scrollTo({top: 0, behavior: State.data.reducedMotion ? 'auto' : 'smooth'});
                 }
             },
-            
-            toggleDrawer() { 
-                document.getElementById('drawer').classList.toggle('active'); 
+
+            toggleDrawer() {
+                const d = document.getElementById('drawer');
+                d.classList.toggle('active');
             },
-            
+
             showModal(id) {
                 const m = document.getElementById(id);
                 if(m) {
-                    m.classList.add('active'); 
+                    m.classList.add('active');
                     if(!this.modals.includes(id)) this.modals.push(id);
-                    document.body.classList.add('overflow-hidden'); // Kunci scroll background
-                    if(id === 'modal-search') { 
-                        setTimeout(() => document.getElementById('search-input').focus(), 100);
-                        this.searchMenu('');
+                    document.body.style.overflow = 'hidden';
+                    if(id === 'modal-search') {
+                        setTimeout(() => document.getElementById('global-search-input').focus(), 100);
+                        this.globalSearch('');
                     }
                 }
             },
-            
+
             closeModal(id) {
                 const m = document.getElementById(id);
-                if(m) { 
-                    m.classList.remove('active'); 
-                    this.modals = this.modals.filter(x => x !== id); 
+                if(m) {
+                    m.classList.remove('active');
+                    this.modals = this.modals.filter(x => x !== id);
                 }
                 if(this.modals.length === 0) {
-                    document.body.classList.remove('overflow-hidden'); // Kembalikan scroll
+                    document.body.style.overflow = '';
                 }
                 if(id === 'modal-lightbox') {
-                    document.getElementById('lightbox-content').innerHTML = ''; // Hentikan video yang diputar
+                    document.getElementById('lightbox-content').innerHTML = '';
                 }
             },
-            
+
             toast(msg) {
                 const c = document.getElementById('toast-container');
                 const t = document.createElement('div');
-                t.className = "bg-[var(--text-primary)] text-[var(--bg-body)] px-5 py-3 rounded-full shadow-2xl font-bold text-sm transform transition-all translate-y-[-20px] opacity-0 text-center flex items-center gap-2";
-                t.innerHTML = `<svg class="w-4 h-4 text-[var(--color-primary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg> <span class="msg-text"></span>`; 
-                t.querySelector('.msg-text').textContent = msg; 
+                t.className = "bg-[var(--text-primary)] text-[var(--bg-body)] px-4 py-2.5 rounded-full shadow-2xl font-bold text-xs flex items-center gap-2 pointer-events-auto transform transition-all";
+                t.innerHTML = `<span>${msg}</span>`;
                 c.prepend(t);
-                requestAnimationFrame(() => { t.classList.remove('translate-y-[-20px]', 'opacity-0'); });
-                setTimeout(() => { t.classList.add('opacity-0'); setTimeout(()=>t.remove(), 300); }, 3000);
+                setTimeout(() => t.remove(), 3000);
             },
 
-            // --- Renders ---
             renderGrid() {
                 const arr = [
-                    {i: Icons.calendar, t:'Jadwal', a:"UI.switchTab('schedule')", c: "text-blue-500"}, 
-                    {i: Icons.users, t:'Siswa', a:"UI.switchTab('students')", c: "text-purple-500"},
-                    {i: Icons.gallery, t:'Galeri', a:"UI.switchTab('gallery')", c: "text-pink-500"}, 
-                    {i: Icons.broom, t:'Piket', a:"UI.showModal('modal-piket')", c: "text-emerald-500"},
-                    {i: Icons.shirt, t:'Seragam', a:"UI.showModal('modal-uniform')", c: "text-rose-500"}, 
-                    {i: Icons.settings, t:'Setting', a:"UI.switchTab('settings')", c: "text-gray-500"}
+                    {i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>', t:'Jadwal', a:"UI.switchTab('schedule')", c: "text-blue-500"},
+                    {i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>', t:'Siswa', a:"UI.switchTab('students')", c: "text-cyan-500"},
+                    {i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg>', t:'Kalender', a:"UI.switchTab('calendar')", c: "text-teal-500"},
+                    {i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle></svg>', t:'Galeri', a:"UI.switchTab('gallery')", c: "text-indigo-500"},
+                    {i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>', t:'Piket', a:"UI.showModal('modal-piket')", c: "text-amber-500"},
+                    {i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>', t:'Seragam', a:"UI.showModal('modal-uniform')", c: "text-rose-500"},
+                    {i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>', t:'Organisasi', a:"UI.showModal('modal-org')", c: "text-sky-500"},
+                    {i: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>', t:'Setting', a:"UI.switchTab('settings')", c: "text-slate-500"}
                 ];
                 document.getElementById('util-grid').innerHTML = arr.map(x => `
-                    <div class="flex flex-col items-center gap-2 cursor-pointer btn-tap group" onclick="${x.a}">
-                        <div class="w-14 h-14 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-[1.2rem] flex items-center justify-center shadow-sm group-hover:border-[var(--color-primary)] transition-colors ${x.c}">
-                            <div class="w-6 h-6">${x.i}</div>
+                    <button type="button" class="flex flex-col items-center gap-1.5 btn-tap group outline-none" onclick="${x.a}">
+                        <div class="w-12 h-12 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-2xl flex items-center justify-center shadow-sm group-hover:border-cyan-500 transition-colors ${x.c}">
+                            <div class="w-5 h-5">${x.i}</div>
                         </div>
-                        <span class="text-[9px] font-bold tracking-wide uppercase text-center">${x.t}</span>
+                        <span class="text-[10px] font-extrabold text-[var(--text-primary)] tracking-wide">${x.t}</span>
+                    </button>
+                `).join('');
+            },
+
+            renderHomeInfo() {
+                document.getElementById('home-agenda-list').innerHTML = DB.agenda.map(a => `
+                    <div class="p-2.5 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)] flex justify-between items-center text-xs">
+                        <div>
+                            <div class="font-bold text-[var(--text-primary)]">${a.title}</div>
+                            <div class="text-[10px] text-[var(--text-secondary)] mt-0.5">${a.desc}</div>
+                        </div>
+                        <span class="text-[9px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded">${a.type}</span>
+                    </div>
+                `).join('');
+
+                document.getElementById('home-tugas-list').innerHTML = DB.tugas.map(t => `
+                    <div class="p-2.5 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)] flex justify-between items-center text-xs">
+                        <div>
+                            <div class="font-bold text-[var(--text-primary)]">${t.title}</div>
+                            <div class="text-[10px] text-cyan-600 font-bold mt-0.5">${t.subject}</div>
+                        </div>
+                        <span class="text-[9px] font-bold bg-rose-500/10 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded">${t.deadline}</span>
                     </div>
                 `).join('');
             },
 
+            toggleStudentSort() {
+                this.sortStudentDesc = !this.sortStudentDesc;
+                const inp = document.getElementById('search-student').value;
+                const activeBtn = document.querySelector('.filter-btn.bg-cyan-600');
+                let f = activeBtn ? (activeBtn.innerText.includes('Semua') ? 'all' : (activeBtn.innerText.includes('Laki-laki') ? 'L' : 'P')) : 'all';
+                this.renderStudents(f, inp);
+            },
+
             renderStudents(flt, q='') {
-                let l = DB.students;
+                let l = [...DB.students];
                 if(flt !== 'all') l = l.filter(x => x.g === flt);
+
                 if(q) {
                     q = q.toLowerCase();
-                    l = l.filter(x => x.name.toLowerCase().includes(q) || (DB.roles[x.name] && DB.roles[x.name].toLowerCase().includes(q)));
+                    l = l.filter(x => 
+                        x.name.toLowerCase().includes(q) || 
+                        String(x.no) === q ||
+                        (x.ig && x.ig.toLowerCase().includes(q)) ||
+                        (DB.roles[x.name] && DB.roles[x.name].toLowerCase().includes(q))
+                    );
                 }
-                document.getElementById('students-grid').innerHTML = l.length ? l.map((s,i) => `
-                    <div class="glass-panel p-4 flex items-center gap-4 card-hover cursor-pointer btn-tap relative overflow-hidden border-[var(--border-solid)]" style="animation-delay:${(i%10)*20}ms" onclick="UI.openStudentID('${s.id}')">
-                        <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shrink-0 ${s.g==='L'?'bg-blue-500/10 text-blue-500':'bg-pink-500/10 text-pink-500'}">${s.name.charAt(0)}</div>
-                        <div class="flex-grow min-w-0 pr-2">
-                            <h4 class="font-bold text-sm leading-tight break-words">${s.name}</h4>
-                            <div class="flex gap-2 mt-1.5">
-                                <span class="text-[9px] font-bold bg-[var(--bg-body)] px-2 py-0.5 rounded shadow-sm border border-[var(--border-solid)]">Absen ${s.no}</span>
-                                ${DB.roles[s.name] ? `<span class="text-[9px] font-bold bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-2 py-0.5 rounded">${DB.roles[s.name]}</span>` : ''}
+
+                l.sort((a,b) => this.sortStudentDesc ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name));
+
+                document.getElementById('students-grid').innerHTML = l.length ? l.map((s) => `
+                    <button type="button" class="text-left glass-panel p-3.5 flex items-center gap-3 card-hover btn-tap outline-none" onclick="UI.openStudentID('${s.id}')">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm ${s.g === 'L' ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-300' : 'bg-pink-500/15 text-pink-600 dark:text-pink-300'} shrink-0">${s.name.charAt(0)}</div>
+                        <div class="flex-grow min-w-0">
+                            <h4 class="font-extrabold text-xs text-[var(--text-primary)] truncate">${s.name}</h4>
+                            <div class="flex gap-1.5 mt-1">
+                                <span class="text-[9px] font-bold bg-[var(--bg-body)] text-[var(--text-secondary)] px-1.5 py-0.2 rounded border border-[var(--border-solid)]">Absen ${String(s.no).padStart(2,'0')}</span>
+                                ${DB.roles[s.name] ? `<span class="text-[9px] font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 px-1.5 py-0.2 rounded truncate">${DB.roles[s.name]}</span>` : ''}
                             </div>
                         </div>
-                    </div>
-                `).join('') : '<div class="col-span-full py-10 text-center opacity-50 font-bold">Tidak ditemukan.</div>';
+                    </button>
+                `).join('') : '<div class="col-span-full py-8 text-center opacity-50 font-bold text-xs">Tidak ada siswa ditemukan.</div>';
             },
-            
+
             filterStudents(f, btn) {
-                document.querySelectorAll('.filter-btn').forEach(b => { 
-                    b.classList.remove('bg-[var(--color-primary)]', 'text-white', 'shadow-md'); 
-                    b.classList.add('text-[var(--text-secondary)]'); 
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-cyan-600', 'text-white');
+                    b.classList.add('text-[var(--text-secondary)]');
                 });
                 btn.classList.remove('text-[var(--text-secondary)]');
-                btn.classList.add('bg-[var(--color-primary)]', 'text-white', 'shadow-md');
+                btn.classList.add('bg-cyan-600', 'text-white');
                 this.renderStudents(f, document.getElementById('search-student').value);
             },
-            
+
             searchStudent(v) {
-                const activeBtn = document.querySelector('.filter-btn.bg-\\[var\\(--color-primary\\)\\]');
+                const activeBtn = document.querySelector('.filter-btn.bg-cyan-600');
                 let f = activeBtn ? (activeBtn.innerText.includes('Semua') ? 'all' : (activeBtn.innerText.includes('Laki-laki') ? 'L' : 'P')) : 'all';
                 this.renderStudents(f, v);
             },
 
             openStudentID(id) {
                 const s = DB.students.find(x => x.id === id); if(!s) return;
-                
+
                 document.getElementById('sid-name').innerText = s.name;
                 document.getElementById('sid-role').innerText = DB.roles[s.name] || 'Siswa Reguler';
                 document.getElementById('sid-gender').innerText = s.g === 'L' ? 'LAKI-LAKI' : 'PEREMPUAN';
                 document.getElementById('sid-absen').innerText = String(s.no).padStart(2, '0');
-                
-                document.getElementById('sid-ig-handle').innerText = `@${s.ig}`;
-                document.getElementById('sid-ig-btn').href = `https://instagram.com/${s.ig}`;
-                
-                const c1 = s.g === 'L' ? 'bae6fd' : 'fbcfe8'; 
-                const c2 = s.g === 'L' ? '0284c7' : 'db2777';
-                const av = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=${c1}&color=${c2}&size=256&bold=true`;
-                document.getElementById('sid-photo').innerHTML = `<img src="${av}" class="w-full h-full object-cover" alt="Foto Siswa">`;
-                
+                document.getElementById('sid-ig-handle').innerText = s.ig ? `@${s.ig}` : 'Tidak Ada IG';
+                document.getElementById('sid-ig-btn').href = s.ig ? `https://instagram.com/${s.ig}` : '#';
+
+                const bgCol = s.g === 'L' ? '#0284c7' : '#ec4899';
+                document.getElementById('sid-photo').innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' class='w-full h-full'><rect width='100' height='100' fill='${bgCol}'/><text x='50%' y='53%' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='38' font-weight='bold'>${s.name.slice(0,2)}</text></svg>`;
+
                 this.showModal('modal-student-id');
             },
 
+            // --- Schedule ---
             renderSchedTabs() {
                 const days = ['Senin','Selasa','Rabu','Kamis','Jumat'];
-                let cd = new Date().getDay(); 
+                let cd = new Date().getDay();
                 let td = (cd>=1 && cd<=5) ? days[cd-1] : 'Senin';
-                
+
                 document.getElementById('schedule-tabs').innerHTML = days.map(d => `
-                    <button class="px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors border border-[var(--border-solid)] shadow-sm ${d===td?'bg-[var(--color-primary)] text-white':'bg-[var(--bg-surface-solid)]'}" onclick="UI.renderSchedDay('${d}', this)">${d}</button>
+                    <button type="button" class="px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border border-[var(--border-solid)] ${d===td?'bg-cyan-600 text-white shadow-md':'bg-[var(--bg-surface-solid)]'}" onclick="UI.renderSchedDay('${d}', this)">${d}</button>
                 `).join('');
-                this.renderSchedDay(td, document.querySelector('#schedule-tabs .bg-\\[var\\(--color-primary\\)\\]'));
+                this.renderSchedDay(td, document.querySelector('#schedule-tabs .bg-cyan-600'));
             },
-            
+
             renderSchedDay(d, btn) {
-                if(btn) { 
+                if(btn) {
                     document.querySelectorAll('#schedule-tabs button').forEach(b => {
-                        b.classList.remove('bg-[var(--color-primary)]', 'text-white');
+                        b.classList.remove('bg-cyan-600', 'text-white');
                         b.classList.add('bg-[var(--bg-surface-solid)]');
-                    }); 
+                    });
                     btn.classList.remove('bg-[var(--bg-surface-solid)]');
-                    btn.classList.add('bg-[var(--color-primary)]', 'text-white');
+                    btn.classList.add('bg-cyan-600', 'text-white');
                 }
-                
+
                 document.getElementById('sched-title').innerText = d;
                 let isT = d === ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][new Date().getDay()];
-                document.getElementById('sched-badge').style.display = isT ? 'block' : 'none';
-                
-                let s = DB.schedule[d];
-                if(!s) { document.getElementById('sched-timeline').innerHTML = '<p class="opacity-50 font-bold">Libur.</p>'; return; }
-                
+                document.getElementById('sched-badge').style.display = isT ? 'inline-block' : 'none';
+
+                let s = DB.schedule[d] || [];
                 let ms = new Date().getHours()*60 + new Date().getMinutes();
-                document.getElementById('sched-timeline').innerHTML = s.map(x => {
-                    let st = parseInt(x.t.split('-')[0].split('.')[0])*60 + parseInt(x.t.split('-')[0].split('.')[1]);
-                    let en = parseInt(x.t.split('-')[1].split('.')[0])*60 + parseInt(x.t.split('-')[1].split('.')[1]);
+
+                document.getElementById('sched-timeline').innerHTML = s.map((x) => {
+                    let st = App.parseTime(x.t.split('-')[0]);
+                    let en = App.parseTime(x.t.split('-')[1]);
                     let cur = isT && ms>=st && ms<en;
-                    
+
                     return `
-                    <div class="relative ${isT && ms>=en ? 'opacity-40' : ''}">
-                        <div class="absolute -left-[1.95rem] top-4 w-4 h-4 rounded-full ${cur ? 'bg-[var(--color-primary)]' : x.br ? 'bg-amber-400' : 'bg-gray-300'} border-[3px] border-[var(--bg-surface)] z-10 transition-colors"></div>
-                        <div class="p-4 rounded-2xl bg-[var(--bg-surface-solid)] border ${cur ? 'border-[var(--color-primary)] shadow-md' : 'border-[var(--border-solid)]'} ${x.br ? 'bg-amber-500/10' : ''} transition-all">
+                    <div class="relative">
+                        <div class="absolute -left-[1.95rem] top-3.5 w-4 h-4 rounded-full ${cur ? 'bg-cyan-500 shadow-[0_0_12px_#06b6d4] scale-125' : x.br ? 'bg-amber-400' : 'bg-slate-300 dark:bg-slate-700'} border-2 border-[var(--bg-surface-solid)] z-10 transition-all"></div>
+                        <div class="p-3.5 rounded-2xl bg-[var(--bg-surface-solid)] border ${cur ? 'border-cyan-500 shadow-md' : 'border-[var(--border-solid)]'}">
                             <div class="flex justify-between items-start mb-1">
-                                <h4 class="font-bold text-base ${x.br ? 'text-amber-600 dark:text-amber-500' : ''}">${x.m}</h4>
-                                <span class="font-mono text-[10px] bg-[var(--bg-body)] px-2 py-0.5 rounded border border-[var(--border-solid)] font-bold tracking-tight">${x.t}</span>
+                                <h4 class="font-extrabold text-sm ${x.br ? 'text-amber-600 dark:text-amber-400' : 'text-[var(--text-primary)]'}">${x.m}</h4>
+                                <span class="font-mono text-[10px] font-bold bg-[var(--bg-body)] px-2 py-0.5 rounded border border-[var(--border-solid)]">${x.t}</span>
                             </div>
-                            ${x.g ? `<p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">${x.g}</p>` : ''}
+                            ${x.g ? `<p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">${x.g}</p>` : ''}
                         </div>
                     </div>`;
                 }).join('');
@@ -1039,143 +1306,150 @@
                 const days = ['Senin','Selasa','Rabu','Kamis','Jumat'];
                 let cd = new Date().getDay(); let td = cd>=1 && cd<=5 ? days[cd-1] : 'Senin';
                 document.getElementById('piket-tabs').innerHTML = days.map(d => `
-                    <button class="px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap transition-colors border border-[var(--border-solid)] ${d===td?'bg-[var(--color-primary)] text-white':'bg-[var(--bg-surface-solid)]'}" onclick="UI.renderPiketDay('${d}', this)">${d}</button>
+                    <button type="button" class="px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap border border-[var(--border-solid)] ${d===td?'bg-cyan-600 text-white':'bg-[var(--bg-surface-solid)]'}" onclick="UI.renderPiketDay('${d}', this)">${d}</button>
                 `).join('');
-                this.renderPiketDay(td, document.querySelector('#piket-tabs .bg-\\[var\\(--color-primary\\)\\]'));
+                this.renderPiketDay(td, document.querySelector('#piket-tabs .bg-cyan-600'));
             },
-            
+
             renderPiketDay(d, btn) {
-                if(btn) { 
+                if(btn) {
                     document.querySelectorAll('#piket-tabs button').forEach(b => {
-                        b.classList.remove('bg-[var(--color-primary)]', 'text-white');
+                        b.classList.remove('bg-cyan-600', 'text-white');
                         b.classList.add('bg-[var(--bg-surface-solid)]');
-                    }); 
+                    });
                     btn.classList.remove('bg-[var(--bg-surface-solid)]');
-                    btn.classList.add('bg-[var(--color-primary)]', 'text-white');
+                    btn.classList.add('bg-cyan-600', 'text-white');
                 }
-                
+
                 let l = DB.piket[d] || [];
                 document.getElementById('piket-list').innerHTML = l.map((n, i) => `
-                    <div class="p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex items-center gap-3 cursor-pointer btn-tap hover:border-[var(--color-primary)] transition-colors" onclick="UI.openStudentID('${DB.students.find(x=>x.name===n)?.id}')">
-                        <div class="w-6 h-6 rounded-full bg-[var(--color-primary-glow)] text-[var(--color-primary)] flex items-center justify-center font-bold text-xs shrink-0">${i+1}</div>
-                        <div class="font-bold text-sm leading-tight break-words">${n}</div>
-                    </div>
+                    <button type="button" class="w-full text-left p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex items-center gap-2.5 btn-tap" onclick="UI.openStudentID('${DB.students.find(x=>x.name===n)?.id}')">
+                        <div class="w-5 h-5 rounded-full bg-cyan-500/15 text-cyan-600 font-bold text-[10px] flex items-center justify-center shrink-0">${i+1}</div>
+                        <div class="font-bold text-xs">${n}</div>
+                    </button>
                 `).join('');
             },
 
             renderUniforms() {
                 let td = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][new Date().getDay()];
                 document.getElementById('uniform-list').innerHTML = Object.entries(DB.seragam).map(([d, u]) => `
-                    <div class="p-4 rounded-xl border ${d===td?'bg-[var(--color-primary-glow)] border-[var(--color-primary)]':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'} flex justify-between items-center transition-colors">
+                    <div class="p-3 rounded-xl border ${d===td?'bg-cyan-500/10 border-cyan-500':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'} flex justify-between items-center text-xs">
                         <div>
-                            <h4 class="font-bold text-sm">${d} ${d===td?'<span class="text-[9px] bg-[var(--color-primary)] text-white px-1.5 py-0.5 rounded uppercase ml-2 shadow-sm">Hari Ini</span>':''}</h4>
-                            <p class="text-xs opacity-80 mt-1 font-medium">${u}</p>
+                            <span class="font-bold">${d}</span>
+                            <p class="text-[11px] text-[var(--text-secondary)] mt-0.5">${u}</p>
                         </div>
+                        ${d===td?'<span class="text-[9px] bg-cyan-600 text-white font-extrabold px-1.5 py-0.5 rounded">HARI INI</span>':''}
                     </div>
                 `).join('');
             },
 
             renderOrg() {
-                const c = document.getElementById('content-org');
-                let h = `<div class="space-y-4">`;
-                
-                h += `<div><h4 class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2 pl-1">Dewan Pembina</h4><div class="space-y-2">`;
+                let h = `<div class="space-y-4 text-xs">`;
+                h += `<div><h4 class="font-extrabold text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-2">Dewan Pembina</h4><div class="space-y-1.5">`;
                 ["TUTI TURSILAH, S.Pd.I.", "TRESNA FUJIE LATIFAH, S.Pd.", "FAHMI ARIZAL NUR FACHRUDIN, S.Pd."].forEach(n => {
-                    h += `<div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-3 rounded-xl flex justify-between items-center shadow-sm"><span class="font-bold text-sm leading-tight break-words pr-2 w-full">${n}</span><span class="text-[9px] font-bold bg-[var(--color-primary-glow)] text-[var(--color-primary)] px-2 py-1 rounded whitespace-nowrap">${DB.roles[n]}</span></div>`;
+                    h += `<div class="p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex justify-between items-center font-bold"><span>${n}</span><span class="text-[9px] bg-cyan-500/10 text-cyan-600 px-2 py-0.5 rounded">${DB.roles[n]}</span></div>`;
                 });
-                
-                h += `</div></div><div><h4 class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2 pl-1 mt-6">Pengurus Inti</h4><div class="grid grid-cols-2 gap-2">`;
+
+                h += `</div></div><div><h4 class="font-extrabold text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-2 mt-4">Pengurus Inti</h4><div class="grid grid-cols-2 gap-2">`;
                 ["PRINCE EZHAD ALVARO SYAHPUTRA", "CINTA AMELA NURCAHAYA", "JENISA LUTHFIAH", "DEWI MUTIA", "NAILA LAILATUL RAMADHANI", "KANDISA"].forEach(n => {
                     let id = DB.students.find(x=>x.name===n)?.id;
-                    h += `<div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-3 rounded-xl shadow-sm text-center cursor-pointer btn-tap flex flex-col justify-center min-h-[70px] hover:border-[var(--color-primary)] transition-colors" onclick="UI.openStudentID('${id}')"><div class="text-[9px] font-bold text-[var(--color-primary)] uppercase mb-1">${DB.roles[n]}</div><div class="font-bold text-xs leading-tight break-words">${n}</div></div>`;
+                    h += `<button type="button" class="p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl text-center btn-tap font-bold" onclick="UI.openStudentID('${id}')"><div class="text-[9px] text-cyan-600 uppercase">${DB.roles[n]}</div><div class="truncate mt-0.5">${n}</div></button>`;
                 });
-                
-                h += `</div></div><div><h4 class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2 pl-1 mt-6">Seksi Bidang</h4><div class="space-y-2">`;
-                Object.entries(DB.sections).forEach(([sec, names]) => {
-                    h += `<div class="bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] p-3 rounded-xl shadow-sm"><div class="font-bold text-xs text-[var(--text-secondary)] uppercase tracking-wider mb-2 border-b border-[var(--border-solid)] pb-1.5">${sec}</div><ul class="space-y-1.5">`;
-                    names.forEach(n => {
-                        let id = DB.students.find(x=>x.name===n)?.id;
-                        h += `<li class="text-sm font-bold cursor-pointer btn-tap flex items-center gap-2 hover:text-[var(--color-primary)] transition-colors" onclick="UI.openStudentID('${id}')"><div class="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)] shrink-0"></div><span class="leading-tight break-words">${n}</span></li>`;
-                    });
-                    h += `</ul></div>`;
-                });
-                
-                c.innerHTML = h + `</div></div>`;
+
+                h += `</div></div></div>`;
+                document.getElementById('content-org').innerHTML = h;
             },
 
-            // --- Unified Gallery ---
             renderGallery() {
+                document.getElementById('gallery-count').innerText = `${DB.gallery.length} Item`;
                 document.getElementById('gallery-grid').innerHTML = DB.gallery.map((g, i) => `
-                    <div class="aspect-square bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl sm:rounded-2xl overflow-hidden relative cursor-pointer group btn-tap shadow-sm hover:border-[var(--color-primary)] transition-colors" onclick="UI.openLightbox(${i})">
+                    <button type="button" class="aspect-square bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-2xl overflow-hidden relative group btn-tap outline-none" onclick="UI.openLightbox(${i})">
                         ${g.type === 'img' 
                             ? `<img src="${g.src}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Galeri">`
-                            : `<video src="${g.src}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" muted playsinline></video>
-                               <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
-                                   <div class="w-10 h-10 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-                               </div>`
+                            : `<video src="${g.src}" class="w-full h-full object-cover" muted playsinline></video><div class="absolute inset-0 bg-black/30 flex items-center justify-center"><svg class="w-8 h-8 text-white fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>`
                         }
-                    </div>
+                    </button>
                 `).join('');
             },
-            
+
             openLightbox(idx) {
                 this.currentMediaIdx = idx;
-                this.renderLightboxMedia();
-                this.showModal('modal-lightbox');
-            },
-            
-            renderLightboxMedia() {
-                const item = DB.gallery[this.currentMediaIdx];
+                const item = DB.gallery[idx];
                 const container = document.getElementById('lightbox-content');
                 if(item.type === 'vid') {
-                    container.innerHTML = `<video src="${item.src}" controls autoplay playsinline class="max-w-full max-h-[80vh] rounded-lg shadow-2xl bg-black outline-none border border-white/10"></video>`;
+                    container.innerHTML = `<video src="${item.src}" controls autoplay playsinline class="max-w-full max-h-[80dvh] rounded-2xl bg-black"></video>`;
                 } else {
-                    container.innerHTML = `<img src="${item.src}" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl bg-black outline-none border border-white/10" alt="Gambar Galeri">`;
+                    container.innerHTML = `<img src="${item.src}" class="max-w-full max-h-[80dvh] object-contain rounded-2xl" alt="Galeri">`;
                 }
-            },
-            
-            prevMedia(e) {
-                if(e) e.stopPropagation();
-                this.currentMediaIdx = (this.currentMediaIdx - 1 + DB.gallery.length) % DB.gallery.length;
-                this.renderLightboxMedia();
-            },
-            
-            nextMedia(e) {
-                if(e) e.stopPropagation();
-                this.currentMediaIdx = (this.currentMediaIdx + 1) % DB.gallery.length;
-                this.renderLightboxMedia();
+                this.showModal('modal-lightbox');
             },
 
-            // --- Search ---
-            searchMenu(q) {
+            globalSearch(q) {
                 q = q.toLowerCase();
-                const cmds = [
-                    {k: "Beranda Utama", a: "UI.switchTab('home')"},
-                    {k: "Jadwal Pelajaran", a: "UI.switchTab('schedule')"},
-                    {k: "Direktori Siswa", a: "UI.switchTab('students')"},
-                    {k: "Galeri Kelas", a: "UI.switchTab('gallery')"},
-                    {k: "Pengaturan & Performa", a: "UI.switchTab('settings')"},
-                    {k: "Struktur Organisasi", a: "UI.showModal('modal-org')"},
-                    {k: "Jadwal Kebersihan (Piket)", a: "UI.showModal('modal-piket')"},
-                    {k: "Aturan Seragam", a: "UI.showModal('modal-uniform')"}
-                ];
-                let f = cmds.filter(x => x.k.toLowerCase().includes(q));
-                document.getElementById('search-results').innerHTML = f.length ? f.map(x => `
-                    <div class="p-3 border-b border-[var(--border-solid)] flex items-center gap-3 cursor-pointer hover:bg-[var(--color-primary-glow)] rounded-xl transition-colors btn-tap group" onclick="${x.a}; UI.closeModal('modal-search')">
-                        <svg class="w-4 h-4 opacity-50 group-hover:text-[var(--color-primary)] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        <span class="font-bold text-sm group-hover:text-[var(--color-primary)] transition-colors">${x.k}</span>
-                    </div>
-                `).join('') : '<div class="p-6 text-center opacity-50 font-bold text-sm">Pencarian tidak ditemukan.</div>';
+                const container = document.getElementById('global-search-results');
+                if(!q) {
+                    container.innerHTML = '<div class="p-6 text-center text-xs opacity-50 font-bold">Ketik kata kunci pencarian...</div>';
+                    return;
+                }
+
+                let html = '';
+                let count = 0;
+
+                // Search Students
+                let fStudents = DB.students.filter(x => x.name.toLowerCase().includes(q) || String(x.no) === q || (x.ig && x.ig.toLowerCase().includes(q)));
+                if(fStudents.length) {
+                    html += `<div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase px-2 mb-1">Siswa (${fStudents.length})</div>`;
+                    html += fStudents.slice(0, 4).map(s => `
+                        <button type="button" class="w-full text-left p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex items-center gap-2.5 btn-tap" onclick="UI.openStudentID('${s.id}'); UI.closeModal('modal-search')">
+                            <div class="w-6 h-6 rounded-full bg-cyan-500/15 text-cyan-600 font-bold text-[10px] flex items-center justify-center">${s.name[0]}</div>
+                            <div class="font-bold text-xs truncate">${s.name}</div>
+                        </button>
+                    `).join('');
+                    count++;
+                }
+
+                // Search Schedule
+                let fSched = [];
+                Object.entries(DB.schedule).forEach(([day, items]) => {
+                    items.forEach(s => {
+                        if(s.m.toLowerCase().includes(q) || (s.g && s.g.toLowerCase().includes(q))) {
+                            fSched.push({day, ...s});
+                        }
+                    });
+                });
+                if(fSched.length) {
+                    html += `<div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase px-2 mt-3 mb-1">Mata Pelajaran</div>`;
+                    html += fSched.slice(0, 3).map(s => `
+                        <button type="button" class="w-full text-left p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex justify-between items-center btn-tap" onclick="UI.switchTab('schedule'); UI.closeModal('modal-search')">
+                            <div><div class="font-bold text-xs">${s.m}</div><div class="text-[10px] text-[var(--text-secondary)]">${s.g || '-'}</div></div>
+                            <span class="text-[9px] font-bold bg-cyan-500/10 text-cyan-600 px-2 py-0.5 rounded">${s.day}</span>
+                        </button>
+                    `).join('');
+                    count++;
+                }
+
+                if(!count) {
+                    container.innerHTML = '<div class="p-6 text-center text-xs opacity-50 font-bold">Hasil pencarian tidak ditemukan.</div>';
+                } else {
+                    container.innerHTML = html;
+                }
             },
-            
-            toggleSearch() {
-                if(document.getElementById('modal-search').classList.contains('active')) this.closeModal('modal-search');
-                else this.showModal('modal-search');
+
+            shareWebsite() {
+                if(navigator.share) {
+                    navigator.share({
+                        title: 'X.Luminance',
+                        text: 'Website Resmi Kelas 10 L SMAN 2 Majalengka',
+                        url: window.location.href,
+                    }).catch(() => {});
+                } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    this.toast('Link website disalin ke clipboard!');
+                }
             }
         };
 
-        // Initialize UI
-        document.addEventListener('DOMContentLoaded', () => UI.init());
+        document.addEventListener('DOMContentLoaded', () => App.init());
     </script>
 </body>
 </html>
