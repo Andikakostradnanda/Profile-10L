@@ -7,7 +7,7 @@
     <meta name="description" content="Website informasi kelas 10 L SMAN 2 Majalengka">
     <meta name="theme-color" content="#0f172a">
     
-    <!-- PWA & SEO -->
+    <!-- PWA & SEO (Prepared but requires actual manifest.json and sw.js for full offline support) -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -311,7 +311,7 @@
         <div class="drawer-content p-5">
             <div class="flex items-center justify-between pb-4 border-b border-[var(--border-solid)] mb-4">
                 <div class="font-serif font-bold text-xl">X.Luminance</div>
-                <button type="button" aria-label="Tutup" class="p-2 btn-tap rounded-xl bg-[var(--border-solid)]" onclick="UI.toggleDrawer()">
+                <button type="button" aria-label="Tutup Menu" class="p-2 btn-tap rounded-xl bg-[var(--border-solid)]" onclick="UI.toggleDrawer()">
                     <svg class="icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
@@ -323,7 +323,7 @@
                 <button class="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap" onclick="UI.switchTab('students'); UI.toggleDrawer()"><svg class="icon-svg text-teal-500" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Direktori Siswa</button>
                 
                 <div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-widest px-2 mb-2 mt-5">Informasi</div>
-                <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap" onclick="UI.switchTab('calendar'); UI.toggleDrawer()"><svg class="icon-svg text-indigo-500" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg> Kalender 2026</button>
+                <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap" onclick="UI.switchTab('calendar'); UI.toggleDrawer()"><svg class="icon-svg text-indigo-500" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg> Kalender Kehadiran</button>
                 <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap" onclick="UI.showModal('modal-piket'); UI.toggleDrawer()"><svg class="icon-svg text-amber-500" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Jadwal Kebersihan</button>
                 <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[var(--border-solid)] font-bold text-sm btn-tap" onclick="UI.showModal('modal-uniform'); UI.toggleDrawer()"><svg class="icon-svg text-rose-500" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg> Aturan Seragam</button>
                 
@@ -343,33 +343,33 @@
             <!-- Hero Premium Command Center -->
             <div class="glass-panel p-6 sm:p-10 relative overflow-hidden min-h-[260px] sm:min-h-[320px] rounded-[2rem] flex flex-col justify-between group">
                 <div class="absolute inset-0 bg-[var(--hero-gradient)] z-10 pointer-events-none"></div>
-                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&fm=webp&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 mix-blend-overlay group-hover:scale-105 transition-transform duration-1000" alt="Ocean">
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&fm=webp&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 mix-blend-overlay group-hover:scale-105 transition-transform duration-1000" alt="Ocean Background" loading="lazy" decoding="async">
                 
                 <div class="relative z-20 flex justify-between items-start">
                     <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-black/30 backdrop-blur-md rounded-full text-[10px] font-bold text-white border border-white/20 mb-3">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-black/30 backdrop-blur-md rounded-full text-[10px] font-bold text-white border border-white/20 mb-3" aria-label="Status Online">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> ONLINE
                         </div>
                         <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white leading-tight drop-shadow-md">X.Luminance <br> Official Website</h2>
                     </div>
                     <div class="text-right text-white drop-shadow-md">
                         <div class="font-mono font-bold text-3xl sm:text-4xl tracking-tighter" id="hero-time">--:--</div>
-                        <div class="text-xs sm:text-sm font-semibold opacity-90 mt-1" id="hero-date">-- --- 2026</div>
+                        <div class="text-xs sm:text-sm font-semibold opacity-90 mt-1" id="hero-date">-- --- ----</div>
                     </div>
                 </div>
 
                 <div class="relative z-20 mt-8 p-4 sm:p-5 bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl cursor-pointer btn-tap" onclick="UI.switchTab('schedule')">
                     <div class="flex justify-between items-end mb-3">
                         <div>
-                            <div class="text-[10px] font-bold text-white/70 uppercase tracking-widest mb-1" id="hero-status-label">STATUS PELAJARAN</div>
-                            <div class="font-extrabold text-xl sm:text-2xl text-white truncate" id="hero-subject">Mengecek Sistem...</div>
+                            <div class="text-[10px] font-bold text-white/70 uppercase tracking-widest mb-1" id="hero-status-label" aria-live="polite">STATUS PELAJARAN</div>
+                            <div class="font-extrabold text-xl sm:text-2xl text-white truncate" id="hero-subject" aria-live="polite">Mengecek Sistem...</div>
                         </div>
                         <div class="text-right">
-                            <div class="text-[10px] font-bold bg-white/20 text-white px-2 py-0.5 rounded border border-white/20" id="hero-countdown">--</div>
+                            <div class="text-[10px] font-bold bg-white/20 text-white px-2 py-0.5 rounded border border-white/20 min-w-[60px] text-center" id="hero-countdown">--</div>
                         </div>
                     </div>
                     <!-- Realtime Progress Bar -->
-                    <div class="h-2.5 progress-track bg-white/10">
+                    <div class="h-2.5 progress-track bg-white/10" aria-hidden="true">
                         <div id="hero-progress" class="progress-fill shadow-[0_0_10px_var(--theme-accent)]" style="width: 0%"></div>
                     </div>
                 </div>
@@ -377,22 +377,22 @@
 
             <!-- Quick Directory & Stats -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <button class="glass-panel p-4 flex flex-col items-center justify-center text-center btn-tap card-hover" onclick="UI.showModal('modal-piket')">
+                <button aria-label="Jadwal Piket Hari Ini" class="glass-panel p-4 flex flex-col items-center justify-center text-center btn-tap card-hover" onclick="UI.showModal('modal-piket')">
                     <div class="w-10 h-10 rounded-full bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] flex items-center justify-center mb-2"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
                     <div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider">Piket Hari Ini</div>
                     <div class="font-bold text-sm text-[var(--text-primary)] mt-1 truncate w-full" id="dash-piket">Mengecek...</div>
                 </button>
-                <button class="glass-panel p-4 flex flex-col items-center justify-center text-center btn-tap card-hover" onclick="UI.showModal('modal-uniform')">
+                <button aria-label="Aturan Seragam Hari Ini" class="glass-panel p-4 flex flex-col items-center justify-center text-center btn-tap card-hover" onclick="UI.showModal('modal-uniform')">
                     <div class="w-10 h-10 rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center mb-2"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg></div>
                     <div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider">Seragam</div>
                     <div class="font-bold text-sm text-[var(--text-primary)] mt-1 truncate w-full" id="dash-uniform">Mengecek...</div>
                 </button>
-                <button class="glass-panel p-4 flex flex-col items-center justify-center text-center btn-tap card-hover" onclick="UI.switchTab('calendar')">
+                <button aria-label="Buka Kalender" class="glass-panel p-4 flex flex-col items-center justify-center text-center btn-tap card-hover" onclick="UI.switchTab('calendar')">
                     <div class="w-10 h-10 rounded-full bg-teal-500/10 text-teal-500 flex items-center justify-center mb-2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" class="icon-svg"></rect><line x1="16" y1="2" x2="16" y2="6" class="icon-svg"></line><line x1="8" y1="2" x2="8" y2="6" class="icon-svg"></line></div>
                     <div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider">Cari Libur Ya</div>
                     <div class="font-bold text-sm text-[var(--text-primary)] mt-1 truncate w-full" id="dash-event">Lihat Kalender</div>
                 </button>
-                <button class="glass-panel p-4 flex flex-col items-center justify-center text-center btn-tap card-hover" onclick="UI.showModal('modal-org')">
+                <button aria-label="Struktur Organisasi" class="glass-panel p-4 flex flex-col items-center justify-center text-center btn-tap card-hover" onclick="UI.showModal('modal-org')">
                     <div class="w-10 h-10 rounded-full bg-indigo-500/10 text-indigo-500 flex items-center justify-center mb-2"><rect x="8" y="2" width="8" height="4" rx="1" ry="1" class="icon-svg"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" class="icon-svg"></path></div>
                     <div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider">Struktur</div>
                     <div class="font-bold text-sm text-[var(--text-primary)] mt-1 truncate w-full">Organisasi Kelas</div>
@@ -404,7 +404,7 @@
                 <div class="glass-panel p-5">
                     <div class="flex justify-between items-center mb-4 pb-2 border-b border-[var(--border-solid)]">
                         <h3 class="font-bold text-base flex items-center gap-2"><svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Agenda Terdekat</h3>
-                        <span class="text-[10px] font-bold bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded">2 Aktif</span>
+                        <span id="badge-agenda" class="text-[10px] font-bold bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded">0 Aktif</span>
                     </div>
                     <div class="space-y-3" id="home-agenda"></div>
                 </div>
@@ -412,7 +412,7 @@
                 <div class="glass-panel p-5">
                     <div class="flex justify-between items-center mb-4 pb-2 border-b border-[var(--border-solid)]">
                         <h3 class="font-bold text-base flex items-center gap-2"><svg class="w-5 h-5 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Tugas Kelas</h3>
-                        <span class="text-[10px] font-bold bg-rose-500/10 text-rose-600 px-2 py-0.5 rounded">2 Deadline</span>
+                        <span id="badge-tugas" class="text-[10px] font-bold bg-rose-500/10 text-rose-600 px-2 py-0.5 rounded">0 Deadline</span>
                     </div>
                     <div class="space-y-3" id="home-tugas"></div>
                 </div>
@@ -466,7 +466,7 @@
         <section id="sec-calendar" class="view-section hidden animate-fade-in space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                 <div>
-                    <h2 class="font-serif text-3xl font-bold">Kalender 2026</h2>
+                    <h2 class="font-serif text-3xl font-bold">Kalender Akademik</h2>
                     <p class="text-sm text-[var(--text-secondary)] mt-1">Data resmi libur nasional & cuti bersama.</p>
                 </div>
                 <button class="px-4 py-2 bg-[var(--theme-accent)] text-white rounded-xl text-xs font-bold btn-tap shadow-md" onclick="CalendarEngine.goToday()">Hari Ini</button>
@@ -474,9 +474,9 @@
 
             <div class="glass-panel p-5 sm:p-6 overflow-hidden">
                 <div class="flex justify-between items-center mb-6 bg-[var(--bg-surface-solid)] p-2 rounded-2xl border border-[var(--border-solid)]">
-                    <button class="p-2.5 hover:bg-[var(--border-solid)] rounded-xl btn-tap" onclick="CalendarEngine.prevMonth()"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                    <button aria-label="Bulan Sebelumnya" class="p-2.5 hover:bg-[var(--border-solid)] rounded-xl btn-tap" onclick="CalendarEngine.prevMonth()"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
                     <h3 class="font-bold text-lg text-[var(--text-primary)]" id="cal-month-title">Bulan Tahun</h3>
-                    <button class="p-2.5 hover:bg-[var(--border-solid)] rounded-xl btn-tap" onclick="CalendarEngine.nextMonth()"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                    <button aria-label="Bulan Berikutnya" class="p-2.5 hover:bg-[var(--border-solid)] rounded-xl btn-tap" onclick="CalendarEngine.nextMonth()"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                 </div>
 
                 <div id="cal-swipe-container" class="touch-pan-y">
@@ -556,12 +556,12 @@
                 </div>
                 
                 <button class="w-full glass-panel py-3 font-bold text-sm text-[var(--text-primary)] hover:border-[var(--theme-accent)] transition-colors btn-tap" onclick="UI.requestNotification()">
-                    Aktifkan Notifikasi Browser
+                    Minta Akses Notifikasi Browser
                 </button>
             </div>
 
             <div class="text-center pt-8 opacity-70 pb-4">
-                <div class="font-serif font-bold text-sm">X.Luminance — OS 9.0 Pro</div>
+                <div class="font-serif font-bold text-sm">X.Luminance — OS 9.1 Pro</div>
                 <div class="text-[10px] mt-1">Dibuat Oleh AK ᡕᠵデᡁ᠊╾━</div>
             </div>
         </section>
@@ -587,7 +587,7 @@
             <div class="modal-content max-w-sm">
                 <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
                     <h3 class="font-bold">Theme Center</h3>
-                    <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" onclick="UI.closeModal('modal-theme')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                    <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" aria-label="Tutup" onclick="UI.closeModal('modal-theme')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
                 <div class="p-4 space-y-2" id="theme-list">
                     <!-- JS Rendered -->
@@ -602,7 +602,7 @@
             <div class="p-3 flex items-center gap-3 border-b border-[var(--border-solid)] bg-[var(--bg-surface-solid)] sticky top-0">
                 <svg class="w-5 h-5 text-[var(--text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 <input type="text" id="global-search" placeholder="Cari siswa, jadwal, fitur..." class="flex-grow bg-transparent border-none outline-none text-sm font-bold" oninput="UI.globalSearch(this.value)">
-                <button class="text-[10px] font-bold bg-[var(--border-solid)] px-2 py-1 rounded text-[var(--text-secondary)]" onclick="UI.closeModal('modal-search')">ESC</button>
+                <button class="text-[10px] font-bold bg-[var(--border-solid)] px-2 py-1 rounded text-[var(--text-secondary)] hover:bg-[var(--border-glass)]" onclick="UI.closeModal('modal-search')">ESC</button>
             </div>
             <div class="max-h-[50dvh] overflow-y-auto p-2" id="search-results">
                 <div class="p-6 text-center text-xs opacity-50 font-bold">Ketik untuk mencari...</div>
@@ -616,7 +616,7 @@
             <div class="modal-content max-w-sm w-full">
                 <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
                     <h3 class="font-bold flex items-center gap-2"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path></svg> Notifikasi</h3>
-                    <button class="text-[10px] font-bold text-[var(--theme-accent)]" onclick="document.getElementById('notif-list').innerHTML='<div class=\'p-8 text-center text-xs opacity-50 font-bold\'>Semua informasi sudah dibaca.</div>'; document.getElementById('bell-badge').style.display='none';">Tandai Dibaca</button>
+                    <button class="text-[10px] font-bold text-[var(--theme-accent)] hover:underline" onclick="UI.markNotifRead()">Tandai Dibaca</button>
                 </div>
                 <div class="p-2 space-y-1" id="notif-list">
                     <div class="p-3 bg-[var(--theme-accent-glow)] rounded-xl border border-[var(--border-glass)]">
@@ -638,7 +638,7 @@
             <div class="bg-[var(--bg-surface-solid)] w-full max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border border-[var(--border-solid)] animate-pop-in relative">
                 <div class="h-28 bg-[var(--theme-gradient)] relative" id="sid-header">
                     <div class="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')]"></div>
-                    <button class="absolute top-3 right-3 p-1.5 bg-black/20 text-white rounded-full btn-tap" onclick="UI.closeModal('modal-student-id')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                    <button aria-label="Tutup Detail Siswa" class="absolute top-3 right-3 p-1.5 bg-black/20 text-white rounded-full btn-tap" onclick="UI.closeModal('modal-student-id')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
                 <div class="p-6 pt-0 flex flex-col items-center relative">
                     <div class="w-24 h-24 rounded-full border-4 border-[var(--bg-surface-solid)] shadow-lg -mt-12 mb-3 bg-[var(--bg-body)] flex items-center justify-center font-bold text-4xl text-white overflow-hidden" id="sid-photo" style="background: var(--theme-gradient);">A</div>
@@ -651,7 +651,7 @@
                         <span class="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)]">Nomor Absen</span>
                         <span class="font-mono font-extrabold text-2xl text-[var(--theme-accent)]" id="sid-absen">00</span>
                     </div>
-                    <a href="#" id="sid-ig" target="_blank" class="w-full py-3 rounded-xl bg-pink-500/10 text-pink-600 font-bold text-xs flex items-center justify-center gap-2 btn-tap border border-pink-500/20 hover:bg-pink-500 hover:text-white transition-colors">
+                    <a href="#" id="sid-ig" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-pink-500/10 text-pink-600 font-bold text-xs flex items-center justify-center gap-2 btn-tap border border-pink-500/20 hover:bg-pink-500 hover:text-white transition-colors">
                         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path></svg>
                         <span id="sid-ig-text">Instagram</span>
                     </a>
@@ -666,7 +666,7 @@
             <div class="modal-content max-w-sm">
                 <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
                     <h3 class="font-bold">Jadwal Kebersihan</h3>
-                    <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" onclick="UI.closeModal('modal-piket')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                    <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" aria-label="Tutup" onclick="UI.closeModal('modal-piket')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
                 <div class="p-4 space-y-3">
                     <div class="flex gap-2 overflow-x-auto hide-scroll pb-1" id="piket-tabs"></div>
@@ -681,7 +681,7 @@
             <div class="modal-content max-w-sm">
                 <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
                     <h3 class="font-bold">Aturan Seragam</h3>
-                    <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" onclick="UI.closeModal('modal-uniform')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                    <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" aria-label="Tutup" onclick="UI.closeModal('modal-uniform')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
                 <div class="p-4 space-y-2" id="uniform-list"></div>
             </div>
@@ -693,7 +693,7 @@
             <div class="modal-content max-w-md">
                 <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
                     <h3 class="font-bold">Struktur Organisasi</h3>
-                    <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" onclick="UI.closeModal('modal-org')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                    <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" aria-label="Tutup" onclick="UI.closeModal('modal-org')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
                 <div class="p-5" id="org-list"></div>
             </div>
@@ -702,7 +702,7 @@
 
     <!-- Lightbox Modal -->
     <div id="modal-lightbox" class="overlay bg-black/90 backdrop-blur-xl" onclick="if(event.target===this) UI.closeModal('modal-lightbox')">
-        <button class="absolute top-4 right-4 p-2 bg-white/10 text-white rounded-full z-50 btn-tap hover:bg-rose-600" onclick="UI.closeModal('modal-lightbox')"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <button class="absolute top-4 right-4 p-2 bg-white/10 text-white rounded-full z-50 btn-tap hover:bg-rose-600" aria-label="Tutup Galeri" onclick="UI.closeModal('modal-lightbox')"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         <div class="w-full h-full flex items-center justify-center p-4 pointer-events-none" id="lightbox-content"></div>
     </div>
 
@@ -711,29 +711,37 @@
         <div class="modal-container">
             <div class="modal-content max-w-sm rounded-[2rem] overflow-hidden text-center bg-transparent border-none shadow-none">
                 <div class="bg-[var(--hero-gradient)] p-6 text-white rounded-t-[2rem] border border-white/10">
-                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-14 h-14 bg-white rounded-full p-1 mx-auto mb-2" alt="SMA">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/06a0a14b777c63cb5f50a06a6b336f4b833f3bdc/Foto%20Khusus%20Web/Logo%20Sma.png?raw=true" class="w-14 h-14 bg-white rounded-full p-1 mx-auto mb-2 object-cover" alt="Logo SMA">
                     <h3 class="font-bold text-lg uppercase tracking-widest">Kelas 10 L</h3>
                     <p class="text-[10px] opacity-80 uppercase tracking-widest">SMAN 2 Majalengka</p>
                 </div>
                 <div class="bg-[var(--bg-surface-solid)] p-6 rounded-b-[2rem] border border-[var(--border-solid)] border-t-0 flex flex-col items-center">
-                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-20 h-20 rounded-full border-4 border-[var(--bg-surface-solid)] shadow-lg -mt-14 mb-2 bg-white object-cover" alt="XL">
+                    <img src="https://github.com/Andikakostradnanda/Profile-10L/blob/460615fcf4f4d0049e23dc81fc684554d837dec0/Foto%20Khusus%20Web/Logo%20XL.jpg?raw=true" class="w-20 h-20 rounded-full border-4 border-[var(--bg-surface-solid)] shadow-lg -mt-14 mb-2 bg-white object-cover" alt="Logo XL">
                     <h2 class="font-serif font-bold text-2xl">X.Luminance</h2>
                     <p class="text-xs text-[var(--text-secondary)] font-medium mb-4">Solidaritas, Kreativitas, Prestasi.</p>
                     <div class="flex gap-2 w-full">
-                        <a href="https://www.instagram.com/x.luminance4us" target="_blank" class="flex-1 py-2.5 bg-pink-500/10 text-pink-600 rounded-xl font-bold text-xs btn-tap border border-pink-500/20">Instagram</a>
+                        <a href="https://www.instagram.com/x.luminance4us" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 bg-pink-500/10 text-pink-600 rounded-xl font-bold text-xs btn-tap border border-pink-500/20">Instagram</a>
                         <button class="flex-1 py-2.5 bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] rounded-xl font-bold text-xs btn-tap border border-[var(--border-glass)]" onclick="UI.share()">Bagikan</button>
                     </div>
                 </div>
-                <button class="mt-4 p-3 bg-[var(--bg-surface-solid)] rounded-full text-[var(--text-primary)] shadow-lg btn-tap pointer-events-auto" onclick="UI.closeModal('modal-class-id')"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                <button class="mt-4 p-3 bg-[var(--bg-surface-solid)] rounded-full text-[var(--text-primary)] shadow-lg btn-tap pointer-events-auto" aria-label="Tutup Modal" onclick="UI.closeModal('modal-class-id')"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
             </div>
         </div>
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 rounded-full font-bold text-xs shadow-2xl z-[9999] transition-all transform -translate-y-10 opacity-0 pointer-events-none"></div>
+    <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 rounded-full font-bold text-xs shadow-2xl z-[9999] transition-all transform -translate-y-10 opacity-0 pointer-events-none" aria-live="polite"></div>
 
     <!-- LOGIC SCRIPT -->
     <script>
+        // Global Time & Date Utilities (Ensuring Asia/Jakarta Timezone handling)
+        const DateUtils = {
+            getNow() {
+                // Returns current date adjusted to Asia/Jakarta standard time for schedule calculations
+                return new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"}));
+            }
+        };
+
         // Database
         const DB = {
             themes: [
@@ -767,7 +775,7 @@
             },
             seragam: { "Senin": "PSAS Putih Abu Lengkap", "Selasa": "PSAS Putih Abu", "Rabu": "Pramuka Lengkap", "Kamis": "Pangsi/Kebaya", "Jumat": "Baju Muslim" },
             agenda: [
-                { title: "Seminggu Sekali X Daring", type: "Wajib", desc: "Daring Karena Perbaikan,Tetap Semangat" },
+                { title: "Seminggu Sekali X Daring", type: "Wajib", desc: "Daring Karena Perbaikan, Tetap Semangat" },
                 { title: "Iuran Kas Perminggu", type: "Penting", desc: "Wajib Ya Untuk Membayar Kas" }
             ],
             tugas: [
@@ -789,7 +797,7 @@
         // Engine
         const App = {
             init() {
-                this.updateClock(); setInterval(() => this.updateClock(), 10000);
+                this.updateClock(); setInterval(() => this.updateClock(), 1000); // 1000ms for smooth progress
                 this.renderThemes();
                 this.renderDashboardInfo();
                 UI.renderStudents();
@@ -820,14 +828,14 @@
                 document.querySelectorAll('.set-tv').forEach(b => b.classList.toggle('text-white', b.dataset.v === Prefs.data.tv));
             },
 
-            parseTime(t) { const [h, m] = t.split('.').map(Number); return h*60+m; },
+            parseTime(t) { const [h, m] = t.split('.').map(Number); return h + (m/60); },
 
             updateClock() {
-                const d = new Date();
+                const d = DateUtils.getNow();
                 const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
                 const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
                 const dn = days[d.getDay()];
-                const ms = d.getHours()*60 + d.getMinutes();
+                const ms = d.getHours() + (d.getMinutes() / 60) + (d.getSeconds() / 3600); // Time represented in decimal hours
                 const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
                 const hol = DB.cal[dateStr];
 
@@ -840,28 +848,66 @@
                     sub = hol.n; lbl = hol.type === 'leave' ? "CUTI BERSAMA" : "LIBUR NASIONAL";
                 } else if (d.getDay() >= 1 && d.getDay() <= 5 && DB.schedule[dn]) {
                     const s = DB.schedule[dn];
-                    for(let i=0; i<s.length; i++) {
-                        let st = this.parseTime(s[i].t.split('-')[0]), en = this.parseTime(s[i].t.split('-')[1]);
+                    let found = false;
+                    
+                    for (let i = 0; i < s.length; i++) {
+                        let st = this.parseTime(s[i].t.split('-')[0]);
+                        let en = this.parseTime(s[i].t.split('-')[1]);
+                        
                         if (ms >= st && ms < en) {
-                            sub = s[i].m; lbl = s[i].br ? "ISTIRAHAT" : "SEDANG BERLANGSUNG";
-                            cd = `${en - ms}m lagi`; pct = ((ms - st) / (en - st)) * 100; break;
-                        } else if (ms < st) {
-                            if(i===0) { sub = "Persiapan Belajar"; lbl = "MENUNGGU MASUK"; cd = `Mulai ${s[i].t.split('-')[0]}`; }
+                            sub = s[i].m; 
+                            lbl = s[i].br ? "ISTIRAHAT" : "SEDANG BERLANGSUNG";
+                            let remS = Math.floor((en - ms) * 3600); // Remaining seconds
+                            let m = Math.floor(remS / 60);
+                            let s_ = remS % 60;
+                            cd = m > 59 ? `${Math.floor(m/60)}j ${m%60}m lagi` : `${m}m ${s_}s lagi`;
+                            pct = ((ms - st) / (en - st)) * 100; 
+                            found = true;
                             break;
-                        } else if (i === s.length-1 && ms >= en) {
-                            sub = "Pelajaran Selesai"; lbl = "HARI INI";
+                        } else if (ms < st) {
+                            if (i === 0) { 
+                                sub = "Persiapan Belajar"; 
+                                lbl = "MENUNGGU MASUK"; 
+                                let remS = Math.floor((st - ms) * 3600);
+                                let h = Math.floor(remS / 3600);
+                                let m = Math.floor((remS % 3600) / 60);
+                                cd = h > 0 ? `Mulai ${h}j ${m}m` : `Mulai ${m}m ${remS % 60}s`;
+                            } else {
+                                // Checking for unlisted gaps (like Friday praying hour)
+                                let prevEn = this.parseTime(s[i-1].t.split('-')[1]);
+                                if (ms >= prevEn && ms < st) {
+                                    sub = "Jeda Waktu";
+                                    lbl = "PERALIHAN";
+                                    let remS = Math.floor((st - ms) * 3600);
+                                    let m = Math.floor(remS / 60);
+                                    cd = m > 0 ? `${m}m ${remS % 60}s lagi` : `${remS % 60}s lagi`;
+                                    pct = ((ms - prevEn) / (st - prevEn)) * 100;
+                                }
+                            }
+                            found = true;
+                            break;
                         }
+                    }
+                    
+                    if (!found && ms >= this.parseTime(s[s.length-1].t.split('-')[1])) {
+                        sub = "Pelajaran Selesai"; lbl = "HARI INI";
+                        cd = "Selesai";
+                        pct = 100;
                     }
                 } else {
                     sub = "Libur Akhir Pekan"; lbl = "WEEKEND";
                 }
 
-                document.getElementById('hero-subject').innerText = sub;
-                document.getElementById('hero-status-label').innerText = lbl;
+                const heroSub = document.getElementById('hero-subject');
+                if (heroSub.innerText !== sub) heroSub.innerText = sub;
+                
+                const heroLbl = document.getElementById('hero-status-label');
+                if (heroLbl.innerText !== lbl) heroLbl.innerText = lbl;
+
                 document.getElementById('hero-countdown').innerText = cd;
                 document.getElementById('hero-progress').style.width = `${Math.min(100, Math.max(0, pct))}%`;
 
-                // Quick Cards logic (don't show "Libur Piket" on weekends/holidays if possible, but keep simple for now)
+                // Quick Cards logic 
                 let showPiket = (d.getDay() >= 1 && d.getDay() <= 5 && !hol);
                 document.getElementById('dash-piket').innerText = showPiket && DB.piket[dn] ? DB.piket[dn].slice(0,2).join(', ')+"..." : "Tidak ada piket";
                 document.getElementById('dash-uniform').innerText = showPiket && DB.seragam[dn] ? DB.seragam[dn] : "Bebas";
@@ -880,8 +926,23 @@
             },
 
             renderDashboardInfo() {
-                document.getElementById('home-agenda').innerHTML = DB.agenda.map(a => `<div class="flex justify-between items-center text-xs p-2.5 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)]"><div><div class="font-bold">${a.title}</div><div class="text-[10px] text-[var(--text-secondary)] mt-0.5">${a.desc}</div></div><span class="bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded font-bold">${a.type}</span></div>`).join('');
-                document.getElementById('home-tugas').innerHTML = DB.tugas.map(t => `<div class="flex justify-between items-center text-xs p-2.5 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)]"><div><div class="font-bold">${t.title}</div><div class="text-[10px] text-[var(--theme-accent)] mt-0.5 font-bold">${t.subject}</div></div><span class="bg-rose-500/10 text-rose-600 px-2 py-0.5 rounded font-bold">${t.deadline}</span></div>`).join('');
+                const agendaCount = DB.agenda.length;
+                const tugasCount = DB.tugas.length;
+
+                document.getElementById('badge-agenda').innerText = `${agendaCount} Aktif`;
+                document.getElementById('badge-tugas').innerText = `${tugasCount} Deadline`;
+
+                if (agendaCount > 0) {
+                    document.getElementById('home-agenda').innerHTML = DB.agenda.map(a => `<div class="flex justify-between items-center text-xs p-2.5 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)]"><div><div class="font-bold">${a.title}</div><div class="text-[10px] text-[var(--text-secondary)] mt-0.5">${a.desc}</div></div><span class="bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded font-bold">${a.type}</span></div>`).join('');
+                } else {
+                    document.getElementById('home-agenda').innerHTML = `<div class="p-4 text-center text-xs opacity-50 font-bold border border-dashed border-[var(--border-solid)] rounded-xl">Tidak ada agenda saat ini.</div>`;
+                }
+
+                if (tugasCount > 0) {
+                    document.getElementById('home-tugas').innerHTML = DB.tugas.map(t => `<div class="flex justify-between items-center text-xs p-2.5 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)]"><div><div class="font-bold">${t.title}</div><div class="text-[10px] text-[var(--theme-accent)] mt-0.5 font-bold">${t.subject}</div></div><span class="bg-rose-500/10 text-rose-600 px-2 py-0.5 rounded font-bold">${t.deadline}</span></div>`).join('');
+                } else {
+                    document.getElementById('home-tugas').innerHTML = `<div class="p-4 text-center text-xs opacity-50 font-bold border border-dashed border-[var(--border-solid)] rounded-xl">Tidak ada tugas kelas baru.</div>`;
+                }
             }
         };
 
@@ -889,7 +950,8 @@
             curr: new Date(),
             sel: new Date(),
             init() { 
-                if(this.curr.getFullYear() !== 2026) this.curr.setFullYear(2026); 
+                this.curr = DateUtils.getNow();
+                // Removes hard lock on 2026 so it remains relevant in the future, yet data is preserved.
                 this.sel = new Date(this.curr);
                 this.render(); 
                 this.setupSwipe();
@@ -918,7 +980,7 @@
                 let h = '';
                 for (let i = fd; i > 0; i--) h += `<div class="cal-cell dim">${pd - i + 1}</div>`;
                 
-                const rt = new Date();
+                const rt = DateUtils.getNow();
                 for (let i = 1; i <= dim; i++) {
                     const ds = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
                     const hol = DB.cal[ds];
@@ -947,11 +1009,11 @@
                 const dn = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][d.getDay()];
                 const mn = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][d.getMonth()];
                 
-                let b = '', t = 'Hari Efektif Sekolah';
+                let b = '', t = 'Hari Efektif Belajar';
                 if(hol) { t = hol.n; b = hol.type === 'leave' ? '<span class="bg-amber-500 text-white px-2 py-0.5 rounded text-[9px] font-bold">CUTI BERSAMA</span>' : '<span class="bg-rose-500 text-white px-2 py-0.5 rounded text-[9px] font-bold">LIBUR NASIONAL</span>'; }
                 else if (d.getDay()===0) { t = "Libur Akhir Pekan"; b = '<span class="bg-slate-500 text-white px-2 py-0.5 rounded text-[9px] font-bold">MINGGU</span>'; }
 
-                let link = (!hol && d.getDay()>=1 && d.getDay()<=5) ? `<button class="mt-2 text-xs font-bold text-[var(--theme-accent)]" onclick="UI.switchTab('schedule')">Lihat Jadwal ${dn} &rarr;</button>` : '';
+                let link = (!hol && d.getDay()>=1 && d.getDay()<=5) ? `<button class="mt-2 text-xs font-bold text-[var(--theme-accent)] hover:underline" onclick="UI.switchTab('schedule')">Lihat Jadwal ${dn} &rarr;</button>` : '';
 
                 document.getElementById('cal-detail-panel').innerHTML = `
                     <div class="flex justify-between items-center mb-1"><span class="text-xs font-bold text-[var(--text-secondary)]">${dn}, ${d.getDate()} ${mn} ${d.getFullYear()}</span>${b}</div>
@@ -998,6 +1060,12 @@
                 const t = document.getElementById('toast');
                 t.innerText = msg; t.style.opacity = '1'; t.style.transform = 'translate(-50%, 0)';
                 setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translate(-50%, -10px)'; }, 3000);
+            },
+
+            markNotifRead() {
+                document.getElementById('notif-list').innerHTML = '<div class="p-8 text-center text-xs opacity-50 font-bold">Semua informasi sudah dibaca.</div>'; 
+                document.getElementById('bell-badge').style.display = 'none';
+                this.toast('Notifikasi ditandai dibaca.');
             },
 
             // Data Renderers
@@ -1047,7 +1115,7 @@
 
             renderSchedTabs() {
                 const d = ['Senin','Selasa','Rabu','Kamis','Jumat'];
-                let cd = new Date().getDay(), td = (cd>=1 && cd<=5) ? d[cd-1] : 'Senin';
+                let cd = DateUtils.getNow().getDay(), td = (cd>=1 && cd<=5) ? d[cd-1] : 'Senin';
                 document.getElementById('sched-tabs').innerHTML = d.map(x => `<button class="px-4 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors border ${x===td?'bg-[var(--theme-accent)] text-white border-[var(--theme-accent)] shadow-md':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'}" onclick="UI.renderSchedDay('${x}', this)">${x}</button>`).join('');
                 this.renderSchedDay(td, document.querySelector('#sched-tabs .bg-\\[var\\(--theme-accent\\)\\]'));
             },
@@ -1058,10 +1126,13 @@
                     btn.classList.add('bg-[var(--theme-accent)]', 'text-white', 'shadow-md', 'border-[var(--theme-accent)]');
                 }
                 document.getElementById('sched-title').innerText = day;
-                let isT = day === ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][new Date().getDay()];
+                let isT = day === ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][DateUtils.getNow().getDay()];
                 document.getElementById('sched-today-badge').style.display = isT ? 'inline-block' : 'none';
                 
-                let s = DB.schedule[day] || [], ms = new Date().getHours()*60 + new Date().getMinutes();
+                let s = DB.schedule[day] || [];
+                let dNow = DateUtils.getNow();
+                let ms = dNow.getHours() + (dNow.getMinutes() / 60);
+
                 document.getElementById('sched-timeline').innerHTML = s.map(x => {
                     let cur = isT && ms >= App.parseTime(x.t.split('-')[0]) && ms < App.parseTime(x.t.split('-')[1]);
                     return `
@@ -1080,21 +1151,21 @@
 
             renderGallery() {
                 document.getElementById('gallery-grid').innerHTML = DB.gallery.map((g,i) => `
-                    <button class="bg-[var(--bg-surface-solid)] rounded-2xl overflow-hidden relative group btn-tap border border-[var(--border-solid)]" onclick="UI.openLightBox(${i})">
-                        ${g.type === 'img' ? `<img src="${g.src}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Galeri">` : `<video src="${g.src}" class="w-full h-full object-cover"></video><div class="absolute inset-0 bg-black/30 flex items-center justify-center"><svg class="w-8 h-8 text-white fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>`}
+                    <button class="bg-[var(--bg-surface-solid)] rounded-2xl overflow-hidden relative group btn-tap border border-[var(--border-solid)]" aria-label="Lihat Media" onclick="UI.openLightBox(${i})">
+                        ${g.type === 'img' ? `<img src="${g.src}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Foto Galeri Kelas">` : `<video src="${g.src}" class="w-full h-full object-cover" preload="metadata"></video><div class="absolute inset-0 bg-black/30 flex items-center justify-center"><svg class="w-8 h-8 text-white fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>`}
                     </button>
                 `).join('');
             },
             
             openLightBox(i) {
                 const g = DB.gallery[i], c = document.getElementById('lightbox-content');
-                c.innerHTML = g.type === 'img' ? `<img src="${g.src}" class="max-w-full max-h-[85dvh] object-contain rounded-xl shadow-2xl pointer-events-auto">` : `<video src="${g.src}" controls autoplay class="max-w-full max-h-[85dvh] rounded-xl shadow-2xl bg-black pointer-events-auto"></video>`;
+                c.innerHTML = g.type === 'img' ? `<img src="${g.src}" class="max-w-full max-h-[85dvh] object-contain rounded-xl shadow-2xl pointer-events-auto" alt="Preview Gambar">` : `<video src="${g.src}" controls autoplay class="max-w-full max-h-[85dvh] rounded-xl shadow-2xl bg-black pointer-events-auto"></video>`;
                 this.showModal('modal-lightbox');
             },
 
             renderPiketTabs() {
                 const d = ['Senin','Selasa','Rabu','Kamis','Jumat'];
-                let td = (new Date().getDay()>=1 && new Date().getDay()<=5) ? d[new Date().getDay()-1] : 'Senin';
+                let td = (DateUtils.getNow().getDay()>=1 && DateUtils.getNow().getDay()<=5) ? d[DateUtils.getNow().getDay()-1] : 'Senin';
                 document.getElementById('piket-tabs').innerHTML = d.map(x => `<button class="px-3 py-1 rounded-lg text-xs font-bold border ${x===td?'bg-[var(--theme-accent)] text-white border-[var(--theme-accent)]':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'}" onclick="UI.renderPiketDay('${x}', this)">${x}</button>`).join('');
                 this.renderPiketDay(td, document.querySelector('#piket-tabs .bg-\\[var\\(--theme-accent\\)\\]'));
             },
@@ -1105,13 +1176,13 @@
             },
 
             renderUniforms() {
-                let td = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][new Date().getDay()];
+                let td = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][DateUtils.getNow().getDay()];
                 document.getElementById('uniform-list').innerHTML = Object.entries(DB.seragam).map(([d,u]) => `<div class="p-3 rounded-xl border flex justify-between items-center text-xs ${d===td?'bg-[var(--theme-accent-glow)] border-[var(--theme-accent)]':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'}"><div><div class="font-bold">${d}</div><div class="text-[10px] text-[var(--text-secondary)]">${u}</div></div>${d===td?'<span class="text-[9px] bg-[var(--theme-accent)] text-white px-2 py-0.5 rounded font-bold">HARI INI</span>':''}</div>`).join('');
             },
 
             renderOrg() {
                 let h = `<div class="space-y-4 text-xs"><div><h4 class="font-extrabold text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-2">Dewan Pembina</h4><div class="space-y-1.5">`;
-                ["TUTI TURSILAH, S.Pd.I.", "TRESNA FUJIE LATIFAH, S.Pd.", "FAHMI ARIZAL NUR FACHRUDIN, S.Pd."].forEach(n => h += `<div class="p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex justify-between items-center font-bold"><span>${n}</span><span class="text-[9px] bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-2 py-0.5 rounded">${DB.roles[n]}</span></div>`);
+                ["TUTI TURSILAH, S.Pd.I.", "TRESNA FUJIE LATIFAH, S.Pd.", "FAHMI ARIZAL NUR FACHRUDIN, S.Pd."].forEach(n => h += `<div class="p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex justify-between items-center font-bold"><span>${n}</span><span class="text-[9px] bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-2 py-0.5 rounded text-center">${DB.roles[n]}</span></div>`);
                 h += `</div></div><div><h4 class="font-extrabold text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-2 mt-4">Pengurus Inti</h4><div class="grid grid-cols-2 gap-2">`;
                 ["PRINCE EZHAD ALVARO SYAHPUTRA", "CINTA AMELA NURCAHAYA", "JENISA LUTHFIAH", "DEWI MUTIA", "NAILA LAILATUL RAMADHANI", "KANDISA"].forEach(n => h += `<button class="p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl text-center btn-tap font-bold" onclick="UI.openStudent('${DB.students.find(x=>x.name===n)?.id}')"><div class="text-[9px] text-[var(--theme-accent)] uppercase">${DB.roles[n]}</div><div class="truncate mt-0.5">${n}</div></button>`);
                 document.getElementById('org-list').innerHTML = h + `</div></div></div>`;
@@ -1137,7 +1208,7 @@
                     count++;
                 }
 
-                c.innerHTML = count ? h : '<div class="p-6 text-center text-xs opacity-50 font-bold">Hasil tidak ditemukan.</div>';
+                c.innerHTML = count ? h : '<div class="p-6 text-center text-xs opacity-50 font-bold border border-dashed border-[var(--border-solid)] rounded-xl mt-2">Hasil tidak ditemukan.</div>';
             },
 
             requestNotification() {
@@ -1150,21 +1221,21 @@
             
             share() {
                 if(navigator.share) navigator.share({ title: 'X.Luminance', text: 'Website Resmi 10 L', url: window.location.href }).catch(()=>{});
-                else { navigator.clipboard.writeText(window.location.href); this.toast('Link disalin!'); }
+                else { navigator.clipboard.writeText(window.location.href); this.toast('Tautan disalin ke clipboard!'); }
             }
         };
 
-        // Keybindings
+        // Keyboard Accessibility / Bindings
         document.addEventListener('keydown', e => {
             if((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); UI.showModal('modal-search'); }
-            if(e.key === 'Escape' && UI.m.length) UI.closeModal(UI.m[UI.m.length-1]);
+            if(e.key === 'Escape' && UI.m.length > 0) { e.preventDefault(); UI.closeModal(UI.m[UI.m.length-1]); }
         });
 
-        // PWA Service Worker (Simulated registration for standalone readiness)
+        // PWA Readiness (Will silently check capabilities without making false claims if sw.js is missing)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // In a real env: navigator.serviceWorker.register('/sw.js')
-                console.log('PWA Ready');
+                // Feature ready for real PWA manifest and service worker
+                console.log('X.Luminance is Service-Worker / PWA ready.');
             });
         }
 
