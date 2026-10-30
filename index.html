@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
-    <title>X.Luminance — Kelas 10 L SMAN 2 Majalengka</title>
+    <title>X.Luminance V19.1.10 — Kelas 10 L SMAN 2 Majalengka</title>
     <meta name="description" content="Website resmi informasi dan arsip kelas 10 L SMAN 2 Majalengka">
     <meta name="theme-color" content="#0f172a">
     
@@ -93,12 +93,181 @@
         html[data-theme="arctic_sea"].dark { --theme-accent: #e0f2fe; --theme-gradient: linear-gradient(135deg, #0284c7, #e0f2fe); --hero-gradient: linear-gradient(180deg, rgba(15,23,42,0.92) 0%, rgba(2,132,199,0.5) 100%); }
         html[data-theme="abyss"].dark { --theme-accent: #818cf8; --theme-gradient: linear-gradient(135deg, #312e81, #818cf8); --bg-body: #050505; --bg-surface: rgba(10, 10, 15, 0.8); --bg-surface-solid: #111118; --hero-gradient: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(49,46,129,0.8) 100%); }
 
-        /* --- PERFORMANCE MODES --- */
-        body.mode-balanced { --glass-blur: blur(8px); }
+        /* --- OCEAN THEME ACCENTS (LIGHT + DARK) --- */
+        html[data-theme="deep_ocean"] {
+            --theme-accent: #0284c7; --theme-accent-hover: #0369a1;
+            --theme-accent-glow: rgba(2, 132, 199, .17);
+            --theme-gradient: linear-gradient(135deg, #0369a1, #06b6d4);
+            --hero-gradient: linear-gradient(180deg, rgba(8, 47, 73, .76), rgba(2, 132, 199, .58));
+        }
+        html[data-theme="tropical_reef"] {
+            --theme-accent: #0f9488; --theme-accent-hover: #0f766e;
+            --theme-accent-glow: rgba(13, 148, 136, .16);
+            --theme-gradient: linear-gradient(135deg, #0f766e, #2dd4bf);
+            --hero-gradient: linear-gradient(180deg, rgba(4, 47, 46, .78), rgba(13, 148, 136, .58));
+        }
+        html[data-theme="sunset_coast"] {
+            --theme-accent: #c2410c; --theme-accent-hover: #9a3412;
+            --theme-accent-glow: rgba(234, 88, 12, .15);
+            --theme-gradient: linear-gradient(135deg, #c026d3, #f97316);
+            --hero-gradient: linear-gradient(180deg, rgba(76, 29, 73, .78), rgba(234, 88, 12, .55));
+        }
+        html[data-theme="arctic_sea"] {
+            --theme-accent: #0369a1; --theme-accent-hover: #075985;
+            --theme-accent-glow: rgba(14, 165, 233, .16);
+            --theme-gradient: linear-gradient(135deg, #0284c7, #7dd3fc);
+            --hero-gradient: linear-gradient(180deg, rgba(15, 23, 42, .72), rgba(2, 132, 199, .52));
+        }
+        html[data-theme="abyss"] {
+            --theme-accent: #4f46e5; --theme-accent-hover: #4338ca;
+            --theme-accent-glow: rgba(99, 102, 241, .16);
+            --theme-gradient: linear-gradient(135deg, #312e81, #818cf8);
+            --hero-gradient: linear-gradient(180deg, rgba(17, 24, 39, .84), rgba(49, 46, 129, .64));
+        }
+        html[data-theme="deep_ocean"].dark { --theme-accent: #38bdf8; --theme-accent-hover: #0ea5e9; }
+        html[data-theme="tropical_reef"].dark { --theme-accent: #2dd4bf; --theme-accent-hover: #14b8a6; }
+        html[data-theme="sunset_coast"].dark { --theme-accent: #fb923c; --theme-accent-hover: #f97316; }
+        html[data-theme="arctic_sea"].dark { --theme-accent: #7dd3fc; --theme-accent-hover: #38bdf8; }
+        html[data-theme="abyss"].dark { --theme-accent: #a5b4fc; --theme-accent-hover: #818cf8; }
+
+        /* --- OCEAN LIQUID GLASS PERFORMANCE TIERS --- */
+        body.mode-full {
+            --glass-blur: blur(22px);
+            --glass-saturation: 1.22;
+            --glass-reflection-opacity: .92;
+            --glass-edge-opacity: .9;
+            --glass-shadow: 0 18px 42px -18px rgba(2, 132, 199, .26), 0 5px 16px rgba(15, 23, 42, .08);
+            --glass-surface-tint: rgba(255, 255, 255, .10);
+        }
+        body.mode-full .ambient-bg { animation: caustics 28s infinite alternate ease-in-out; }
+        body.mode-balanced {
+            --glass-blur: blur(12px);
+            --glass-saturation: 1.12;
+            --glass-reflection-opacity: .64;
+            --glass-edge-opacity: .72;
+            --glass-shadow: 0 12px 28px -16px rgba(2, 132, 199, .20), 0 3px 10px rgba(15, 23, 42, .06);
+            --glass-surface-tint: rgba(255, 255, 255, .08);
+        }
         body.mode-balanced .ambient-bg { animation: none; }
-        body.mode-performance { --glass-blur: blur(0px); --bg-surface: var(--bg-surface-solid); }
+        body.mode-performance {
+            --glass-blur: blur(2px);
+            --glass-saturation: 1.04;
+            --glass-reflection-opacity: .25;
+            --glass-edge-opacity: .46;
+            --glass-shadow: 0 5px 14px rgba(2, 132, 199, .08);
+            --glass-surface-tint: rgba(255, 255, 255, .05);
+            --bg-surface: rgba(248, 252, 255, .94);
+        }
+        html.dark body.mode-performance {
+            --bg-surface: rgba(15, 23, 42, .94);
+            --glass-shadow: 0 5px 14px rgba(0, 0, 0, .24);
+        }
         body.mode-performance .ambient-bg { display: none; }
+        body.mode-performance .glass-panel::before,
+        body.mode-performance .bubble-nav::before,
+        body.mode-performance .ocean-header::after { opacity: .2; }
+        body.mode-performance .progress-fill::after,
+        body.mode-performance #bell-badge.animate-pulse { animation: none !important; }
         body.reduced-motion * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+
+        /* --- LIQUID GLASS MATERIAL --- */
+        .glass-panel {
+            position: relative;
+            isolation: isolate;
+            background: var(--bg-surface);
+            -webkit-backdrop-filter: saturate(var(--glass-saturation, 1.08)) var(--glass-blur);
+            backdrop-filter: saturate(var(--glass-saturation, 1.08)) var(--glass-blur);
+            border: 1px solid color-mix(in srgb, var(--border-glass) 82%, rgba(255,255,255,.55));
+            box-shadow: var(--glass-shadow, var(--shadow-premium));
+        }
+        .glass-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            opacity: var(--glass-reflection-opacity, .64);
+            background:
+                radial-gradient(120% 70% at 0% 0%, rgba(255,255,255,.34), transparent 48%),
+                linear-gradient(145deg, rgba(255,255,255,.18), transparent 34%, transparent 68%, rgba(34,211,238,.07));
+        }
+        .glass-panel::after {
+            content: "";
+            position: absolute;
+            inset: 1px;
+            z-index: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            opacity: var(--glass-edge-opacity, .72);
+            border-top: 1px solid rgba(255,255,255,.58);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.18), inset 0 -1px 0 rgba(56,189,248,.06);
+        }
+        .glass-panel > :not(.absolute) { position: relative; z-index: 1; }
+        .glass-panel > .absolute { pointer-events: none; }
+        .glass-panel > .absolute button,
+        .glass-panel > .absolute a { pointer-events: auto; }
+        html.dark .glass-panel::before {
+            background:
+                radial-gradient(115% 65% at 0% 0%, rgba(125,211,252,.20), transparent 48%),
+                linear-gradient(145deg, rgba(255,255,255,.09), transparent 42%, transparent 70%, rgba(6,182,212,.10));
+        }
+        html.dark .glass-panel::after { border-top-color: rgba(186,230,253,.30); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), inset 0 -1px 0 rgba(56,189,248,.08); }
+        .ocean-header {
+            background: var(--bg-surface) !important;
+            -webkit-backdrop-filter: saturate(var(--glass-saturation, 1.08)) var(--glass-blur);
+            backdrop-filter: saturate(var(--glass-saturation, 1.08)) var(--glass-blur);
+            border-bottom: 1px solid var(--border-glass) !important;
+            box-shadow: 0 8px 26px rgba(2, 132, 199, .08);
+            position: relative;
+        }
+        .ocean-header::after {
+            content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.78), rgba(125,211,252,.62), transparent);
+            pointer-events: none; opacity: var(--glass-edge-opacity, .72);
+        }
+        .bubble-nav {
+            -webkit-backdrop-filter: saturate(var(--glass-saturation, 1.08)) var(--glass-blur);
+            backdrop-filter: saturate(var(--glass-saturation, 1.08)) var(--glass-blur);
+            background: var(--bg-surface);
+            box-shadow: var(--glass-shadow, var(--shadow-premium)), inset 0 1px 0 rgba(255,255,255,.38);
+        }
+        .bubble-nav::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,.30), transparent 38%, transparent 70%, rgba(34,211,238,.08)); opacity: var(--glass-reflection-opacity, .64); }
+        .bubble-nav > * { position: relative; z-index: 1; }
+        .drawer-content, .modal-content {
+            background: var(--bg-surface) !important;
+            -webkit-backdrop-filter: saturate(var(--glass-saturation, 1.08)) var(--glass-blur);
+            backdrop-filter: saturate(var(--glass-saturation, 1.08)) var(--glass-blur);
+            border-color: var(--border-glass) !important;
+            box-shadow: var(--glass-shadow, var(--shadow-premium)), inset 0 1px 0 rgba(255,255,255,.22);
+        }
+        .overlay { background: color-mix(in srgb, var(--overlay-bg) 88%, rgba(2,132,199,.12)); }
+        .rolling-slot-container {
+            background: var(--bg-surface) !important;
+            border-color: var(--border-glass) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.32), 0 5px 16px rgba(2,132,199,.08);
+        }
+        .rolling-slot-container::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(255,255,255,.20), transparent 32%, transparent 68%, rgba(34,211,238,.08)); }
+        .spin-result-card { background: var(--bg-surface) !important; border-color: var(--border-glass) !important; }
+        .glass-preview-card { min-height: 108px; background: var(--bg-surface); }
+        .glass-preview-card .preview-glass-chip { background: var(--bg-surface); border: 1px solid var(--border-glass); box-shadow: inset 0 1px 0 rgba(255,255,255,.36), 0 5px 16px rgba(2,132,199,.10); }
+        .file-status { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 2px 7px; font-size: 9px; font-weight: 800; border: 1px solid var(--border-solid); }
+        .file-status.available { color: #059669; background: rgba(16,185,129,.10); border-color: rgba(16,185,129,.25); }
+        .file-status.failed { color: #e11d48; background: rgba(244,63,94,.09); border-color: rgba(244,63,94,.22); }
+        .file-status.checking, .file-status.unknown { color: var(--text-secondary); background: var(--glass-surface-tint, rgba(255,255,255,.08)); }
+        .schedule-export-btn { border: 1px solid var(--border-glass); background: var(--bg-surface); color: var(--theme-accent); border-radius: .65rem; padding: .42rem .65rem; font-size: 10px; font-weight: 800; white-space: nowrap; }
+        .schedule-export-btn:active { transform: scale(.97); }
+        @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+            .glass-panel, .bubble-nav, .ocean-header, .drawer-content, .modal-content { background: var(--bg-surface-solid) !important; }
+        }
+        @media (max-width: 640px) {
+            body.mode-full { --glass-blur: blur(16px); }
+            .glass-panel::before { background-size: 100% 100%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ambient-bg, .progress-fill::after { animation: none !important; }
+            .glass-panel, .bubble-nav, .nav-item, .btn-tap { transition-duration: .01ms !important; }
+        }
 
         /* --- TYPOGRAPHY & TV MODE --- */
         html[data-font="large"] body { font-size: 16px; }
@@ -265,7 +434,7 @@
     </div>
 
     <!-- HEADER -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg-surface)] backdrop-blur-md border-b border-[var(--border-glass)]">
+    <header class="ocean-header fixed top-0 left-0 right-0 z-50 bg-[var(--bg-surface)] backdrop-blur-md border-b border-[var(--border-glass)]">
         <div class="px-4 py-3 flex justify-between items-center max-w-7xl mx-auto">
             <div class="flex items-center gap-3">
                 <button type="button" aria-label="Buka Menu" class="p-2 -ml-2 rounded-xl hover:bg-[var(--border-solid)] btn-tap" onpointerdown="XLFeedback.play('tap')" onclick="UI.toggleDrawer()">
@@ -430,9 +599,13 @@
             </div>
 
             <div class="glass-panel p-6">
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex justify-between items-center gap-2 mb-6">
                     <h3 class="font-bold text-2xl text-[var(--theme-accent)]" id="sched-title">Senin</h3>
-                    <span class="text-[10px] px-3 py-1 bg-[var(--theme-accent)] text-white rounded-full font-extrabold hidden shadow-md" id="sched-today-badge">HARI INI</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] px-3 py-1 bg-[var(--theme-accent)] text-white rounded-full font-extrabold hidden shadow-md" id="sched-today-badge">HARI INI</span>
+                        <button type="button" class="schedule-export-btn btn-tap" onclick="ScheduleExport.downloadICS()" title="Ekspor jadwal ke kalender">ICS</button>
+                        <button type="button" class="schedule-export-btn btn-tap" onclick="ScheduleExport.printPDF()" title="Cetak atau simpan jadwal sebagai PDF">PDF</button>
+                    </div>
                 </div>
                 <div class="relative pl-6 border-l-2 border-[var(--border-glass)] space-y-5" id="sched-timeline"></div>
             </div>
@@ -613,6 +786,25 @@
                         <button class="flex-1 py-2 rounded-lg text-xs font-bold btn-tap set-perf transition-colors" data-v="balanced" onclick="Prefs.save('perf', 'balanced'); App.syncSettingsUI();">Seimbang</button>
                         <button class="flex-1 py-2 rounded-lg text-xs font-bold btn-tap set-perf transition-colors" data-v="performance" onclick="Prefs.save('perf', 'performance'); App.syncSettingsUI();">Hemat Daya</button>
                     </div>
+                    <div class="mt-4 rounded-2xl border border-[var(--border-glass)] p-3 bg-[var(--theme-accent-glow)]/40">
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-[var(--text-secondary)]">Live Glass Preview</div>
+                            <span id="glass-preview-tier" class="text-[9px] font-extrabold rounded-full px-2 py-1 bg-[var(--bg-surface)] text-[var(--theme-accent)] border border-[var(--border-glass)]">Maksimal</span>
+                        </div>
+                        <div id="glass-live-preview" class="glass-panel glass-preview-card rounded-xl p-3" aria-live="polite">
+                            <div class="flex items-center justify-between gap-3">
+                                <div class="min-w-0">
+                                    <div class="text-[9px] font-extrabold uppercase tracking-widest text-[var(--text-secondary)]">X.Luminance / Ocean UI</div>
+                                    <div class="font-bold text-sm mt-1">Liquid Glass Surface</div>
+                                    <div class="text-[10px] text-[var(--text-secondary)] mt-0.5" id="glass-preview-desc">Refleksi lembut, blur kaya, dan depth berlapis.</div>
+                                </div>
+                                <div class="preview-glass-chip shrink-0 rounded-xl w-14 h-14 flex items-center justify-center text-[var(--theme-accent)]">
+                                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3 20 8v8l-8 5-8-5V8z"/><path d="m4 8 8 5 8-5M12 13v8"/></svg>
+                                </div>
+                            </div>
+                            <div class="flex gap-1.5 mt-3"><span class="h-1.5 flex-1 rounded-full bg-[var(--theme-accent)]"></span><span class="h-1.5 flex-1 rounded-full bg-[var(--theme-accent)]/50"></span><span class="h-1.5 flex-1 rounded-full bg-[var(--theme-accent)]/20"></span></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="glass-panel p-4">
@@ -624,13 +816,30 @@
                     </div>
                 </div>
                 
+                <div class="glass-panel p-4" aria-labelledby="whats-new-title">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <div id="whats-new-title" class="font-bold text-sm">What's New</div>
+                            <div class="text-[10px] text-[var(--text-secondary)] mt-0.5">V19.1.10 · 30 Oktober 2026</div>
+                        </div>
+                        <span class="text-[9px] font-extrabold px-2 py-1 rounded-full border border-amber-500/25 bg-amber-500/10 text-amber-600">Pratinjau lokal</span>
+                    </div>
+                    <ul class="mt-3 space-y-2 text-[11px] text-[var(--text-secondary)]">
+                        <li class="flex gap-2"><span class="text-[var(--theme-accent)]">•</span><span>Ocean Liquid Glass dengan refleksi, edge lighting, dan blur adaptif.</span></li>
+                        <li class="flex gap-2"><span class="text-[var(--theme-accent)]">•</span><span>Live Glass Preview untuk membandingkan tiga tingkat performa.</span></li>
+                        <li class="flex gap-2"><span class="text-[var(--theme-accent)]">•</span><span>Ekspor jadwal ke PDF/ICS dan pemeriksaan tautan Pusat File.</span></li>
+                        <li class="flex gap-2"><span class="text-[var(--theme-accent)]">•</span><span>Polesan material pada modal, navigasi, dan Rolling Name Machine.</span></li>
+                    </ul>
+                    <p class="text-[9px] text-[var(--text-secondary)] mt-3 pt-2 border-t border-[var(--border-solid)]">Catatan ini menjelaskan perubahan pada file pratinjau ini; belum berarti versi live sudah diperbarui.</p>
+                </div>
+
                 <button class="w-full glass-panel py-3 font-bold text-sm text-[var(--text-primary)] hover:border-[var(--theme-accent)] hover:text-[var(--theme-accent)] transition-colors btn-tap" onclick="UI.requestNotification()">
                     Izin Notifikasi Browser
                 </button>
             </div>
 
             <div class="text-center pt-8 opacity-70 pb-4">
-                <div class="font-serif font-bold text-sm">X.Luminance — OS 10.1 Pro</div>
+                <div class="font-serif font-bold text-sm">X.Luminance — V19.1.10</div>
                 <div class="text-[10px] mt-1">Dibuat Oleh AK ᡕᠵデᡁ᠊╾━</div>
             </div>
         </section>
@@ -944,7 +1153,7 @@
 
     <!-- LOGIC SCRIPT -->
     <script>
-        console.log("X.Luminance UI Engine v10.1 Pro initialized");
+        console.log("X.Luminance UI Engine v19.1.10 — Ocean Liquid Glass local preview");
 
         // Global Time & Date Utilities
         const DateUtils = {
@@ -1242,7 +1451,7 @@
         // SISTEM PENGACAKAN KELOMPOK ADIL & BEBAS BUG INPUT
         const SpinEngine = {
             pool: [], plan: [], results: [], currentGroup: 0,
-            isSpinning: false, calcMode: 'group', calcVal: null,
+            isSpinning: false, calcMode: 'group', calcVal: null, stepTimer: null, rollTimers: [], animationToken: 0, pendingTargets: [],
             
             ui: {
                 config: () => document.getElementById('spin-config-box'),
@@ -1370,6 +1579,9 @@
 
                 this.results = Array.from({length: numGroups}, () => []);
                 this.currentGroup = 0;
+                this.clearAnimationTimers();
+                this.animationToken++;
+                this.pendingTargets = [];
                 
                 this.ui.config().classList.add('hidden');
                 this.ui.res().classList.add('hidden');
@@ -1387,6 +1599,13 @@
                 this.spinOne();
             },
 
+            clearAnimationTimers() {
+                if (this.stepTimer) clearTimeout(this.stepTimer);
+                this.stepTimer = null;
+                this.rollTimers.forEach(timer => clearTimeout(timer));
+                this.rollTimers = [];
+            },
+
             spinOne() {
                 this.isSpinning = true;
                 
@@ -1402,21 +1621,31 @@
                     if(this.pool.length === 0) break;
                     targets.push(this.pool.pop());
                 }
+                this.pendingTargets = targets;
                 
                 this.renderRolling(targets);
                 XLFeedback.play('spin');
-                
-                setTimeout(() => {
-                    if(!this.isSpinning) return;
-                    this.results[this.currentGroup].push(...targets);
+                const token = ++this.animationToken;
+                this.stepTimer = setTimeout(() => {
+                    if(!this.isSpinning || token !== this.animationToken) return;
+                    this.results[this.currentGroup].push(...this.pendingTargets);
+                    this.pendingTargets = [];
                     XLFeedback.play('success');
-                    setTimeout(() => this.nextStep(), 600);
+                    this.stepTimer = setTimeout(() => {
+                        if (token === this.animationToken) this.nextStep();
+                    }, 600);
                 }, 900 + (needed * 120));
             },
 
             skipGroup() {
                 if(!this.isSpinning) return;
                 this.isSpinning = false;
+                this.animationToken++;
+                this.clearAnimationTimers();
+                if (this.pendingTargets.length) {
+                    this.results[this.currentGroup].push(...this.pendingTargets);
+                    this.pendingTargets = [];
+                }
                 let needed = this.plan[this.currentGroup] - this.results[this.currentGroup].length;
                 for(let i = 0; i < needed; i++) {
                     if(this.pool.length === 0) break;
@@ -1428,6 +1657,12 @@
             completeAll() {
                 if(!this.isSpinning) return;
                 this.isSpinning = false;
+                this.animationToken++;
+                this.clearAnimationTimers();
+                if (this.pendingTargets.length && this.currentGroup < this.results.length) {
+                    this.results[this.currentGroup].push(...this.pendingTargets);
+                    this.pendingTargets = [];
+                }
                 while(this.currentGroup < this.plan.length) {
                     let needed = this.plan[this.currentGroup] - this.results[this.currentGroup].length;
                     for(let i = 0; i < needed; i++) {
@@ -1441,6 +1676,9 @@
 
             finishAll() {
                 this.isSpinning = false;
+                this.animationToken++;
+                this.clearAnimationTimers();
+                this.pendingTargets = [];
                 this.ui.anim().classList.add('hidden');
                 this.ui.res().classList.remove('hidden');
                 this.showResults();
@@ -1463,17 +1701,18 @@
                     const track = document.getElementById(`roll-track-${i}`);
                     if(!track) return;
                     track.style.transition = 'none'; track.style.transform = 'translateY(0)';
-                    setTimeout(() => {
+                    this.rollTimers.push(setTimeout(() => {
+                        if (!this.isSpinning) return;
                         track.style.transition = `transform ${0.7 + i*0.12}s cubic-bezier(0.15, 0.85, 0.15, 1)`;
                         track.style.transform = `translateY(-${10 * 44}px)`; 
-                    }, 40);
+                    }, 40));
                 });
             },
 
             showResults() {
                 const list = document.getElementById('spin-results-list');
                 list.innerHTML = this.results.map((g, gIdx) => `
-                    <div class="p-3.5 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)] shadow-sm">
+                    <div class="glass-panel spin-result-card p-3.5 rounded-xl border shadow-sm">
                         <div class="font-extrabold text-xs text-[var(--text-primary)] mb-2 pb-2 border-b border-[var(--border-solid)] flex justify-between items-center">
                             <span class="bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-2 py-0.5 rounded border border-[var(--border-glass)]">KELOMPOK ${gIdx+1}</span>
                             <div class="flex items-center gap-2 text-[10px] text-[var(--text-secondary)] font-medium">
@@ -1638,6 +1877,20 @@
                 document.querySelectorAll('.set-perf').forEach(b => b.classList.toggle('text-white', b.dataset.v === Prefs.data.perf));
                 document.querySelectorAll('.set-tv').forEach(b => b.classList.toggle('bg-[var(--theme-accent)]', b.dataset.v === Prefs.data.tv));
                 document.querySelectorAll('.set-tv').forEach(b => b.classList.toggle('text-white', b.dataset.v === Prefs.data.tv));
+
+                const preview = document.getElementById('glass-live-preview');
+                const tier = document.getElementById('glass-preview-tier');
+                const desc = document.getElementById('glass-preview-desc');
+                if (preview && tier && desc) {
+                    const details = {
+                        full: ['Maksimal', 'Refleksi lembut, blur kaya, dan depth berlapis.'],
+                        balanced: ['Seimbang', 'Blur sedang dengan highlight statis yang tetap terasa glassy.'],
+                        performance: ['Hemat Daya', 'Blur minimal, permukaan lebih solid, dan dekorasi ringan.']
+                    }[Prefs.data.perf] || ['Seimbang', 'Glass surface adaptif untuk penggunaan harian.'];
+                    tier.textContent = details[0];
+                    desc.textContent = details[1];
+                    preview.dataset.previewPerf = Prefs.data.perf;
+                }
             },
 
             parseTime(t) { const [h, m] = t.split('.').map(Number); return h + (m/60); },
@@ -1856,8 +2109,86 @@
             }
         };
 
+        // Schedule export is generated only from the existing DB.schedule entries.
+        const ScheduleExport = {
+            dayOrder: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'],
+            dayCodes: { Senin: 'MO', Selasa: 'TU', Rabu: 'WE', Kamis: 'TH', Jumat: 'FR' },
+            escICS(value) {
+                return String(value ?? '').replace(/\\/g, '\\\\').replace(/\r?\n/g, '\\n').replace(/,/g, '\\,').replace(/;/g, '\\;');
+            },
+            toICSDate(date) {
+                return `${date.getFullYear()}${String(date.getMonth()+1).padStart(2,'0')}${String(date.getDate()).padStart(2,'0')}`;
+            },
+            toICSTime(time) {
+                const [hours, minutes] = time.split('.').map(Number);
+                return `${String(hours).padStart(2,'0')}${String(minutes || 0).padStart(2,'0')}00`;
+            },
+            nextDateFor(dayName, startTime) {
+                const now = DateUtils.getNow();
+                const todayIndex = (now.getDay() + 6) % 7;
+                const targetIndex = this.dayOrder.indexOf(dayName);
+                let delta = (targetIndex - todayIndex + 7) % 7;
+                const [sh, sm] = startTime.split('.').map(Number);
+                if (delta === 0 && (now.getHours() > sh || (now.getHours() === sh && now.getMinutes() >= sm))) delta = 7;
+                const date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                date.setDate(date.getDate() + delta);
+                return date;
+            },
+            downloadICS() {
+                const nowStamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+                const lines = [
+                    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//X.Luminance//Class Schedule 19.1.10//ID',
+                    'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'X-WR-CALNAME:Jadwal Kelas X.Luminance',
+                    'X-WR-TIMEZONE:Asia/Jakarta', 'BEGIN:VTIMEZONE', 'TZID:Asia/Jakarta',
+                    'X-LIC-LOCATION:Asia/Jakarta', 'BEGIN:STANDARD', 'TZOFFSETFROM:+0700', 'TZOFFSETTO:+0700',
+                    'TZNAME:WIB', 'DTSTART:19700101T000000', 'END:STANDARD', 'END:VTIMEZONE'
+                ];
+                let total = 0;
+                this.dayOrder.forEach(day => {
+                    (DB.schedule[day] || []).forEach((item, index) => {
+                        if (!item.t || !item.t.includes('-')) return;
+                        const [start, end] = item.t.split('-');
+                        const date = this.toICSDate(this.nextDateFor(day, start));
+                        const uid = `${day.toLowerCase()}-${index}-${this.escICS(item.m).replace(/[^a-z0-9]/gi,'') || 'class'}@xluminance`;
+                        lines.push(
+                            'BEGIN:VEVENT', `UID:${uid}`, `DTSTAMP:${nowStamp}`,
+                            `DTSTART;TZID=Asia/Jakarta:${date}T${this.toICSTime(start)}`,
+                            `DTEND;TZID=Asia/Jakarta:${date}T${this.toICSTime(end)}`,
+                            `RRULE:FREQ=WEEKLY;BYDAY=${this.dayCodes[day]}`,
+                            `SUMMARY:${this.escICS(item.m)}`,
+                            `DESCRIPTION:${this.escICS([item.g ? 'Pengajar: ' + item.g : '', item.br ? 'Jadwal istirahat' : 'Jadwal kelas X.Luminance'].filter(Boolean).join('\n'))}`,
+                            'END:VEVENT'
+                        );
+                        total++;
+                    });
+                });
+                lines.push('END:VCALENDAR');
+                if (!total) return UI.toast('Data jadwal tidak ditemukan untuk diekspor.');
+                const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a'); a.href = url; a.download = 'jadwal-x-luminance.ics';
+                document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1200);
+                UI.toast(`File ICS dibuat dari ${total} entri jadwal.`);
+            },
+            escapeHTML(value) {
+                return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+            },
+            printPDF() {
+                const popup = window.open('', '_blank');
+                if (!popup) return UI.toast('Izinkan pop-up untuk membuat PDF.');
+                const content = this.dayOrder.map(day => {
+                    const rows = (DB.schedule[day] || []).map(item => `<tr><td>${this.escapeHTML(item.t)}</td><td>${this.escapeHTML(item.m)}</td><td>${this.escapeHTML(item.g || (item.br ? 'Istirahat' : ''))}</td></tr>`).join('');
+                    return `<section><h2>${this.escapeHTML(day)}</h2><table><thead><tr><th>Waktu</th><th>Kegiatan / Mata Pelajaran</th><th>Pengajar</th></tr></thead><tbody>${rows || '<tr><td colspan="3">Belum ada data jadwal.</td></tr>'}</tbody></table></section>`;
+                }).join('');
+                popup.document.open();
+                popup.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Jadwal Kelas X.Luminance</title><style>body{font:13px Arial,sans-serif;color:#102a43;margin:28px}h1{color:#075985;margin-bottom:4px}p{color:#486581;margin-top:0}section{margin:22px 0;break-inside:avoid}h2{font-size:16px;color:#0369a1;margin:0 0 8px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #cbd5e1;padding:7px;text-align:left}th{background:#e0f2fe}tr:nth-child(even){background:#f8fafc}.note{font-size:10px;color:#64748b;margin-top:20px}@media print{body{margin:14mm}section{break-inside:avoid}}</style></head><body><h1>X.Luminance — Jadwal Pelajaran</h1><p>Kelas 10 L · SMAN 2 Majalengka</p>${content}<div class="note">Dokumen dibuat dari data jadwal yang tersimpan pada website X.Luminance.</div><script>window.addEventListener('load',()=>{window.focus();window.print();});<\/script></body></html>`);
+                popup.document.close();
+                UI.toast('Pratinjau cetak dibuka. Pilih “Simpan sebagai PDF”.');
+            }
+        };
+
         const UI = {
-            m: [], stdFilt: 'all', fileFilt: 'all',
+            m: [], stdFilt: 'all', fileFilt: 'all', fileStatus: {}, fileStatusChecking: new Set(),
 
             toggleDrawer() { document.getElementById('drawer').classList.toggle('active'); },
             showModal(id) { 
@@ -1960,11 +2291,16 @@
                 let l = FILE_LIBRARY;
                 
                 if(this.fileFilt !== 'all') l = l.filter(x => x.category.includes(this.fileFilt));
-                if(q) l = l.filter(x => x.title.toLowerCase().includes(q) || x.type.toLowerCase().includes(q) || x.desc.toLowerCase().includes(q));
+                if(q) l = l.filter(x => x.title.toLowerCase().includes(q) || x.type.toLowerCase().includes(q) || x.category.toLowerCase().includes(q) || x.desc.toLowerCase().includes(q) || (x.date || '').includes(q));
                 
                 const grid = document.getElementById('files-grid');
-                grid.innerHTML = l.length ? l.map(f => `
-                    <div class="glass-panel p-4 flex flex-col group card-hover">
+                grid.innerHTML = l.length ? l.map(f => {
+                    const status = this.fileStatus[f.id] || 'checking';
+                    const statusText = status === 'available' ? 'Tersedia' : status === 'failed' ? 'Gagal diakses' : status === 'unknown' ? 'Belum diverifikasi' : 'Memeriksa…';
+                    const statusClass = status === 'available' ? 'available' : status === 'failed' ? 'failed' : status === 'unknown' ? 'unknown' : 'checking';
+                    const dateText = f.date ? new Date(f.date + 'T00:00:00').toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'}) : 'Tanggal tidak dicantumkan';
+                    return `
+                    <div class="glass-panel p-4 flex flex-col group card-hover" data-file-id="${f.id}">
                         <div class="flex items-start gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] flex items-center justify-center shrink-0 border border-[var(--border-glass)] group-hover:bg-[var(--theme-accent)] group-hover:text-white transition-colors">
                                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
@@ -1973,18 +2309,50 @@
                                 <h4 class="font-bold text-xs line-clamp-2 leading-tight group-hover:text-[var(--theme-accent)] transition-colors text-[var(--text-primary)] pr-2">${f.title}</h4>
                                 <div class="text-[9px] text-[var(--text-secondary)] mt-1 flex items-center gap-1.5 font-bold">
                                     <span class="bg-[var(--bg-body)] px-1.5 py-0.5 rounded border border-[var(--border-solid)] uppercase text-[8px]">${f.type}</span>
-                                    <span>${f.size}</span>
+                                    <span>${f.size || 'Ukuran tidak dicantumkan'}</span>
                                     <span>• ${f.category}</span>
                                 </div>
+                                <div class="mt-1 text-[9px] text-[var(--text-secondary)]">Diperbarui: ${dateText}</div>
+                                <span class="file-status ${statusClass} mt-2" data-file-status="${f.id}">${statusText}</span>
                             </div>
                         </div>
                         <div class="text-[10px] text-[var(--text-secondary)] mb-4 line-clamp-2 leading-relaxed px-1">${f.desc}</div>
                         <div class="flex gap-2 mt-auto pt-1">
                             <button class="flex-1 py-2 text-[10px] font-bold bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-lg hover:border-[var(--theme-accent)] transition-colors btn-tap text-[var(--text-primary)] shadow-sm" onpointerdown="XLFeedback.play('tap')" onclick="UI.previewFile('${f.id}')">Pratinjau</button>
-                            <a href="${f.url}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 text-[10px] font-bold bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] rounded-lg hover:bg-[var(--theme-accent)] hover:text-white transition-colors flex items-center justify-center gap-1 border border-[var(--border-glass)] shadow-sm btn-tap" onpointerdown="XLFeedback.play('tap')"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Unduh</a>
+                            <a href="${status === 'failed' ? '' : f.url}" ${status === 'failed' ? 'aria-disabled="true"' : 'target="_blank" rel="noopener noreferrer"'} class="file-download-link ${status === 'failed' ? 'opacity-40 pointer-events-none' : ''} flex-1 py-2 text-[10px] font-bold bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] rounded-lg hover:bg-[var(--theme-accent)] hover:text-white transition-colors flex items-center justify-center gap-1 border border-[var(--border-glass)] shadow-sm btn-tap" onpointerdown="XLFeedback.play('tap')"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> ${status === 'failed' ? 'File tidak tersedia' : 'Unduh'}</a>
                         </div>
                     </div>
-                `).join('') : '<div class="col-span-full py-12 text-center opacity-50 font-bold text-xs"><svg class="w-8 h-8 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> File tidak ditemukan dalam pustaka.</div>';
+                `}).join('') : '<div class="col-span-full py-12 text-center opacity-50 font-bold text-xs"><svg class="w-8 h-8 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> File tidak ditemukan dalam pustaka.</div>';
+                this.checkFileAvailability();
+            },
+
+            checkFileAvailability() {
+                FILE_LIBRARY.forEach(async f => {
+                    if (this.fileStatus[f.id] || this.fileStatusChecking.has(f.id)) return;
+                    this.fileStatusChecking.add(f.id);
+                    try {
+                        const response = await fetch(f.url, { method: 'HEAD', mode: 'cors', cache: 'no-store' });
+                        this.fileStatus[f.id] = response.ok ? 'available' : ([404, 410].includes(response.status) ? 'failed' : 'unknown');
+                    } catch (error) {
+                        // CORS/network restrictions are inconclusive; do not label the file broken.
+                        this.fileStatus[f.id] = 'unknown';
+                    } finally {
+                        this.fileStatusChecking.delete(f.id);
+                        const badge = document.querySelector(`[data-file-status="${f.id}"]`);
+                        if (badge) {
+                            const state = this.fileStatus[f.id];
+                            badge.className = `file-status ${state === 'available' ? 'available' : state === 'failed' ? 'failed' : 'unknown'} mt-2`;
+                            badge.textContent = state === 'available' ? 'Tersedia' : state === 'failed' ? 'Gagal diakses' : 'Belum dapat diverifikasi';
+                            const downloadLink = document.querySelector(`[data-file-id="${f.id}"] .file-download-link`);
+                            if (downloadLink && state === 'failed') {
+                                downloadLink.removeAttribute('href');
+                                downloadLink.setAttribute('aria-disabled', 'true');
+                                downloadLink.classList.add('opacity-40', 'pointer-events-none');
+                                downloadLink.textContent = 'File tidak tersedia';
+                            }
+                        }
+                    }
+                });
             },
 
             previewFile(id) {
@@ -1997,6 +2365,11 @@
                 const container = document.getElementById('file-preview-content');
                 const ext = f.type.toLowerCase();
                 let html = '';
+                if (this.fileStatus[f.id] === 'failed') {
+                    container.innerHTML = `<div class="w-full h-full min-h-48 flex flex-col items-center justify-center p-6 text-center"><div class="font-bold text-sm text-rose-500 mb-2">File gagal diakses</div><p class="text-xs text-[var(--text-secondary)] max-w-sm">Tautan file mengembalikan respons gagal saat diperiksa. Minta pengelola kelas memperbaiki URL sebelum mengunduhnya.</p></div>`;
+                    this.showModal('modal-file-preview');
+                    return;
+                }
                 
                 const officeExts = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'txt', 'csv', 'rtf', 'ods', 'odp'];
                 const imgExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
@@ -2189,4 +2562,4 @@
         App.init();
     </script>
 </body>
-</html>
+                                                                                                                                                                                                             </html>
