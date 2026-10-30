@@ -241,13 +241,11 @@
         }
 
         /* Spin Roulette Elements */
-        .spin-wheel-box { position: relative; width: 240px; height: 240px; margin: 0 auto; border-radius: 50%; overflow: hidden; border: 4px solid var(--bg-surface-solid); box-shadow: var(--shadow-premium); transition: transform 3s cubic-bezier(0.15, 0.85, 0.15, 1); }
-        .spin-pointer-arrow { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 22px solid var(--theme-accent); z-index: 10; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.3)); }
+        .spin-wheel-box { position: relative; width: 240px; height: 240px; margin: 0 auto; border-radius: 50%; overflow: hidden; border: 4px solid var(--bg-surface-solid); box-shadow: var(--shadow-premium); }
+        @media (min-width: 640px) { .spin-wheel-box { width: 280px; height: 280px; } }
         
-        .rolling-slot-container { height: 55px; overflow: hidden; position: relative; background: var(--bg-surface-solid); border: 2px solid var(--border-glass); border-radius: 1rem; }
-        .rolling-slot-track { transition: transform 3s cubic-bezier(0.15, 0.85, 0.15, 1); }
-        .rolling-slot-item { height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 800; }
-
+        .spin-pointer-arrow { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 26px solid var(--theme-accent); z-index: 10; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)); }
+        
         /* Utils */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -257,6 +255,9 @@
         
         #offline-banner { transform: translateY(-100%); transition: transform 0.3s ease; }
         #offline-banner.active { transform: translateY(0); }
+        
+        /* Highlight match */
+        mark.search-highlight { background-color: rgba(2, 132, 199, 0.2); color: var(--theme-accent); border-radius: 2px; padding: 0 2px; font-weight: 800; }
     </style>
 </head>
 <body class="pb-28 pt-20 md:pt-24 mode-full">
@@ -318,12 +319,12 @@
             <div class="flex items-center gap-1.5">
                 <button type="button" aria-label="Notifikasi" class="p-2 rounded-xl hover:bg-[var(--border-solid)] btn-tap relative" onpointerdown="XLFeedback.play('tap')" onclick="UI.showModal('modal-notif')">
                     <svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border border-[var(--bg-surface-solid)]" id="bell-badge"></span>
+                    <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-[var(--bg-surface-solid)] hidden" id="bell-badge"></span>
                 </button>
                 <button type="button" aria-label="Tema Laut" class="p-2 rounded-xl hover:bg-[var(--border-solid)] btn-tap hidden sm:block" onpointerdown="XLFeedback.play('tap')" onclick="UI.showModal('modal-theme')">
                     <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                 </button>
-                <button type="button" aria-label="Pencarian" class="ml-1 p-2 px-3 rounded-xl bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] font-bold text-xs flex items-center gap-2 btn-tap" onpointerdown="XLFeedback.play('tap')" onclick="UI.showModal('modal-search')">
+                <button type="button" aria-label="Pencarian" class="ml-1 p-2 px-3 rounded-xl bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] font-bold text-xs flex items-center gap-2 btn-tap transition-transform" onpointerdown="XLFeedback.play('tap')" onclick="SmartSearch.open()">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     <span class="hidden sm:inline">Cari (Ctrl+K)</span>
                 </button>
@@ -442,6 +443,11 @@
                     <div class="space-y-3" id="home-tugas"></div>
                 </div>
             </div>
+            
+            <div class="text-[10px] font-bold text-center text-[var(--text-secondary)] opacity-70 flex justify-center items-center gap-1.5" aria-live="polite">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                Terakhir tersinkronisasi: <span id="dash-last-sync">--:--</span>
+            </div>
         </section>
 
         <!-- ================= SCHEDULE SECTION ================= -->
@@ -457,7 +463,7 @@
             <div class="glass-panel p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="font-bold text-2xl text-[var(--theme-accent)]" id="sched-title">Senin</h3>
-                    <span class="text-[10px] px-3 py-1 bg-[var(--theme-accent)] text-white rounded-full font-extrabold hidden" id="sched-today-badge">HARI INI</span>
+                    <span class="text-[10px] px-3 py-1 bg-[var(--theme-accent)] text-white rounded-full font-extrabold hidden shadow-md" id="sched-today-badge">HARI INI</span>
                 </div>
                 <div class="relative pl-6 border-l-2 border-[var(--border-glass)] space-y-5" id="sched-timeline"></div>
             </div>
@@ -470,14 +476,14 @@
                     <h2 class="font-serif text-3xl font-bold">Anggota Siswa</h2>
                     <p class="text-sm text-[var(--text-secondary)] mt-1">Daftar lengkap 46 siswa/i X.Luminance.</p>
                 </div>
-                <button class="px-4 py-2 bg-[var(--theme-gradient)] text-white rounded-xl text-xs font-bold btn-tap shadow-md flex items-center gap-2" onpointerdown="XLFeedback.play('tap')" onclick="UI.showModal('modal-spin')">
+                <button class="px-4 py-2 bg-[var(--theme-gradient)] text-white rounded-xl text-xs font-bold btn-tap shadow-[0_0_15px_var(--theme-accent-glow)] flex items-center gap-2 border border-white/20 hover:scale-105 transition-transform" onpointerdown="XLFeedback.play('tap')" onclick="UI.showModal('modal-spin')">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 12l-4-4-4 4M12 8v8"></path></svg> Spin Kelompok
                 </button>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3">
                 <div class="relative flex-grow">
-                    <input type="text" id="student-search" placeholder="Cari nama, absen, IG, atau jabatan..." class="w-full glass-panel py-3 pl-11 pr-4 outline-none focus:border-[var(--theme-accent)] text-sm font-medium" oninput="UI.renderStudents()">
+                    <input type="text" id="student-search" placeholder="Cari nama, absen, IG, atau jabatan..." class="w-full glass-panel py-3 pl-11 pr-4 outline-none focus:border-[var(--theme-accent)] text-sm font-medium transition-colors" oninput="UI.renderStudents()">
                     <svg class="icon-svg absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] w-5 h-5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
                 <div class="flex gap-1.5 bg-[var(--bg-surface)] border border-[var(--border-solid)] p-1.5 rounded-xl shrink-0 overflow-x-auto hide-scroll">
@@ -497,7 +503,7 @@
                     <h2 class="font-serif text-3xl font-bold">Kalender Akademik</h2>
                     <p class="text-sm text-[var(--text-secondary)] mt-1">Data resmi libur nasional & cuti bersama.</p>
                 </div>
-                <button class="px-4 py-2 bg-[var(--theme-accent)] text-white rounded-xl text-xs font-bold btn-tap shadow-md" onpointerdown="XLFeedback.play('tap')" onclick="CalendarEngine.goToday()">Hari Ini</button>
+                <button class="px-4 py-2 bg-[var(--theme-accent)] text-white rounded-xl text-xs font-bold btn-tap shadow-md hover:scale-105 transition-transform" onpointerdown="XLFeedback.play('tap')" onclick="CalendarEngine.goToday()">Hari Ini</button>
             </div>
 
             <div class="glass-panel p-5 sm:p-6 overflow-hidden">
@@ -524,7 +530,7 @@
                 </div>
 
                 <!-- Detail Panel -->
-                <div class="mt-6 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-2xl p-4 min-h-[90px]" id="cal-detail-panel"></div>
+                <div class="mt-6 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-2xl p-4 min-h-[90px] transition-all" id="cal-detail-panel"></div>
             </div>
         </section>
 
@@ -558,7 +564,7 @@
                     <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--border-solid)] rounded-xl transition-colors">
                         <div>
                             <div class="font-bold text-sm">Kurangi Animasi</div>
-                            <div class="text-[11px] text-[var(--text-secondary)]">Mematikan transisi berat.</div>
+                            <div class="text-[11px] text-[var(--text-secondary)]">Mematikan transisi untuk aksesibilitas/performa.</div>
                         </div>
                         <input type="checkbox" id="set-motion" class="w-5 h-5 accent-[var(--theme-accent)]" onchange="Prefs.save('motion', this.checked)">
                     </label>
@@ -568,14 +574,14 @@
                     <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--border-solid)] rounded-xl transition-colors">
                         <div>
                             <div class="font-bold text-sm">Efek Suara (Sound)</div>
-                            <div class="text-[11px] text-[var(--text-secondary)]">Umpan balik audio saat menekan tombol.</div>
+                            <div class="text-[11px] text-[var(--text-secondary)]">Umpan balik audio interaktif.</div>
                         </div>
                         <input type="checkbox" id="set-sound" class="w-5 h-5 accent-[var(--theme-accent)]" onchange="Prefs.save('sound', this.checked); XLFeedback.init(); if(this.checked) XLFeedback.play('success');">
                     </label>
                     <div class="h-px bg-[var(--border-solid)] mx-4"></div>
                     <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--border-solid)] rounded-xl transition-colors">
                         <div>
-                            <div class="font-bold text-sm">Haptic Feedback (Getaran)</div>
+                            <div class="font-bold text-sm">Haptic Feedback</div>
                             <div class="text-[11px] text-[var(--text-secondary)]" id="haptic-status-desc">Sensasi getar ringan pada HP yang mendukung.</div>
                         </div>
                         <input type="checkbox" id="set-haptic" class="w-5 h-5 accent-[var(--theme-accent)]" onchange="Prefs.save('haptic', this.checked); XLFeedback.init(); if(this.checked) XLFeedback.vibrate([20, 30, 20]);">
@@ -584,7 +590,7 @@
 
                 <div class="glass-panel p-4">
                     <div class="font-bold text-sm mb-1">Performa Visual</div>
-                    <div class="text-[11px] text-[var(--text-secondary)] mb-3">Pilih sesuai kemampuan perangkat.</div>
+                    <div class="text-[11px] text-[var(--text-secondary)] mb-3">Sesuaikan dengan kemampuan perangkat Anda.</div>
                     <div class="flex bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl p-1 gap-1">
                         <button class="flex-1 py-1.5 rounded-lg text-xs font-bold btn-tap set-perf" data-v="full" onclick="Prefs.save('perf', 'full')">Full</button>
                         <button class="flex-1 py-1.5 rounded-lg text-xs font-bold btn-tap set-perf" data-v="balanced" onclick="Prefs.save('perf', 'balanced')">Balanced</button>
@@ -601,7 +607,7 @@
                     </div>
                 </div>
                 
-                <button class="w-full glass-panel py-3 font-bold text-sm text-[var(--text-primary)] hover:border-[var(--theme-accent)] transition-colors btn-tap" onclick="UI.requestNotification()">
+                <button class="w-full glass-panel py-3 font-bold text-sm text-[var(--text-primary)] hover:border-[var(--theme-accent)] hover:text-[var(--theme-accent)] transition-colors btn-tap" onclick="UI.requestNotification()">
                     Minta Akses Notifikasi Browser
                 </button>
             </div>
@@ -627,55 +633,94 @@
 
     <!-- ================= MODALS ================= -->
 
-    <!-- Spin Kelompok Modal -->
+    <!-- Spin Kelompok Modal (ADVANCED) -->
     <div id="modal-spin" class="overlay" onclick="if(event.target===this) UI.closeModal('modal-spin')">
         <div class="modal-container">
-            <div class="modal-content max-w-lg">
-                <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
-                    <h3 class="font-bold flex items-center gap-2"><svg class="w-5 h-5 text-[var(--theme-accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 12l-4-4-4 4M12 8v8"></path></svg> Spin Acak Kelompok</h3>
-                    <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" aria-label="Tutup" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-spin')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            <div class="modal-content max-w-lg flex flex-col max-h-[90dvh]">
+                <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center bg-[var(--bg-surface-solid)] shrink-0 rounded-t-[2rem]">
+                    <h3 class="font-bold flex items-center gap-2 text-[var(--theme-accent)]"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 12l-4-4-4 4M12 8v8"></path></svg> Spin Acak Kelompok</h3>
+                    <button class="p-1.5 rounded-xl bg-[var(--border-solid)] hover:bg-[var(--border-glass)] btn-tap transition-colors" aria-label="Tutup" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-spin')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
-                <div class="p-5 space-y-4">
-                    <!-- Model Selector -->
-                    <div class="flex bg-[var(--bg-surface)] border border-[var(--border-solid)] p-1 rounded-xl">
-                        <button class="flex-1 py-2 text-xs font-bold rounded-lg spin-model-btn bg-[var(--theme-accent)] text-white shadow-md transition-all" data-m="roulette" onclick="SpinEngine.setModel('roulette')">Model 1: Roulette Wheel</button>
-                        <button class="flex-1 py-2 text-xs font-bold rounded-lg spin-model-btn text-[var(--text-secondary)] transition-all" data-m="rolling" onclick="SpinEngine.setModel('rolling')">Model 2: Rolling Machine</button>
+                
+                <div class="flex border-b border-[var(--border-solid)] shrink-0">
+                    <button class="flex-1 py-3 text-xs font-bold border-b-2 border-[var(--theme-accent)] text-[var(--theme-accent)] transition-colors" id="tab-spin-new" onclick="SpinEngine.switchTab('new')">Acak Baru</button>
+                    <button class="flex-1 py-3 text-xs font-bold text-[var(--text-secondary)] border-b-2 border-transparent hover:text-[var(--text-primary)] transition-colors" id="tab-spin-hist" onclick="SpinEngine.switchTab('hist')">Riwayat Undian</button>
+                </div>
+
+                <div class="overflow-y-auto hide-scroll flex-grow p-5" id="spin-scroll-area">
+                    
+                    <!-- NEW CONFIG TAB -->
+                    <div id="spin-content-new" class="space-y-4">
+                        <div id="spin-config-box" class="space-y-4 animate-fade-in">
+                            <div class="flex bg-[var(--bg-surface)] border border-[var(--border-solid)] p-1.5 rounded-xl">
+                                <button class="flex-1 py-2 text-xs font-bold rounded-lg spin-model-btn bg-[var(--theme-accent)] text-white shadow-md transition-all" data-m="roulette" onclick="SpinEngine.setModel('roulette')">Mode 1: Roulette</button>
+                                <button class="flex-1 py-2 text-xs font-bold rounded-lg spin-model-btn text-[var(--text-secondary)] transition-all hover:bg-[var(--border-solid)]" data-m="rolling" onclick="SpinEngine.setModel('rolling')">Mode 2: Rolling</button>
+                            </div>
+
+                            <div class="bg-[var(--bg-body)] p-4 rounded-xl border border-[var(--border-solid)] space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-bold">Jumlah Kelompok</label>
+                                        <div class="text-[10px] text-[var(--text-secondary)]">Dari 46 siswa terdaftar</div>
+                                    </div>
+                                    <input type="number" id="spin-num-groups" min="2" max="23" value="6" class="w-20 p-2 text-center rounded-xl bg-[var(--bg-surface-solid)] border border-[var(--theme-accent)] text-sm font-bold outline-none focus:ring-2 focus:ring-[var(--theme-accent-glow)] transition-all">
+                                </div>
+                                <div class="text-[11px] text-[var(--text-secondary)] leading-relaxed p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-lg flex gap-2">
+                                    <svg class="w-4 h-4 text-[var(--theme-accent)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    <span>Sistem akan membagi 46 siswa secara adil (Fisher-Yates alg) tanpa duplikasi atau sisa.</span>
+                                </div>
+                                <button class="w-full py-3.5 bg-[var(--theme-gradient)] text-white font-bold rounded-xl btn-tap shadow-[0_4px_15px_var(--theme-accent-glow)] hover:shadow-[0_6px_20px_var(--theme-accent-glow)] transition-all text-sm flex items-center justify-center gap-2" onpointerdown="XLFeedback.play('tap')" onclick="SpinEngine.startSpin()">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Mulai Mengacak
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- ANIMATION BOX -->
+                        <div id="spin-anim-box" class="hidden py-4 flex flex-col items-center justify-center space-y-6 min-h-[350px] animate-fade-in">
+                            <div id="spin-status" class="text-sm font-bold text-[var(--theme-accent)] bg-[var(--theme-accent-glow)] px-4 py-2 rounded-full border border-[var(--border-glass)] shadow-sm animate-pulse">Menyiapkan Mesin...</div>
+                            
+                            <!-- ROULETTE MODEL -->
+                            <div id="roulette-display" class="relative hidden w-full flex justify-center py-4">
+                                <div class="spin-pointer-arrow"></div>
+                                <div class="spin-wheel-box shadow-[0_0_30px_var(--theme-accent-glow)]" id="roulette-wheel"></div>
+                            </div>
+                            
+                            <!-- ROLLING MODEL -->
+                            <div id="rolling-display" class="hidden w-full max-w-sm space-y-1.5 bg-[var(--bg-body)] p-3 rounded-2xl border border-[var(--border-solid)] shadow-inner">
+                                <!-- Tracks inserted by JS -->
+                            </div>
+
+                            <div id="spin-controls" class="flex gap-3 w-full max-w-xs mt-4">
+                                <button class="flex-1 py-2.5 bg-[var(--bg-surface-solid)] border-2 border-[var(--border-solid)] text-[var(--text-secondary)] font-bold rounded-xl btn-tap text-xs hover:border-[var(--text-primary)] hover:text-[var(--text-primary)] transition-colors" onclick="SpinEngine.skipGroup()">Lewati Kelompok</button>
+                                <button class="flex-1 py-2.5 bg-rose-500/10 border-2 border-rose-500/20 text-rose-600 font-bold rounded-xl btn-tap text-xs hover:bg-rose-500 hover:text-white transition-colors" onclick="SpinEngine.completeAll()">Selesaikan Semua</button>
+                            </div>
+                        </div>
+
+                        <!-- RESULT BOX -->
+                        <div id="spin-result-box" class="hidden space-y-4 animate-fade-in">
+                            <div class="flex justify-between items-center pb-3 border-b border-[var(--border-solid)]">
+                                <h4 class="font-bold text-sm">Hasil Pembagian Final</h4>
+                                <div class="flex gap-2">
+                                    <button class="p-2 bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] rounded-lg btn-tap hover:bg-[var(--theme-accent)] hover:text-white transition-colors" title="Salin Semua" onclick="SpinEngine.copyAll()"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+                                    <button class="p-2 bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] rounded-lg btn-tap hover:bg-[var(--theme-accent)] hover:text-white transition-colors" title="Bagikan" onclick="SpinEngine.shareAll()"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button>
+                                </div>
+                            </div>
+                            
+                            <div id="spin-results-list" class="space-y-3"></div>
+                            
+                            <div class="flex gap-3 pt-2">
+                                <button class="flex-1 py-3 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] text-[var(--text-primary)] font-bold rounded-xl btn-tap text-sm" onclick="SpinEngine.resetUI()">Konfigurasi Ulang</button>
+                                <button class="flex-1 py-3 bg-[var(--theme-gradient)] text-white font-bold rounded-xl btn-tap text-sm shadow-md" onclick="SpinEngine.startSpin()">Acak Kembali (Re-Roll)</button>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Config Box -->
-                    <div id="spin-config-box" class="space-y-3 bg-[var(--bg-body)] p-4 rounded-xl border border-[var(--border-solid)]">
-                        <div class="flex items-center justify-between">
-                            <label class="text-xs font-bold">Jumlah Kelompok:</label>
-                            <input type="number" id="spin-num-groups" min="2" max="15" value="6" class="w-20 p-2 text-center rounded-lg bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] text-sm font-bold">
-                        </div>
-                        <div class="text-[10px] text-[var(--text-secondary)] leading-relaxed">
-                            46 siswa akan dibagi secara adil (Fisher-Yates shuffle) tanpa duplikasi.
-                        </div>
-                        <button class="w-full py-3 bg-[var(--theme-gradient)] text-white font-bold rounded-xl btn-tap shadow-md text-sm" onpointerdown="XLFeedback.play('tap')" onclick="SpinEngine.startSpin()">Mulai Acak Kelompok</button>
+                    <!-- HISTORY TAB -->
+                    <div id="spin-content-hist" class="hidden space-y-3">
+                        <div id="spin-hist-list" class="space-y-3"></div>
+                        <button class="w-full py-2.5 text-rose-500 font-bold text-xs bg-rose-500/10 rounded-xl hover:bg-rose-500 hover:text-white transition-colors hidden mt-4" id="btn-clear-hist" onclick="SpinEngine.clearHistory()">Hapus Semua Riwayat</button>
                     </div>
 
-                    <!-- Animation Display Box -->
-                    <div id="spin-anim-box" class="hidden py-6 flex flex-col items-center justify-center space-y-4">
-                        <div id="roulette-display" class="relative">
-                            <div class="spin-pointer-arrow"></div>
-                            <div class="spin-wheel-box" id="roulette-wheel"></div>
-                        </div>
-                        <div id="rolling-display" class="hidden w-full max-w-xs space-y-2">
-                            <div class="rolling-slot-container"><div class="rolling-slot-track" id="track-1"></div></div>
-                            <div class="rolling-slot-container"><div class="rolling-slot-track" id="track-2"></div></div>
-                        </div>
-                        <div id="spin-status" class="text-xs font-bold text-[var(--theme-accent)] animate-pulse">Mengacak anggota...</div>
-                    </div>
-
-                    <!-- Result Box -->
-                    <div id="spin-result-box" class="hidden space-y-3">
-                        <div class="flex justify-between items-center pb-2 border-b border-[var(--border-solid)]">
-                            <h4 class="font-bold text-sm">Hasil Pembagian Kelompok</h4>
-                            <button class="px-3 py-1 bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] text-xs font-bold rounded-lg btn-tap" onclick="SpinEngine.copyResults()">Salin Hasil</button>
-                        </div>
-                        <div id="spin-results-list" class="max-h-[350px] overflow-y-auto space-y-3 pr-1"></div>
-                        <button class="w-full py-2.5 bg-[var(--border-solid)] text-[var(--text-primary)] font-bold rounded-xl btn-tap text-xs" onclick="SpinEngine.resetUI()">Acak Kembali</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -694,37 +739,31 @@
         </div>
     </div>
 
-    <!-- Search Modal -->
+    <!-- Search Modal (SMART SEARCH) -->
     <div id="modal-search" class="overlay items-start pt-[10dvh]" onclick="if(event.target===this) UI.closeModal('modal-search')">
         <div class="modal-content max-w-xl mx-auto m-4 shadow-2xl">
-            <div class="p-3 flex items-center gap-3 border-b border-[var(--border-solid)] bg-[var(--bg-surface-solid)] sticky top-0">
-                <svg class="w-5 h-5 text-[var(--text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="global-search" placeholder="Cari siswa, jadwal, fitur..." class="flex-grow bg-transparent border-none outline-none text-sm font-bold" oninput="UI.globalSearch(this.value)">
-                <button class="text-[10px] font-bold bg-[var(--border-solid)] px-2 py-1 rounded text-[var(--text-secondary)] hover:bg-[var(--border-glass)]" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-search')">ESC</button>
+            <div class="p-3 flex items-center gap-3 border-b border-[var(--border-solid)] bg-[var(--bg-surface-solid)] sticky top-0 rounded-t-[2rem]">
+                <svg class="w-5 h-5 text-[var(--theme-accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="global-search" placeholder="Cari siswa, jadwal, kalender, fitur..." class="flex-grow bg-transparent border-none outline-none text-sm font-bold text-[var(--text-primary)]" oninput="SmartSearch.onInput(this.value)" autocomplete="off">
+                <button class="p-1.5 text-[var(--text-secondary)] hover:text-rose-500 rounded-lg hover:bg-[var(--border-solid)] transition-colors btn-tap hidden" id="search-clear-btn" onclick="document.getElementById('global-search').value=''; SmartSearch.search(''); document.getElementById('global-search').focus();"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                <button class="text-[10px] font-bold bg-[var(--border-solid)] px-2 py-1 rounded text-[var(--text-secondary)] hidden sm:block pointer-events-none">ESC</button>
             </div>
             <div class="max-h-[50dvh] overflow-y-auto p-2" id="search-results">
-                <div class="p-6 text-center text-xs opacity-50 font-bold">Ketik untuk mencari...</div>
+                <!-- Injected by SmartSearch -->
             </div>
         </div>
     </div>
 
-    <!-- Notifications Modal -->
+    <!-- Notifications Modal (SMART NOTIF) -->
     <div id="modal-notif" class="overlay" onclick="if(event.target===this) UI.closeModal('modal-notif')">
         <div class="modal-container items-start pt-20 justify-end sm:pr-4">
             <div class="modal-content max-w-sm w-full">
                 <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
-                    <h3 class="font-bold flex items-center gap-2"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path></svg> Notifikasi</h3>
-                    <button class="text-[10px] font-bold text-[var(--theme-accent)] hover:underline" onclick="UI.markNotifRead()">Tandai Dibaca</button>
+                    <h3 class="font-bold flex items-center gap-2"><svg class="w-4 h-4 text-[var(--theme-accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path></svg> Notifikasi</h3>
+                    <button class="text-[10px] font-bold text-[var(--theme-accent)] hover:underline btn-tap" onclick="NotifEngine.markAllRead()">Tandai Semua Dibaca</button>
                 </div>
                 <div class="p-2 space-y-1" id="notif-list">
-                    <div class="p-3 bg-[var(--theme-accent-glow)] rounded-xl border border-[var(--border-glass)]">
-                        <div class="font-bold text-xs flex justify-between">Tugas Baru <span class="text-[9px] opacity-60">Baru saja</span></div>
-                        <div class="text-[11px] mt-1">Latihan Soal Matematika Halaman 45-47 telah ditambahkan.</div>
-                    </div>
-                    <div class="p-3 hover:bg-[var(--bg-surface)] rounded-xl transition-colors">
-                        <div class="font-bold text-xs flex justify-between">Agenda Kelas <span class="text-[9px] opacity-60">1 jam lalu</span></div>
-                        <div class="text-[11px] mt-1 opacity-80">Rapat Pengurus Kelas dijadwalkan besok.</div>
-                    </div>
+                    <!-- Injected by NotifEngine -->
                 </div>
             </div>
         </div>
@@ -736,7 +775,7 @@
             <div class="bg-[var(--bg-surface-solid)] w-full max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border border-[var(--border-solid)] animate-pop-in relative">
                 <div class="h-28 bg-[var(--theme-gradient)] relative" id="sid-header">
                     <div class="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')]"></div>
-                    <button aria-label="Tutup Detail Siswa" class="absolute top-3 right-3 p-1.5 bg-black/20 text-white rounded-full btn-tap" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-student-id')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                    <button aria-label="Tutup Detail Siswa" class="absolute top-3 right-3 p-1.5 bg-black/20 text-white rounded-full btn-tap hover:bg-black/40 transition-colors" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-student-id')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
                 <div class="p-6 pt-0 flex flex-col items-center relative">
                     <div class="w-24 h-24 rounded-full border-4 border-[var(--bg-surface-solid)] shadow-lg -mt-12 mb-3 bg-[var(--bg-body)] flex items-center justify-center font-bold text-4xl text-white overflow-hidden" id="sid-photo" style="background: var(--theme-gradient);">A</div>
@@ -745,7 +784,7 @@
                         <span class="text-[10px] font-extrabold bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-3 py-1 rounded-full uppercase tracking-wider border border-[var(--border-glass)]" id="sid-role">Siswa</span>
                         <span class="text-[10px] font-extrabold bg-[var(--border-solid)] text-[var(--text-secondary)] px-3 py-1 rounded-full uppercase tracking-wider" id="sid-gender">L</span>
                     </div>
-                    <div class="w-full flex items-center justify-between bg-[var(--bg-body)] rounded-2xl p-4 border border-[var(--border-solid)] mb-4">
+                    <div class="w-full flex items-center justify-between bg-[var(--bg-body)] rounded-2xl p-4 border border-[var(--border-solid)] mb-4 shadow-inner">
                         <span class="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)]">Nomor Absen</span>
                         <span class="font-mono font-extrabold text-2xl text-[var(--theme-accent)]" id="sid-absen">00</span>
                     </div>
@@ -763,7 +802,7 @@
         <div class="modal-container">
             <div class="modal-content max-w-sm">
                 <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
-                    <h3 class="font-bold">Jadwal Kebersihan</h3>
+                    <h3 class="font-bold text-[var(--theme-accent)]">Jadwal Kebersihan</h3>
                     <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" aria-label="Tutup" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-piket')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
                 <div class="p-4 space-y-3">
@@ -778,7 +817,7 @@
         <div class="modal-container">
             <div class="modal-content max-w-sm">
                 <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
-                    <h3 class="font-bold">Aturan Seragam</h3>
+                    <h3 class="font-bold text-rose-500">Aturan Seragam</h3>
                     <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" aria-label="Tutup" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-uniform')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
                 <div class="p-4 space-y-2" id="uniform-list"></div>
@@ -790,7 +829,7 @@
         <div class="modal-container">
             <div class="modal-content max-w-md">
                 <div class="p-4 border-b border-[var(--border-solid)] flex justify-between items-center sticky top-0 bg-[var(--bg-surface-solid)] z-10">
-                    <h3 class="font-bold">Struktur Organisasi</h3>
+                    <h3 class="font-bold text-indigo-500">Struktur Organisasi</h3>
                     <button class="p-1 rounded-lg bg-[var(--border-solid)] btn-tap" aria-label="Tutup" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-org')"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </div>
                 <div class="p-5" id="org-list"></div>
@@ -800,7 +839,7 @@
 
     <!-- Lightbox Modal -->
     <div id="modal-lightbox" class="overlay bg-black/90 backdrop-blur-xl" onclick="if(event.target===this) UI.closeModal('modal-lightbox')">
-        <button class="absolute top-4 right-4 p-2 bg-white/10 text-white rounded-full z-50 btn-tap hover:bg-rose-600" aria-label="Tutup Galeri" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-lightbox')"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <button class="absolute top-4 right-4 p-2 bg-white/10 text-white rounded-full z-50 btn-tap hover:bg-rose-600 transition-colors" aria-label="Tutup Galeri" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-lightbox')"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         <div class="w-full h-full flex items-center justify-center p-4 pointer-events-none" id="lightbox-content"></div>
     </div>
 
@@ -818,20 +857,25 @@
                     <h2 class="font-serif font-bold text-2xl">X.Luminance</h2>
                     <p class="text-xs text-[var(--text-secondary)] font-medium mb-4">Solidaritas, Kreativitas, Prestasi.</p>
                     <div class="flex gap-2 w-full">
-                        <a href="https://www.instagram.com/x.luminance4us" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 bg-pink-500/10 text-pink-600 rounded-xl font-bold text-xs btn-tap border border-pink-500/20">Instagram</a>
-                        <button class="flex-1 py-2.5 bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] rounded-xl font-bold text-xs btn-tap border border-[var(--border-glass)]" onpointerdown="XLFeedback.play('tap')" onclick="UI.share()">Bagikan</button>
+                        <a href="https://www.instagram.com/x.luminance4us" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 bg-pink-500/10 text-pink-600 rounded-xl font-bold text-xs btn-tap border border-pink-500/20 hover:bg-pink-500 hover:text-white transition-colors">Instagram</a>
+                        <button class="flex-1 py-2.5 bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] rounded-xl font-bold text-xs btn-tap border border-[var(--border-glass)] hover:bg-[var(--theme-accent)] hover:text-white transition-colors" onpointerdown="XLFeedback.play('tap')" onclick="UI.share()">Bagikan Web</button>
                     </div>
                 </div>
-                <button class="mt-4 p-3 bg-[var(--bg-surface-solid)] rounded-full text-[var(--text-primary)] shadow-lg btn-tap pointer-events-auto" aria-label="Tutup Modal" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-class-id')"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                <button class="mt-4 p-3 bg-[var(--bg-surface-solid)] rounded-full text-[var(--text-primary)] shadow-lg btn-tap pointer-events-auto hover:bg-rose-500 hover:text-white transition-colors" aria-label="Tutup Modal" onpointerdown="XLFeedback.play('close')" onclick="UI.closeModal('modal-class-id')"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
             </div>
         </div>
     </div>
 
-    <!-- Toast -->
-    <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 rounded-full font-bold text-xs shadow-2xl z-[9999] transition-all transform -translate-y-10 opacity-0 pointer-events-none" aria-live="polite"></div>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 bg-[var(--bg-surface-solid)] border border-[var(--theme-accent)] text-[var(--text-primary)] px-4 py-2.5 rounded-full font-bold text-xs shadow-[0_10px_30px_rgba(0,0,0,0.3)] z-[9999] transition-all duration-300 transform -translate-y-10 opacity-0 pointer-events-none flex items-center gap-2" aria-live="polite">
+        <svg class="w-4 h-4 text-[var(--theme-accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span id="toast-msg"></span>
+    </div>
 
     <!-- LOGIC SCRIPT -->
     <script>
+        console.log("X.Luminance UI Engine v10.0 initialized");
+
         // Global Time & Date Utilities
         const DateUtils = {
             getNow() {
@@ -888,7 +932,12 @@
             ],
             cal: {
                 "2026-01-01": { type: "holiday", n: "Tahun Baru Masehi 2026" }, "2026-01-16": { type: "holiday", n: "Isra Mikraj Nabi Muhammad SAW" }, "2026-02-16": { type: "leave", n: "Cuti Bersama Tahun Baru Imlek" }, "2026-02-17": { type: "holiday", n: "Tahun Baru Imlek 2577" }, "2026-03-18": { type: "leave", n: "Cuti Bersama Hari Suci Nyepi" }, "2026-03-19": { type: "holiday", n: "Hari Suci Nyepi 1948" }, "2026-03-20": { type: "leave", n: "Cuti Bersama Idulfitri" }, "2026-03-21": { type: "holiday", n: "Hari Raya Idulfitri 1447 H" }, "2026-03-22": { type: "holiday", n: "Hari Raya Idulfitri 1447 H" }, "2026-03-23": { type: "leave", n: "Cuti Bersama Idulfitri" }, "2026-03-24": { type: "leave", n: "Cuti Bersama Idulfitri" }, "2026-04-03": { type: "holiday", n: "Wafat Yesus Kristus" }, "2026-04-05": { type: "holiday", n: "Paskah" }, "2026-05-01": { type: "holiday", n: "Hari Buruh Internasional" }, "2026-05-14": { type: "holiday", n: "Kenaikan Yesus Kristus" }, "2026-05-15": { type: "leave", n: "Cuti Kenaikan Yesus Kristus" }, "2026-05-27": { type: "holiday", n: "Hari Raya Iduladha 1447 H" }, "2026-05-28": { type: "leave", n: "Cuti Bersama Iduladha" }, "2026-05-31": { type: "holiday", n: "Hari Raya Waisak 2570 BE" }, "2026-06-01": { type: "holiday", n: "Hari Lahir Pancasila" }, "2026-06-16": { type: "holiday", n: "Tahun Baru Islam 1448 H" }, "2026-08-17": { type: "holiday", n: "Hari Kemerdekaan RI" }, "2026-08-25": { type: "holiday", n: "Maulid Nabi Muhammad SAW" }, "2026-12-24": { type: "leave", n: "Cuti Bersama Natal" }, "2026-12-25": { type: "holiday", n: "Hari Raya Natal" }
-            }
+            },
+            notifs: [
+                { id: 1, title: 'Tugas Baru', desc: 'Latihan Soal Matematika Halaman 45-47 telah ditambahkan.', time: 'Baru saja', type: 'tugas', read: false },
+                { id: 2, title: 'Agenda Kelas', desc: 'Rapat Pengurus Kelas dijadwalkan besok siang.', time: '1 jam lalu', type: 'agenda', read: false },
+                { id: 3, title: 'Pembaruan Sistem', desc: 'Spin Kelompok Advanced telah tersedia.', time: 'Kemarin', type: 'system', read: true }
+            ]
         };
 
         // XLFeedback Engine
@@ -936,6 +985,10 @@
                         gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(this.vol, t + 0.01); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
                         osc.start(t); osc.stop(t + 0.22);
                         this.vibrate([20, 40, 20]);
+                    } else if (type === 'spin') {
+                        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, t); osc.frequency.exponentialRampToValueAtTime(300, t + 1.0);
+                        gain.gain.setValueAtTime(this.vol*0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 1.0);
+                        osc.start(t); osc.stop(t + 1.1);
                     }
                 } catch(e) {}
             },
@@ -945,9 +998,153 @@
             }
         };
 
-        // Spin Engine
+        // Notification Engine (SMART NOTIF)
+        const NotifEngine = {
+            data: [],
+            init() {
+                try { this.data = JSON.parse(localStorage.getItem('xl_notifs_v10')) || DB.notifs; } 
+                catch(e) { this.data = DB.notifs; }
+                this.render();
+            },
+            save() { localStorage.setItem('xl_notifs_v10', JSON.stringify(this.data)); },
+            render() {
+                const unread = this.data.filter(n => !n.read).length;
+                const badge = document.getElementById('bell-badge');
+                if(unread > 0) { badge.classList.remove('hidden'); badge.classList.add('animate-pulse'); } 
+                else { badge.classList.add('hidden'); badge.classList.remove('animate-pulse'); }
+                
+                const list = document.getElementById('notif-list');
+                list.innerHTML = this.data.length ? this.data.map(n => `
+                    <div class="p-3 rounded-xl border transition-colors ${n.read ? 'bg-[var(--bg-surface-solid)] border-[var(--border-solid)] opacity-70' : 'bg-[var(--theme-accent-glow)] border-[var(--border-glass)] shadow-sm'}">
+                        <div class="font-bold text-xs flex justify-between items-center mb-1">
+                            <span class="${n.read ? '' : 'text-[var(--theme-accent)]'}">${n.title}</span>
+                            <span class="text-[9px] font-medium opacity-60">${n.time}</span>
+                        </div>
+                        <div class="text-[11px] leading-relaxed opacity-90">${n.desc}</div>
+                    </div>
+                `).join('') : '<div class="p-6 text-center text-xs opacity-50 font-bold border border-dashed border-[var(--border-solid)] rounded-xl">Tidak ada notifikasi.</div>';
+            },
+            markAllRead() {
+                this.data.forEach(n => n.read = true);
+                this.save(); this.render();
+                XLFeedback.play('success'); UI.toast('Semua ditandai dibaca.');
+            }
+        };
+
+        // Smart Search Engine
+        const SmartSearch = {
+            history: [], debounceTimer: null,
+            init() {
+                try { this.history = JSON.parse(localStorage.getItem('xl_search_hist')) || []; } catch(e) {}
+            },
+            open() {
+                UI.showModal('modal-search');
+                this.search(document.getElementById('global-search').value);
+            },
+            addHistory(q) {
+                if(!q || q.length < 2) return;
+                this.history = [q, ...this.history.filter(x => x !== q)].slice(0, 5);
+                localStorage.setItem('xl_search_hist', JSON.stringify(this.history));
+            },
+            clearHistory() {
+                this.history = []; localStorage.removeItem('xl_search_hist'); this.search('');
+            },
+            onInput(val) {
+                clearTimeout(this.debounceTimer);
+                const btn = document.getElementById('search-clear-btn');
+                if(val) btn.classList.remove('hidden'); else btn.classList.add('hidden');
+                this.debounceTimer = setTimeout(() => this.search(val.trim()), 250);
+            },
+            highlight(text, q) {
+                if(!q) return text;
+                return text.replace(new RegExp(q, 'gi'), match => `<mark class="search-highlight">${match}</mark>`);
+            },
+            search(q) {
+                const c = document.getElementById('search-results');
+                q = q.toLowerCase();
+                
+                if(!q) {
+                    let h = '';
+                    if(this.history.length) {
+                        h += `<div class="flex justify-between items-center px-2 mb-2 mt-1"><span class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider">Riwayat Pencarian</span> <button class="text-[10px] font-bold text-rose-500 hover:underline" onclick="SmartSearch.clearHistory()">Hapus</button></div>`;
+                        h += this.history.map(x => `<button class="w-full text-left p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex items-center gap-3 btn-tap mb-1.5 hover:border-[var(--theme-accent)] transition-colors" onpointerdown="XLFeedback.play('tap')" onclick="document.getElementById('global-search').value='${x}'; SmartSearch.search('${x}')"><svg class="w-4 h-4 text-[var(--text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <span class="font-bold text-xs">${x}</span></button>`).join('');
+                    } else {
+                        h = '<div class="p-8 text-center flex flex-col items-center opacity-50"><svg class="w-8 h-8 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span class="text-xs font-bold">Ketik untuk mencari siswa, jadwal, atau kalender...</span></div>';
+                    }
+                    c.innerHTML = h; return;
+                }
+
+                let h = '', count = 0;
+
+                // 1. Siswa
+                let fs = DB.students.filter(x => x.name.toLowerCase().includes(q) || String(x.no)===q || (x.ig&&x.ig.toLowerCase().includes(q)) || (DB.roles[x.name]&&DB.roles[x.name].toLowerCase().includes(q)));
+                if(fs.length) {
+                    h += `<div class="text-[10px] font-extrabold text-[var(--theme-accent)] uppercase tracking-wider px-2 mb-1.5 mt-2">Data Siswa (${fs.length})</div>`;
+                    h += fs.slice(0, 5).map(s => `<button class="w-full text-left p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex items-center gap-3 btn-tap mb-1.5 hover:border-[var(--theme-accent)] transition-colors group" onpointerdown="XLFeedback.play('tap')" onclick="SmartSearch.addHistory('${q}'); UI.openStudent('${s.id}'); UI.closeModal('modal-search')">
+                        <div class="w-8 h-8 rounded-full ${s.g==='L'?'bg-cyan-500/10 text-cyan-500':'bg-pink-500/10 text-pink-500'} font-bold text-[10px] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">${s.name[0]}</div>
+                        <div class="flex-grow min-w-0"><div class="font-bold text-xs truncate">${this.highlight(s.name, q)}</div><div class="text-[9px] opacity-70 mt-0.5">Absen ${String(s.no).padStart(2,'0')} ${DB.roles[s.name] ? '• ' + this.highlight(DB.roles[s.name], q) : ''}</div></div>
+                        <svg class="w-4 h-4 text-[var(--text-secondary)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>`).join('');
+                    count++;
+                }
+
+                // 2. Fitur & Navigasi
+                const features = [
+                    { k: ['jadwal', 'pelajaran'], n: 'Jadwal Pelajaran', a: () => { UI.switchTab('schedule'); } },
+                    { k: ['piket', 'kebersihan'], n: 'Jadwal Piket', a: () => { UI.showModal('modal-piket'); } },
+                    { k: ['kalender', 'libur', 'tanggal merah'], n: 'Kalender Akademik', a: () => { UI.switchTab('calendar'); } },
+                    { k: ['spin', 'acak', 'kelompok'], n: 'Spin Kelompok', a: () => { UI.showModal('modal-spin'); } },
+                    { k: ['pengaturan', 'setting', 'tema', 'gelap'], n: 'Pengaturan Sistem', a: () => { UI.switchTab('settings'); } },
+                    { k: ['seragam', 'baju'], n: 'Aturan Seragam', a: () => { UI.showModal('modal-uniform'); } },
+                ];
+                let ff = features.filter(f => f.k.some(kw => kw.includes(q) || q.includes(kw)));
+                if(ff.length) {
+                    h += `<div class="text-[10px] font-extrabold text-amber-500 uppercase tracking-wider px-2 mt-4 mb-1.5">Fitur Website</div>`;
+                    h += ff.map(f => `<button class="w-full text-left p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex items-center justify-between btn-tap mb-1.5 hover:border-[var(--theme-accent)] transition-colors" onpointerdown="XLFeedback.play('tap')" onclick="SmartSearch.addHistory('${q}'); (${f.a})(); UI.closeModal('modal-search')"><span class="font-bold text-xs">${this.highlight(f.n, q)}</span><svg class="w-4 h-4 text-[var(--text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg></button>`).join('');
+                    count++;
+                }
+
+                // 3. Pelajaran Specific
+                let fsc = [];
+                Object.entries(DB.schedule).forEach(([d, items]) => items.forEach(s => { if(s.m.toLowerCase().includes(q) || (s.g&&s.g.toLowerCase().includes(q))) fsc.push({d, ...s}); }));
+                if(fsc.length && !ff.some(x=>x.n==='Jadwal Pelajaran')) {
+                    h += `<div class="text-[10px] font-extrabold text-teal-500 uppercase tracking-wider px-2 mt-4 mb-1.5">Pelajaran Ditemukan</div>`;
+                    h += fsc.slice(0, 3).map(s => `<button class="w-full text-left p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex justify-between items-center btn-tap mb-1.5 hover:border-[var(--theme-accent)] transition-colors" onpointerdown="XLFeedback.play('tap')" onclick="SmartSearch.addHistory('${q}'); UI.switchTab('schedule'); UI.closeModal('modal-search')"><div><div class="font-bold text-xs">${this.highlight(s.m, q)}</div><div class="text-[9px] opacity-70 mt-0.5">${s.g?this.highlight(s.g,q):'-'}</div></div><span class="text-[9px] bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-2 py-1 rounded font-bold">${s.d}</span></button>`).join('');
+                    count++;
+                }
+
+                c.innerHTML = count ? h : '<div class="p-8 text-center flex flex-col items-center opacity-50 border border-dashed border-[var(--border-solid)] rounded-xl mt-2"><svg class="w-8 h-8 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg><span class="text-xs font-bold">Hasil tidak ditemukan.</span><span class="text-[10px] mt-1">Coba kata kunci lain.</span></div>';
+            }
+        };
+
+        // ADVANCED SPIN ENGINE
         const SpinEngine = {
-            model: 'roulette', timer: null, lastResult: null,
+            model: 'roulette', pool: [], plan: [], results: [], currentGroup: 0,
+            isSpinning: false, lastAngle: 0,
+            
+            ui: {
+                config: () => document.getElementById('spin-config-box'),
+                anim: () => document.getElementById('spin-anim-box'),
+                res: () => document.getElementById('spin-result-box'),
+                roulette: () => document.getElementById('roulette-display'),
+                rolling: () => document.getElementById('rolling-display'),
+                status: () => document.getElementById('spin-status'),
+                controls: () => document.getElementById('spin-controls'),
+                scroll: () => document.getElementById('spin-scroll-area')
+            },
+
+            switchTab(tab) {
+                document.getElementById('tab-spin-new').classList.replace(tab==='new'?'text-[var(--text-secondary)]':'text-[var(--theme-accent)]', tab==='new'?'text-[var(--theme-accent)]':'text-[var(--text-secondary)]');
+                document.getElementById('tab-spin-new').classList.toggle('border-transparent', tab!=='new');
+                document.getElementById('tab-spin-hist').classList.replace(tab==='hist'?'text-[var(--text-secondary)]':'text-[var(--theme-accent)]', tab==='hist'?'text-[var(--theme-accent)]':'text-[var(--text-secondary)]');
+                document.getElementById('tab-spin-hist').classList.toggle('border-transparent', tab!=='hist');
+                
+                document.getElementById('spin-content-new').classList.toggle('hidden', tab!=='new');
+                document.getElementById('spin-content-hist').classList.toggle('hidden', tab!=='hist');
+                
+                if(tab === 'hist') this.renderHistory();
+            },
+
             setModel(m) {
                 this.model = m;
                 document.querySelectorAll('.spin-model-btn').forEach(b => {
@@ -960,102 +1157,286 @@
                 });
                 XLFeedback.play('tick');
             },
+
             startSpin() {
-                const numGroups = parseInt(document.getElementById('spin-num-groups').value) || 6;
-                if (numGroups < 2 || numGroups > 15) { UI.toast("Jumlah kelompok antara 2 - 15"); return; }
+                const groups = parseInt(document.getElementById('spin-num-groups').value) || 6;
+                if(groups < 2 || groups > 46) return UI.toast("Pilih 2 - 46 Kelompok");
                 
-                document.getElementById('spin-config-box').classList.add('hidden');
-                document.getElementById('spin-anim-box').classList.remove('hidden');
-                
-                // Fair Shuffle (Fisher-Yates)
-                let shuffled = [...DB.students];
-                let cur = shuffled.length;
-                while (cur !== 0) {
+                this.pool = [...DB.students];
+                let cur = this.pool.length;
+                while (cur !== 0) { // Fisher-Yates
                     let rIdx = 0;
-                    if (window.crypto && window.crypto.getRandomValues) {
-                        let rand = new Uint32Array(1);
-                        window.crypto.getRandomValues(rand);
-                        rIdx = rand[0] % cur;
-                    } else { rIdx = Math.floor(Math.random() * cur); }
-                    cur--;
-                    [shuffled[cur], shuffled[rIdx]] = [shuffled[rIdx], shuffled[cur]];
+                    if (window.crypto && window.crypto.getRandomValues) { let rand = new Uint32Array(1); window.crypto.getRandomValues(rand); rIdx = rand[0] % cur; } 
+                    else { rIdx = Math.floor(Math.random() * cur); }
+                    cur--; [this.pool[cur], this.pool[rIdx]] = [this.pool[rIdx], this.pool[cur]];
                 }
                 
-                let res = Array.from({length: numGroups}, () => []);
-                shuffled.forEach((s, idx) => res[idx % numGroups].push(s));
-                this.lastResult = res;
+                let base = Math.floor(46 / groups);
+                let rem = 46 % groups;
+                this.plan = Array.from({length: groups}, (_, i) => base + (i < rem ? 1 : 0));
+                this.results = Array.from({length: groups}, () => []);
+                this.currentGroup = 0;
+                
+                this.ui.config().classList.add('hidden');
+                this.ui.res().classList.add('hidden');
+                this.ui.anim().classList.remove('hidden');
+                this.ui.controls().classList.remove('hidden');
+                
+                this.nextStep();
+            },
+
+            nextStep() {
+                if (this.currentGroup >= this.plan.length) return this.finishAll();
+                if (this.results[this.currentGroup].length >= this.plan[this.currentGroup]) {
+                    this.currentGroup++; return this.nextStep();
+                }
+                this.spinOne();
+            },
+
+            spinOne() {
+                this.isSpinning = true;
+                
+                if (Prefs.data.motion || Prefs.data.perf === 'performance') {
+                    return this.skipGroup(); // Instant for accessibility
+                }
 
                 if (this.model === 'roulette') {
-                    document.getElementById('roulette-display').classList.remove('hidden');
-                    document.getElementById('rolling-display').classList.add('hidden');
-                    const w = document.getElementById('roulette-wheel');
-                    const colors = ['#0284c7', '#38bdf8', '#0ea5e9', '#0369a1', '#3b82f6', '#0284c7'];
-                    let gradientStr = 'conic-gradient(';
-                    let step = 360 / 10;
-                    for(let i=0; i<10; i++) gradientStr += `${colors[i%colors.length]} ${i*step}deg ${(i+1)*step}deg, `;
-                    w.style.background = gradientStr.slice(0, -2) + ')';
+                    this.ui.status().innerHTML = `Mengacak untuk <b>Kelompok ${this.currentGroup+1}</b>... <span class="text-[10px] ml-1 bg-white/20 px-1.5 rounded">${this.results[this.currentGroup].length+1}/${this.plan[this.currentGroup]}</span>`;
                     
-                    setTimeout(() => { w.style.transform = `rotate(${1800 + Math.floor(Math.random()*360)}deg)`; }, 50);
+                    let targetIdx = Math.floor(Math.random() * this.pool.length);
+                    let targetStudent = this.pool[targetIdx];
+                    
+                    this.ui.roulette().classList.remove('hidden');
+                    this.ui.rolling().classList.add('hidden');
+                    this.renderRoulette(targetIdx);
+                    
+                    XLFeedback.play('spin');
+                    setTimeout(() => {
+                        if(!this.isSpinning) return;
+                        this.pool.splice(targetIdx, 1);
+                        this.results[this.currentGroup].push(targetStudent);
+                        XLFeedback.play('success');
+                        setTimeout(() => this.nextStep(), 400);
+                    }, 1400);
+                    
                 } else {
-                    document.getElementById('roulette-display').classList.add('hidden');
-                    document.getElementById('rolling-display').classList.remove('hidden');
-                    for(let i=1; i<=2; i++) {
-                        let tr = document.getElementById(`track-${i}`);
-                        let html = '';
-                        for(let j=0; j<25; j++) html += `<div class="rolling-slot-item">${DB.students[Math.floor(Math.random()*DB.students.length)].name.split(' ')[0]}</div>`;
-                        tr.innerHTML = html;
-                        tr.style.transform = 'translateY(0)';
-                        setTimeout(() => { tr.style.transform = `translateY(-${55 * 18}px)`; }, 50);
+                    this.ui.status().innerHTML = `Menggulir <b>Kelompok ${this.currentGroup+1}</b>... <span class="text-[10px] ml-1 bg-white/20 px-1.5 rounded">${this.plan[this.currentGroup]} Anggota</span>`;
+                    
+                    let needed = this.plan[this.currentGroup] - this.results[this.currentGroup].length;
+                    let targets = [];
+                    for(let i=0; i<needed; i++) {
+                        let idx = Math.floor(Math.random() * this.pool.length);
+                        targets.push(this.pool.splice(idx, 1)[0]);
                     }
+                    
+                    this.ui.roulette().classList.add('hidden');
+                    this.ui.rolling().classList.remove('hidden');
+                    this.renderRolling(targets);
+                    
+                    XLFeedback.play('spin');
+                    setTimeout(() => {
+                        if(!this.isSpinning) return;
+                        this.results[this.currentGroup].push(...targets);
+                        XLFeedback.play('success');
+                        setTimeout(() => this.nextStep(), 600);
+                    }, 1000 + (needed * 200));
                 }
-
-                this.timer = setInterval(() => { XLFeedback.play('tick'); }, 120);
-
-                setTimeout(() => {
-                    clearInterval(this.timer);
-                    XLFeedback.play('success');
-                    document.getElementById('spin-anim-box').classList.add('hidden');
-                    this.showResults();
-                }, 3200);
             },
-            showResults() {
-                const box = document.getElementById('spin-result-box');
-                const list = document.getElementById('spin-results-list');
-                list.innerHTML = this.lastResult.map((g, i) => `
-                    <div class="p-3 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)]">
-                        <div class="font-extrabold text-xs text-[var(--theme-accent)] mb-1.5 flex justify-between">
-                            <span>KELOMPOK ${i+1}</span>
-                            <span class="text-[10px] text-[var(--text-secondary)] font-medium">${g.length} Orang</span>
-                        </div>
-                        <div class="space-y-1">
-                            ${g.map((s, idx) => `<div class="text-xs font-bold text-[var(--text-primary)] flex gap-2"><span class="opacity-40 font-mono">${idx+1}.</span><span>${s.name}</span></div>`).join('')}
+
+            skipGroup() {
+                if(!this.isSpinning) return;
+                this.isSpinning = false;
+                let needed = this.plan[this.currentGroup] - this.results[this.currentGroup].length;
+                for(let i=0; i<needed; i++) {
+                    if(this.pool.length === 0) break;
+                    this.results[this.currentGroup].push(this.pool.splice(0, 1)[0]);
+                }
+                this.currentGroup++; this.nextStep();
+            },
+
+            completeAll() {
+                if(!this.isSpinning) return;
+                this.isSpinning = false;
+                while(this.currentGroup < this.plan.length) {
+                    let needed = this.plan[this.currentGroup] - this.results[this.currentGroup].length;
+                    for(let i=0; i<needed; i++) {
+                        if(this.pool.length === 0) break;
+                        this.results[this.currentGroup].push(this.pool.splice(0, 1)[0]);
+                    }
+                    this.currentGroup++;
+                }
+                this.finishAll();
+            },
+
+            finishAll() {
+                this.isSpinning = false;
+                this.ui.anim().classList.add('hidden');
+                this.ui.res().classList.remove('hidden');
+                this.showResults();
+                this.saveHistory();
+                XLFeedback.play('success');
+            },
+
+            renderRoulette(targetIdx) {
+                const w = document.getElementById('roulette-wheel');
+                const n = this.pool.length;
+                if(n===0) return;
+                const step = 360 / n;
+                
+                let bg = 'conic-gradient(';
+                const colors = ['#0284c7', '#0ea5e9', '#38bdf8', '#0369a1', '#0284c7'];
+                for(let i=0; i<n; i++) bg += `${colors[i%colors.length]} ${i*step}deg ${(i+1)*step}deg, `;
+                w.style.background = bg.slice(0,-2) + ')';
+                
+                const targetAngle = 360 - (targetIdx * step + step/2);
+                const spins = 3 * 360; 
+                this.lastAngle = (this.lastAngle || 0) % 360;
+                
+                w.style.transition = 'none'; w.style.transform = `rotate(${this.lastAngle}deg)`;
+                void w.offsetWidth; 
+                
+                let newAngle = this.lastAngle + spins + targetAngle - (this.lastAngle % 360);
+                w.style.transition = 'transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                w.style.transform = `rotate(${newAngle}deg)`;
+                this.lastAngle = newAngle;
+            },
+
+            renderRolling(targets) {
+                const container = document.getElementById('rolling-display');
+                container.innerHTML = targets.map((s, i) => `
+                    <div class="rolling-slot-container rounded-xl bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] h-11 overflow-hidden relative shadow-sm">
+                        <div class="rolling-slot-track w-full flex flex-col" id="roll-track-${i}">
+                            ${Array.from({length: 12}).map(()=> `<div class="h-11 flex items-center justify-center font-bold text-xs opacity-40 blur-[1px] select-none">${DB.students[Math.floor(Math.random()*DB.students.length)].name}</div>`).join('')}
+                            <div class="h-11 flex items-center justify-center font-extrabold text-sm text-[var(--theme-accent)]">${s.name}</div>
                         </div>
                     </div>
                 `).join('');
-                box.classList.remove('hidden');
+                
+                targets.forEach((_, i) => {
+                    const track = document.getElementById(`roll-track-${i}`);
+                    track.style.transition = 'none'; track.style.transform = 'translateY(0)';
+                    setTimeout(() => {
+                        track.style.transition = `transform ${0.8 + i*0.15}s cubic-bezier(0.15, 0.85, 0.15, 1)`;
+                        track.style.transform = `translateY(-${12 * 44}px)`; 
+                    }, 50);
+                });
             },
+
+            showResults() {
+                const list = document.getElementById('spin-results-list');
+                list.innerHTML = this.results.map((g, gIdx) => `
+                    <div class="p-3 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)] shadow-sm">
+                        <div class="font-extrabold text-xs text-[var(--text-primary)] mb-2 pb-2 border-b border-[var(--border-solid)] flex justify-between items-center">
+                            <span class="bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-2 py-0.5 rounded">KELOMPOK ${gIdx+1}</span>
+                            <div class="flex items-center gap-2 text-[10px] text-[var(--text-secondary)] font-medium">
+                                <span>${g.length} Anggota</span>
+                                <button class="hover:text-[var(--theme-accent)] transition-colors btn-tap" onclick="SpinEngine.copyGroup(${gIdx})">Salin</button>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            ${g.map((s, sIdx) => `
+                                <div class="text-xs font-bold text-[var(--text-secondary)] flex justify-between items-center hover:bg-[var(--bg-surface-solid)] p-1 rounded transition-colors group">
+                                    <div class="flex gap-2 truncate"><span class="opacity-40 font-mono w-4">${sIdx+1}.</span><span class="text-[var(--text-primary)] truncate">${s.name}</span></div>
+                                    <select class="opacity-0 group-hover:opacity-100 bg-transparent text-[9px] text-[var(--theme-accent)] font-bold outline-none cursor-pointer border border-[var(--border-glass)] rounded" onchange="SpinEngine.moveStudent(${gIdx}, ${sIdx}, this.value)">
+                                        <option value="">Pindah...</option>
+                                        ${this.plan.map((_, i) => i !== gIdx ? `<option value="${i}">Ke Kel ${i+1}</option>` : '').join('')}
+                                    </select>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+                this.ui.scroll().scrollTop = 0;
+            },
+
+            moveStudent(fromGroup, sIdx, toGroup) {
+                if(toGroup === "") return;
+                toGroup = parseInt(toGroup);
+                const s = this.results[fromGroup].splice(sIdx, 1)[0];
+                this.results[toGroup].push(s);
+                this.showResults();
+                UI.toast(`${s.name.split(' ')[0]} dipindah ke Kelompok ${toGroup+1}`);
+            },
+
             resetUI() {
-                document.getElementById('spin-config-box').classList.remove('hidden');
-                document.getElementById('spin-anim-box').classList.add('hidden');
-                document.getElementById('spin-result-box').classList.add('hidden');
+                this.ui.res().classList.add('hidden');
+                this.ui.anim().classList.add('hidden');
+                this.ui.config().classList.remove('hidden');
                 const w = document.getElementById('roulette-wheel');
                 w.style.transition = 'none'; w.style.transform = 'rotate(0deg)';
-                setTimeout(() => { w.style.transition = 'transform 3s cubic-bezier(0.15, 0.85, 0.15, 1)'; }, 50);
+                this.lastAngle = 0;
             },
-            copyResults() {
-                if(!this.lastResult) return;
+
+            formatResultsText() {
                 let text = "PEMBAGIAN KELOMPOK X.LUMINANCE\n\n";
-                this.lastResult.forEach((g, i) => {
-                    text += `[ Kelompok ${i+1} ]\n`;
+                this.results.forEach((g, i) => {
+                    text += `[ KELOMPOK ${i+1} ]\n`;
                     g.forEach((s, idx) => text += `${idx+1}. ${s.name}\n`);
                     text += "\n";
                 });
-                navigator.clipboard.writeText(text);
-                UI.toast("Hasil disalin ke clipboard!");
+                return text;
+            },
+
+            copyGroup(idx) {
+                let text = `[ KELOMPOK ${idx+1} ]\n`;
+                this.results[idx].forEach((s, i) => text += `${i+1}. ${s.name}\n`);
+                navigator.clipboard.writeText(text); UI.toast(`Kelompok ${idx+1} disalin!`);
+            },
+            copyAll() {
+                navigator.clipboard.writeText(this.formatResultsText()); UI.toast("Semua hasil disalin!");
+            },
+            shareAll() {
+                const text = this.formatResultsText();
+                if(navigator.share) { navigator.share({ title: 'Hasil Spin Kelompok 10L', text: text }).catch(()=>{}); } 
+                else { this.copyAll(); }
+            },
+
+            saveHistory() {
+                let hist = JSON.parse(localStorage.getItem('xl_spin_hist_v10') || '[]');
+                hist.unshift({ date: new Date().toLocaleString('id-ID'), results: this.results });
+                if(hist.length > 5) hist.pop();
+                localStorage.setItem('xl_spin_hist_v10', JSON.stringify(hist));
+            },
+            renderHistory() {
+                let hist = JSON.parse(localStorage.getItem('xl_spin_hist_v10') || '[]');
+                const list = document.getElementById('spin-hist-list');
+                const btn = document.getElementById('btn-clear-hist');
+                
+                if(hist.length) {
+                    btn.classList.remove('hidden');
+                    list.innerHTML = hist.map((h, i) => `
+                        <div class="p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl shadow-sm">
+                            <div class="text-[10px] font-bold text-[var(--text-secondary)] mb-2">${h.date}</div>
+                            <div class="text-xs font-bold text-[var(--text-primary)] mb-2">${h.results.length} Kelompok Acak</div>
+                            <button class="w-full py-1.5 bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] rounded font-bold text-[10px] btn-tap" onclick="SpinEngine.loadPastResult(${i})">Buka Hasil Ini</button>
+                        </div>
+                    `).join('');
+                } else {
+                    btn.classList.add('hidden');
+                    list.innerHTML = '<div class="p-8 text-center text-xs opacity-50 font-bold border border-dashed border-[var(--border-solid)] rounded-xl">Belum ada riwayat undian.</div>';
+                }
+            },
+            loadPastResult(idx) {
+                let hist = JSON.parse(localStorage.getItem('xl_spin_hist_v10') || '[]');
+                if(hist[idx]) {
+                    this.results = hist[idx].results;
+                    this.plan = this.results.map(g => g.length); // mock plan
+                    this.switchTab('new');
+                    this.ui.config().classList.add('hidden');
+                    this.ui.anim().classList.add('hidden');
+                    this.ui.res().classList.remove('hidden');
+                    this.showResults();
+                    UI.toast("Memuat riwayat undian...");
+                }
+            },
+            clearHistory() {
+                if(confirm("Hapus semua riwayat undian?")) {
+                    localStorage.removeItem('xl_spin_hist_v10'); this.renderHistory();
+                }
             }
         };
 
-        // App Engine
+        // Core App Engine
         const App = {
             init() {
                 this.updateClock(); setInterval(() => this.updateClock(), 1000);
@@ -1068,6 +1449,9 @@
                 UI.renderUniforms();
                 UI.renderOrg();
                 CalendarEngine.init();
+                NotifEngine.init();
+                SmartSearch.init();
+                
                 this.checkNetwork();
                 window.addEventListener('online', () => this.checkNetwork());
                 window.addEventListener('offline', () => this.checkNetwork());
@@ -1076,7 +1460,7 @@
             
             checkNetwork() {
                 const b = document.getElementById('offline-banner');
-                if(!navigator.onLine) { b.classList.add('active'); b.innerHTML = 'Koneksi offline — Menampilkan data tersimpan'; }
+                if(!navigator.onLine) { b.classList.add('active'); b.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a15.16 15.16 0 0 1-2.43 3.44"/><line x1="2" y1="2" x2="22" y2="22"/></svg> Koneksi offline — Menampilkan data tersimpan'; }
                 else { b.innerHTML = 'Koneksi tersambung kembali'; setTimeout(()=>b.classList.remove('active'), 2000); }
             },
 
@@ -1104,6 +1488,10 @@
 
                 document.getElementById('hero-time').innerText = d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
                 document.getElementById('hero-date').innerText = `${dn}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+                
+                const syncEl = document.getElementById('dash-last-sync');
+                if(syncEl && d.getSeconds() === 0) syncEl.innerText = d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+                if(syncEl && syncEl.innerText === '--:--') syncEl.innerText = d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
 
                 let sub = "Di Luar Jam Sekolah", lbl = "STATUS", cd = "-", pct = 0;
 
@@ -1125,36 +1513,26 @@
                             let s_ = remS % 60;
                             cd = m > 59 ? `${Math.floor(m/60)}j ${m%60}m lagi` : `${m}m ${s_}s lagi`;
                             pct = ((ms - st) / (en - st)) * 100; 
-                            found = true;
-                            break;
+                            found = true; break;
                         } else if (ms < st) {
                             if (i === 0) { 
-                                sub = "Persiapan Belajar"; 
-                                lbl = "MENUNGGU MASUK"; 
-                                let remS = Math.floor((st - ms) * 3600);
-                                let h = Math.floor(remS / 3600);
-                                let m = Math.floor((remS % 3600) / 60);
+                                sub = "Persiapan Belajar"; lbl = "MENUNGGU MASUK"; 
+                                let remS = Math.floor((st - ms) * 3600); let h = Math.floor(remS / 3600); let m = Math.floor((remS % 3600) / 60);
                                 cd = h > 0 ? `Mulai ${h}j ${m}m` : `Mulai ${m}m ${remS % 60}s`;
                             } else {
                                 let prevEn = this.parseTime(s[i-1].t.split('-')[1]);
                                 if (ms >= prevEn && ms < st) {
-                                    sub = "Jeda Waktu";
-                                    lbl = "PERALIHAN";
-                                    let remS = Math.floor((st - ms) * 3600);
-                                    let m = Math.floor(remS / 60);
+                                    sub = "Jeda Waktu"; lbl = "PERALIHAN";
+                                    let remS = Math.floor((st - ms) * 3600); let m = Math.floor(remS / 60);
                                     cd = m > 0 ? `${m}m ${remS % 60}s lagi` : `${remS % 60}s lagi`;
                                     pct = ((ms - prevEn) / (st - prevEn)) * 100;
                                 }
                             }
-                            found = true;
-                            break;
+                            found = true; break;
                         }
                     }
-                    
                     if (!found && ms >= this.parseTime(s[s.length-1].t.split('-')[1])) {
-                        sub = "Pelajaran Selesai"; lbl = "HARI INI";
-                        cd = "Selesai";
-                        pct = 100;
+                        sub = "Pelajaran Selesai"; lbl = "HARI INI"; cd = "Selesai"; pct = 100;
                     }
                 } else {
                     sub = "Libur Akhir Pekan"; lbl = "WEEKEND";
@@ -1179,8 +1557,8 @@
                     <button class="w-full p-3 rounded-xl border flex items-center justify-between btn-tap ${Prefs.data.theme === t.id ? 'border-[var(--theme-accent)] bg-[var(--theme-accent-glow)]' : 'border-[var(--border-solid)] bg-[var(--bg-surface-solid)]'}" onpointerdown="XLFeedback.play('tap')" onclick="Prefs.save('theme', '${t.id}'); App.renderThemes()">
                         <span class="font-bold text-sm">${t.name}</span>
                         <div class="flex gap-1">
-                            <div class="w-4 h-4 rounded-full" style="background:${t.c1}"></div>
-                            <div class="w-4 h-4 rounded-full" style="background:${t.c2}"></div>
+                            <div class="w-4 h-4 rounded-full shadow-inner border border-white/20" style="background:${t.c1}"></div>
+                            <div class="w-4 h-4 rounded-full shadow-inner border border-white/20" style="background:${t.c2}"></div>
                         </div>
                     </button>
                 `).join('');
@@ -1194,28 +1572,22 @@
                 document.getElementById('badge-tugas').innerText = `${tugasCount} Deadline`;
 
                 if (agendaCount > 0) {
-                    document.getElementById('home-agenda').innerHTML = DB.agenda.map(a => `<div class="flex justify-between items-center text-xs p-2.5 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)]"><div><div class="font-bold">${a.title}</div><div class="text-[10px] text-[var(--text-secondary)] mt-0.5">${a.desc}</div></div><span class="bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded font-bold">${a.type}</span></div>`).join('');
+                    document.getElementById('home-agenda').innerHTML = DB.agenda.map(a => `<div class="flex justify-between items-center text-xs p-3 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)] hover:border-amber-500/50 transition-colors cursor-default"><div><div class="font-bold text-[var(--text-primary)]">${a.title}</div><div class="text-[10px] text-[var(--text-secondary)] mt-0.5">${a.desc}</div></div><span class="bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded font-bold whitespace-nowrap">${a.type}</span></div>`).join('');
                 } else {
-                    document.getElementById('home-agenda').innerHTML = `<div class="p-4 text-center text-xs opacity-50 font-bold border border-dashed border-[var(--border-solid)] rounded-xl">Tidak ada agenda saat ini.</div>`;
+                    document.getElementById('home-agenda').innerHTML = `<div class="p-4 text-center flex flex-col items-center opacity-50"><svg class="w-6 h-6 mb-1 text-[var(--text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg><span class="text-xs font-bold">Tidak ada agenda saat ini.</span></div>`;
                 }
 
                 if (tugasCount > 0) {
-                    document.getElementById('home-tugas').innerHTML = DB.tugas.map(t => `<div class="flex justify-between items-center text-xs p-2.5 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)]"><div><div class="font-bold">${t.title}</div><div class="text-[10px] text-[var(--theme-accent)] mt-0.5 font-bold">${t.subject}</div></div><span class="bg-rose-500/10 text-rose-600 px-2 py-0.5 rounded font-bold">${t.deadline}</span></div>`).join('');
+                    document.getElementById('home-tugas').innerHTML = DB.tugas.map(t => `<div class="flex justify-between items-center text-xs p-3 bg-[var(--bg-body)] rounded-xl border border-[var(--border-solid)] hover:border-rose-500/50 transition-colors cursor-default"><div><div class="font-bold text-[var(--text-primary)]">${t.title}</div><div class="text-[10px] text-[var(--theme-accent)] mt-0.5 font-bold">${t.subject}</div></div><span class="bg-rose-500/10 text-rose-600 px-2 py-0.5 rounded font-bold whitespace-nowrap">${t.deadline}</span></div>`).join('');
                 } else {
-                    document.getElementById('home-tugas').innerHTML = `<div class="p-4 text-center text-xs opacity-50 font-bold border border-dashed border-[var(--border-solid)] rounded-xl">Tidak ada tugas kelas baru.</div>`;
+                    document.getElementById('home-tugas').innerHTML = `<div class="p-4 text-center flex flex-col items-center opacity-50"><svg class="w-6 h-6 mb-1 text-[var(--text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span class="text-xs font-bold">Tidak ada tugas kelas baru.</span></div>`;
                 }
             }
         };
 
         const CalendarEngine = {
-            curr: new Date(),
-            sel: new Date(),
-            init() { 
-                this.curr = DateUtils.getNow();
-                this.sel = new Date(this.curr);
-                this.render(); 
-                this.setupSwipe();
-            },
+            curr: new Date(), sel: new Date(),
+            init() { this.curr = DateUtils.getNow(); this.sel = new Date(this.curr); this.render(); this.setupSwipe(); },
             goToday() { this.init(); },
             prevMonth() { this.curr.setMonth(this.curr.getMonth()-1); this.animateRender('right'); },
             nextMonth() { this.curr.setMonth(this.curr.getMonth()+1); this.animateRender('left'); },
@@ -1223,8 +1595,7 @@
             animateRender(dir) {
                 if(Prefs.data.motion) { this.render(); return; }
                 const w = document.getElementById('cal-grid-wrapper');
-                w.style.transform = `translateX(${dir==='left'?'-20px':'20px'})`;
-                w.style.opacity = '0';
+                w.style.transform = `translateX(${dir==='left'?'-20px':'20px'})`; w.style.opacity = '0';
                 setTimeout(() => { this.render(); w.style.transform = 'translateX(0)'; w.style.opacity = '1'; }, 200);
             },
 
@@ -1234,8 +1605,7 @@
                 document.getElementById('cal-month-title').innerText = `${mNames[m]} ${y}`;
 
                 let fd = new Date(y, m, 1).getDay(); fd = fd === 0 ? 6 : fd - 1;
-                const dim = new Date(y, m+1, 0).getDate();
-                const pd = new Date(y, m, 0).getDate();
+                const dim = new Date(y, m+1, 0).getDate(); const pd = new Date(y, m, 0).getDate();
 
                 let h = '';
                 for (let i = fd; i > 0; i--) h += `<div class="cal-cell dim">${pd - i + 1}</div>`;
@@ -1243,21 +1613,18 @@
                 const rt = DateUtils.getNow();
                 for (let i = 1; i <= dim; i++) {
                     const ds = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-                    const hol = DB.cal[ds];
-                    const isSun = new Date(y, m, i).getDay() === 0;
+                    const hol = DB.cal[ds]; const isSun = new Date(y, m, i).getDay() === 0;
                     
                     let cls = 'cal-cell interactive btn-tap';
                     if (y === rt.getFullYear() && m === rt.getMonth() && i === rt.getDate()) cls += ' today';
-                    else if (isSun || (hol && hol.type === 'holiday')) cls += ' text-rose-500';
-                    else if (hol && hol.type === 'leave') cls += ' text-amber-500';
+                    else if (isSun || (hol && hol.type === 'holiday')) cls += ' text-rose-500 font-extrabold bg-rose-500/5 border-rose-500/10';
+                    else if (hol && hol.type === 'leave') cls += ' text-amber-500 font-extrabold bg-amber-500/5 border-amber-500/10';
                     if (y === this.sel.getFullYear() && m === this.sel.getMonth() && i === this.sel.getDate()) cls += ' selected';
 
-                    let dot = '';
-                    if(hol) dot = `<div class="status-dot dot-${hol.type}"></div>`;
+                    let dot = ''; if(hol) dot = `<div class="status-dot dot-${hol.type}"></div>`;
                     h += `<div class="${cls}" onpointerdown="XLFeedback.play('tick')" onclick="CalendarEngine.select(${y},${m},${i})">${i}${dot}</div>`;
                 }
-                document.getElementById('cal-days').innerHTML = h;
-                this.updateDetail();
+                document.getElementById('cal-days').innerHTML = h; this.updateDetail();
             },
             
             select(y, m, d) { this.sel = new Date(y, m, d); this.render(); },
@@ -1269,15 +1636,20 @@
                 const dn = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][d.getDay()];
                 const mn = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][d.getMonth()];
                 
-                let b = '', t = 'Hari Efektif Belajar';
-                if(hol) { t = hol.n; b = hol.type === 'leave' ? '<span class="bg-amber-500 text-white px-2 py-0.5 rounded text-[9px] font-bold">CUTI BERSAMA</span>' : '<span class="bg-rose-500 text-white px-2 py-0.5 rounded text-[9px] font-bold">LIBUR NASIONAL</span>'; }
-                else if (d.getDay()===0) { t = "Libur Akhir Pekan"; b = '<span class="bg-slate-500 text-white px-2 py-0.5 rounded text-[9px] font-bold">MINGGU</span>'; }
+                let b = '', t = 'Hari Efektif Belajar', cIcon = '<svg class="w-5 h-5 text-[var(--theme-accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>';
+                if(hol) { 
+                    t = hol.n; 
+                    b = hol.type === 'leave' ? '<span class="bg-amber-500 text-white px-2 py-0.5 rounded text-[9px] font-bold">CUTI BERSAMA</span>' : '<span class="bg-rose-500 text-white px-2 py-0.5 rounded text-[9px] font-bold shadow-sm">LIBUR NASIONAL</span>'; 
+                    cIcon = hol.type === 'leave' ? '<svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>' : '<svg class="w-5 h-5 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+                } else if (d.getDay()===0) { 
+                    t = "Libur Akhir Pekan"; b = '<span class="bg-slate-500 text-white px-2 py-0.5 rounded text-[9px] font-bold">MINGGU</span>'; 
+                }
 
-                let link = (!hol && d.getDay()>=1 && d.getDay()<=5) ? `<button class="mt-2 text-xs font-bold text-[var(--theme-accent)] hover:underline" onpointerdown="XLFeedback.play('tap')" onclick="UI.switchTab('schedule')">Lihat Jadwal ${dn} &rarr;</button>` : '';
+                let link = (!hol && d.getDay()>=1 && d.getDay()<=5) ? `<button class="mt-2 text-[10px] font-extrabold text-[var(--theme-accent)] hover:underline flex items-center gap-1 bg-[var(--theme-accent-glow)] px-2 py-1 rounded" onpointerdown="XLFeedback.play('tap')" onclick="UI.switchTab('schedule')">LIHAT JADWAL ${dn.toUpperCase()} <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="9 18 15 12 9 6"></polyline></svg></button>` : '';
 
                 document.getElementById('cal-detail-panel').innerHTML = `
-                    <div class="flex justify-between items-center mb-1"><span class="text-xs font-bold text-[var(--text-secondary)]">${dn}, ${d.getDate()} ${mn} ${d.getFullYear()}</span>${b}</div>
-                    <div class="font-bold text-base">${t}</div>${link}
+                    <div class="flex justify-between items-center mb-2"><span class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider">${dn}, ${d.getDate()} ${mn} ${d.getFullYear()}</span>${b}</div>
+                    <div class="font-bold text-base flex items-center gap-2">${cIcon} ${t}</div>${link}
                 `;
             },
             
@@ -1294,15 +1666,13 @@
         };
 
         const UI = {
-            m: [],
-            stdFilt: 'all',
+            m: [], stdFilt: 'all',
 
             toggleDrawer() { document.getElementById('drawer').classList.toggle('active'); },
             showModal(id) { 
                 const el = document.getElementById(id); if(!el) return;
                 el.classList.add('active'); this.m.push(id); 
                 document.body.style.overflow = 'hidden';
-                if(id === 'modal-search') setTimeout(() => document.getElementById('global-search').focus(), 100);
             },
             closeModal(id) { 
                 const el = document.getElementById(id); if(!el) return;
@@ -1320,15 +1690,9 @@
             },
             toast(msg) {
                 const t = document.getElementById('toast');
-                t.innerText = msg; t.style.opacity = '1'; t.style.transform = 'translate(-50%, 0)';
+                document.getElementById('toast-msg').innerText = msg; 
+                t.style.opacity = '1'; t.style.transform = 'translate(-50%, 0)';
                 setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translate(-50%, -10px)'; }, 3000);
-            },
-
-            markNotifRead() {
-                document.getElementById('notif-list').innerHTML = '<div class="p-8 text-center text-xs opacity-50 font-bold">Semua informasi sudah dibaca.</div>'; 
-                document.getElementById('bell-badge').style.display = 'none';
-                XLFeedback.play('success');
-                this.toast('Notifikasi ditandai dibaca.');
             },
 
             setStudentFilter(f, btn) {
@@ -1344,17 +1708,17 @@
                 if(q) l = l.filter(x => x.name.toLowerCase().includes(q) || String(x.no)===q || (x.ig&&x.ig.toLowerCase().includes(q)) || (DB.roles[x.name]&&DB.roles[x.name].toLowerCase().includes(q)));
                 
                 document.getElementById('students-grid').innerHTML = l.length ? l.map(s => `
-                    <button class="text-left glass-panel p-3.5 flex items-center gap-3 card-hover btn-tap outline-none" onpointerdown="XLFeedback.play('tap')" onclick="UI.openStudent('${s.id}')">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ${s.g==='L'?'bg-cyan-500/10 text-cyan-500':'bg-pink-500/10 text-pink-500'}">${s.name.charAt(0)}</div>
+                    <button class="text-left glass-panel p-3.5 flex items-center gap-3 card-hover btn-tap outline-none group" onpointerdown="XLFeedback.play('tap')" onclick="UI.openStudent('${s.id}')">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 transition-transform group-hover:scale-110 ${s.g==='L'?'bg-cyan-500/10 text-cyan-500':'bg-pink-500/10 text-pink-500'}">${s.name.charAt(0)}</div>
                         <div class="flex-grow min-w-0">
-                            <h4 class="font-bold text-xs truncate">${s.name}</h4>
+                            <h4 class="font-bold text-xs truncate group-hover:text-[var(--theme-accent)] transition-colors">${s.name}</h4>
                             <div class="flex gap-1.5 mt-1">
-                                <span class="text-[9px] font-bold bg-[var(--bg-body)] text-[var(--text-secondary)] px-1.5 py-0.5 rounded">Absen ${String(s.no).padStart(2,'0')}</span>
-                                ${DB.roles[s.name] ? `<span class="text-[9px] font-bold bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-1.5 py-0.5 rounded truncate">${DB.roles[s.name]}</span>` : ''}
+                                <span class="text-[9px] font-bold bg-[var(--bg-body)] border border-[var(--border-solid)] text-[var(--text-secondary)] px-1.5 py-0.5 rounded">Absen ${String(s.no).padStart(2,'0')}</span>
+                                ${DB.roles[s.name] ? `<span class="text-[9px] font-bold bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-1.5 py-0.5 rounded truncate border border-[var(--border-glass)]">${DB.roles[s.name]}</span>` : ''}
                             </div>
                         </div>
                     </button>
-                `).join('') : '<div class="col-span-full py-8 text-center opacity-50 font-bold text-xs">Siswa tidak ditemukan.</div>';
+                `).join('') : '<div class="col-span-full py-10 text-center opacity-50 font-bold text-xs flex flex-col items-center"><svg class="w-8 h-8 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> Siswa tidak ditemukan.</div>';
             },
             
             openStudent(id) {
@@ -1378,14 +1742,15 @@
             renderSchedTabs() {
                 const d = ['Senin','Selasa','Rabu','Kamis','Jumat'];
                 let cd = DateUtils.getNow().getDay(), td = (cd>=1 && cd<=5) ? d[cd-1] : 'Senin';
-                document.getElementById('sched-tabs').innerHTML = d.map(x => `<button class="px-4 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors border ${x===td?'bg-[var(--theme-accent)] text-white border-[var(--theme-accent)] shadow-md':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'}" onpointerdown="XLFeedback.play('tick')" onclick="UI.renderSchedDay('${x}', this)">${x}</button>`).join('');
+                document.getElementById('sched-tabs').innerHTML = d.map(x => `<button class="px-4 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors border ${x===td?'bg-[var(--theme-accent)] text-white border-[var(--theme-accent)] shadow-md':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)] hover:border-[var(--theme-accent)] hover:text-[var(--theme-accent)]'}" onpointerdown="XLFeedback.play('tick')" onclick="UI.renderSchedDay('${x}', this)">${x}</button>`).join('');
                 this.renderSchedDay(td, document.querySelector('#sched-tabs .bg-\\[var\\(--theme-accent\\)\\]'));
             },
 
             renderSchedDay(day, btn) {
                 if(btn) {
-                    document.querySelectorAll('#sched-tabs button').forEach(b => { b.classList.remove('bg-[var(--theme-accent)]', 'text-white', 'shadow-md', 'border-[var(--theme-accent)]'); b.classList.add('bg-[var(--bg-surface-solid)]', 'border-[var(--border-solid)]'); });
+                    document.querySelectorAll('#sched-tabs button').forEach(b => { b.classList.remove('bg-[var(--theme-accent)]', 'text-white', 'shadow-md', 'border-[var(--theme-accent)]'); b.classList.add('bg-[var(--bg-surface-solid)]', 'border-[var(--border-solid)]', 'hover:border-[var(--theme-accent)]', 'hover:text-[var(--theme-accent)]'); });
                     btn.classList.add('bg-[var(--theme-accent)]', 'text-white', 'shadow-md', 'border-[var(--theme-accent)]');
+                    btn.classList.remove('hover:border-[var(--theme-accent)]', 'hover:text-[var(--theme-accent)]');
                 }
                 document.getElementById('sched-title').innerText = day;
                 let isT = day === ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][DateUtils.getNow().getDay()];
@@ -1398,14 +1763,14 @@
                 document.getElementById('sched-timeline').innerHTML = s.map(x => {
                     let cur = isT && ms >= App.parseTime(x.t.split('-')[0]) && ms < App.parseTime(x.t.split('-')[1]);
                     return `
-                    <div class="relative">
-                        <div class="absolute -left-[1.95rem] top-3 w-4 h-4 rounded-full border-2 border-[var(--bg-surface-solid)] z-10 transition-all ${cur ? 'bg-[var(--theme-accent)] shadow-[0_0_10px_var(--theme-accent-glow)] scale-110' : x.br ? 'bg-amber-400' : 'bg-[var(--border-solid)]'}"></div>
-                        <div class="p-4 rounded-2xl bg-[var(--bg-surface-solid)] border ${cur ? 'border-[var(--theme-accent)] shadow-md' : 'border-[var(--border-solid)]'}">
+                    <div class="relative group">
+                        <div class="absolute -left-[1.95rem] top-3 w-4 h-4 rounded-full border-2 border-[var(--bg-surface-solid)] z-10 transition-all ${cur ? 'bg-[var(--theme-accent)] shadow-[0_0_10px_var(--theme-accent-glow)] scale-110' : x.br ? 'bg-amber-400' : 'bg-[var(--border-solid)] group-hover:bg-[var(--border-glass)] group-hover:border-[var(--theme-accent)]'}"></div>
+                        <div class="p-4 rounded-2xl bg-[var(--bg-surface-solid)] border transition-all ${cur ? 'border-[var(--theme-accent)] shadow-md' : 'border-[var(--border-solid)] hover:border-[var(--border-glass)]'}">
                             <div class="flex justify-between items-start mb-1">
-                                <h4 class="font-bold text-sm ${x.br ? 'text-amber-500' : ''}">${x.m}</h4>
+                                <h4 class="font-bold text-sm ${x.br ? 'text-amber-500' : 'text-[var(--text-primary)]'}">${x.m}</h4>
                                 <span class="font-mono text-[10px] font-bold bg-[var(--bg-body)] px-2 py-0.5 rounded border border-[var(--border-solid)]">${x.t}</span>
                             </div>
-                            ${x.g ? `<p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">${x.g}</p>` : ''}
+                            ${x.g ? `<p class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-wider">${x.g}</p>` : ''}
                         </div>
                     </div>`;
                 }).join('');
@@ -1413,64 +1778,41 @@
 
             renderGallery() {
                 document.getElementById('gallery-grid').innerHTML = DB.gallery.map((g,i) => `
-                    <button class="bg-[var(--bg-surface-solid)] rounded-2xl overflow-hidden relative group btn-tap border border-[var(--border-solid)]" aria-label="Lihat Media" onpointerdown="XLFeedback.play('tap')" onclick="UI.openLightBox(${i})">
-                        ${g.type === 'img' ? `<img src="${g.src}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Foto Galeri Kelas">` : `<video src="${g.src}" class="w-full h-full object-cover" preload="metadata"></video><div class="absolute inset-0 bg-black/30 flex items-center justify-center"><svg class="w-8 h-8 text-white fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>`}
+                    <button class="bg-[var(--bg-surface-solid)] rounded-2xl overflow-hidden relative group btn-tap border border-[var(--border-solid)] shadow-sm hover:shadow-md transition-shadow" aria-label="Lihat Media" onpointerdown="XLFeedback.play('tap')" onclick="UI.openLightBox(${i})">
+                        ${g.type === 'img' ? `<img src="${g.src}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Foto Galeri Kelas">` : `<video src="${g.src}" class="w-full h-full object-cover" preload="metadata"></video><div class="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/10 transition-colors"><svg class="w-10 h-10 text-white fill-current drop-shadow-md group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>`}
                     </button>
                 `).join('');
             },
             
             openLightBox(i) {
                 const g = DB.gallery[i], c = document.getElementById('lightbox-content');
-                c.innerHTML = g.type === 'img' ? `<img src="${g.src}" class="max-w-full max-h-[85dvh] object-contain rounded-xl shadow-2xl pointer-events-auto" alt="Preview Gambar">` : `<video src="${g.src}" controls autoplay class="max-w-full max-h-[85dvh] rounded-xl shadow-2xl bg-black pointer-events-auto"></video>`;
+                c.innerHTML = g.type === 'img' ? `<img src="${g.src}" class="max-w-full max-h-[85dvh] object-contain rounded-xl shadow-2xl pointer-events-auto animate-pop-in" alt="Preview Gambar">` : `<video src="${g.src}" controls autoplay class="max-w-full max-h-[85dvh] rounded-xl shadow-2xl bg-black pointer-events-auto animate-pop-in"></video>`;
                 this.showModal('modal-lightbox');
             },
 
             renderPiketTabs() {
                 const d = ['Senin','Selasa','Rabu','Kamis','Jumat'];
                 let td = (DateUtils.getNow().getDay()>=1 && DateUtils.getNow().getDay()<=5) ? d[DateUtils.getNow().getDay()-1] : 'Senin';
-                document.getElementById('piket-tabs').innerHTML = d.map(x => `<button class="px-3 py-1 rounded-lg text-xs font-bold border ${x===td?'bg-[var(--theme-accent)] text-white border-[var(--theme-accent)]':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'}" onpointerdown="XLFeedback.play('tick')" onclick="UI.renderPiketDay('${x}', this)">${x}</button>`).join('');
+                document.getElementById('piket-tabs').innerHTML = d.map(x => `<button class="px-3 py-1 rounded-lg text-xs font-bold border transition-colors ${x===td?'bg-[var(--theme-accent)] text-white border-[var(--theme-accent)]':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)] hover:border-[var(--theme-accent)]'}" onpointerdown="XLFeedback.play('tick')" onclick="UI.renderPiketDay('${x}', this)">${x}</button>`).join('');
                 this.renderPiketDay(td, document.querySelector('#piket-tabs .bg-\\[var\\(--theme-accent\\)\\]'));
             },
 
             renderPiketDay(day, btn) {
-                if(btn) { document.querySelectorAll('#piket-tabs button').forEach(b => { b.className = 'px-3 py-1 rounded-lg text-xs font-bold border bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'; }); btn.className = 'px-3 py-1 rounded-lg text-xs font-bold border bg-[var(--theme-accent)] text-white border-[var(--theme-accent)]'; }
-                document.getElementById('piket-list').innerHTML = (DB.piket[day]||[]).map((n,i) => `<button class="w-full text-left p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex items-center gap-3 btn-tap" onpointerdown="XLFeedback.play('tap')" onclick="UI.openStudent('${DB.students.find(x=>x.name===n)?.id}')"><div class="w-5 h-5 rounded-full bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] font-bold text-[10px] flex items-center justify-center">${i+1}</div><div class="font-bold text-xs truncate">${n}</div></button>`).join('');
+                if(btn) { document.querySelectorAll('#piket-tabs button').forEach(b => { b.className = 'px-3 py-1 rounded-lg text-xs font-bold border bg-[var(--bg-surface-solid)] border-[var(--border-solid)] transition-colors hover:border-[var(--theme-accent)]'; }); btn.className = 'px-3 py-1 rounded-lg text-xs font-bold border bg-[var(--theme-accent)] text-white border-[var(--theme-accent)] transition-colors'; }
+                document.getElementById('piket-list').innerHTML = (DB.piket[day]||[]).map((n,i) => `<button class="w-full text-left p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] hover:border-[var(--theme-accent)] transition-colors rounded-xl flex items-center gap-3 btn-tap group" onpointerdown="XLFeedback.play('tap')" onclick="UI.openStudent('${DB.students.find(x=>x.name===n)?.id}')"><div class="w-6 h-6 rounded-full bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] font-bold text-[10px] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">${i+1}</div><div class="font-bold text-xs truncate group-hover:text-[var(--theme-accent)] transition-colors">${n}</div></button>`).join('');
             },
 
             renderUniforms() {
                 let td = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][DateUtils.getNow().getDay()];
-                document.getElementById('uniform-list').innerHTML = Object.entries(DB.seragam).map(([d,u]) => `<div class="p-3 rounded-xl border flex justify-between items-center text-xs ${d===td?'bg-[var(--theme-accent-glow)] border-[var(--theme-accent)]':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'}"><div><div class="font-bold">${d}</div><div class="text-[10px] text-[var(--text-secondary)]">${u}</div></div>${d===td?'<span class="text-[9px] bg-[var(--theme-accent)] text-white px-2 py-0.5 rounded font-bold">HARI INI</span>':''}</div>`).join('');
+                document.getElementById('uniform-list').innerHTML = Object.entries(DB.seragam).map(([d,u]) => `<div class="p-3 rounded-xl border flex justify-between items-center text-xs transition-colors ${d===td?'bg-[var(--theme-accent-glow)] border-[var(--theme-accent)] shadow-sm':'bg-[var(--bg-surface-solid)] border-[var(--border-solid)]'}"><div><div class="font-bold">${d}</div><div class="text-[10px] text-[var(--text-secondary)]">${u}</div></div>${d===td?'<span class="text-[9px] bg-[var(--theme-accent)] text-white px-2 py-0.5 rounded font-bold shadow-sm">HARI INI</span>':''}</div>`).join('');
             },
 
             renderOrg() {
-                let h = `<div class="space-y-4 text-xs"><div><h4 class="font-extrabold text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-2">Dewan Pembina</h4><div class="space-y-1.5">`;
-                ["TUTI TURSILAH, S.Pd.I.", "TRESNA FUJIE LATIFAH, S.Pd.", "FAHMI ARIZAL NUR FACHRUDIN, S.Pd."].forEach(n => h += `<div class="p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex justify-between items-center font-bold"><span>${n}</span><span class="text-[9px] bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-2 py-0.5 rounded text-center">${DB.roles[n]}</span></div>`);
-                h += `</div></div><div><h4 class="font-extrabold text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-2 mt-4">Pengurus Inti</h4><div class="grid grid-cols-2 gap-2">`;
-                ["PRINCE EZHAD ALVARO SYAHPUTRA", "CINTA AMELA NURCAHAYA", "JENISA LUTHFIAH", "DEWI MUTIA", "NAILA LAILATUL RAMADHANI", "KANDISA"].forEach(n => h += `<button class="p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl text-center btn-tap font-bold" onpointerdown="XLFeedback.play('tap')" onclick="UI.openStudent('${DB.students.find(x=>x.name===n)?.id}')"><div class="text-[9px] text-[var(--theme-accent)] uppercase">${DB.roles[n]}</div><div class="truncate mt-0.5">${n}</div></button>`);
+                let h = `<div class="space-y-4 text-xs"><div><h4 class="font-extrabold text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-2">Dewan Pembina</h4><div class="space-y-2">`;
+                ["TUTI TURSILAH, S.Pd.I.", "TRESNA FUJIE LATIFAH, S.Pd.", "FAHMI ARIZAL NUR FACHRUDIN, S.Pd."].forEach(n => h += `<div class="p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex justify-between items-center font-bold"><span>${n}</span><span class="text-[9px] bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-2 py-0.5 rounded border border-[var(--border-glass)]">${DB.roles[n]}</span></div>`);
+                h += `</div></div><div><h4 class="font-extrabold text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-2 mt-5">Pengurus Inti</h4><div class="grid grid-cols-2 gap-2">`;
+                ["PRINCE EZHAD ALVARO SYAHPUTRA", "CINTA AMELA NURCAHAYA", "JENISA LUTHFIAH", "DEWI MUTIA", "NAILA LAILATUL RAMADHANI", "KANDISA"].forEach(n => h += `<button class="p-3 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl text-center btn-tap font-bold hover:border-[var(--theme-accent)] transition-colors group" onpointerdown="XLFeedback.play('tap')" onclick="UI.openStudent('${DB.students.find(x=>x.name===n)?.id}')"><div class="text-[9px] text-[var(--theme-accent)] uppercase mb-1">${DB.roles[n]}</div><div class="truncate text-[11px] group-hover:text-[var(--theme-accent)] transition-colors">${n}</div></button>`);
                 document.getElementById('org-list').innerHTML = h + `</div></div></div>`;
-            },
-
-            globalSearch(q) {
-                q = q.toLowerCase(); const c = document.getElementById('search-results');
-                if(!q) { c.innerHTML = '<div class="p-6 text-center text-xs opacity-50 font-bold">Ketik untuk mencari...</div>'; return; }
-                
-                let h = '', count = 0;
-                let fs = DB.students.filter(x => x.name.toLowerCase().includes(q) || String(x.no)===q || (x.ig&&x.ig.toLowerCase().includes(q)));
-                if(fs.length) {
-                    h += `<div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase px-2 mb-1">Siswa</div>`;
-                    h += fs.slice(0,4).map(s => `<button class="w-full text-left p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex items-center gap-3 btn-tap mb-1" onpointerdown="XLFeedback.play('tap')" onclick="UI.openStudent('${s.id}'); UI.closeModal('modal-search')"><div class="w-6 h-6 rounded-full bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] font-bold text-[10px] flex items-center justify-center">${s.name[0]}</div><div class="font-bold text-xs truncate">${s.name}</div></button>`).join('');
-                    count++;
-                }
-
-                let fsc = [];
-                Object.entries(DB.schedule).forEach(([d, items]) => items.forEach(s => { if(s.m.toLowerCase().includes(q) || (s.g&&s.g.toLowerCase().includes(q))) fsc.push({d, ...s}); }));
-                if(fsc.length) {
-                    h += `<div class="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase px-2 mt-3 mb-1">Pelajaran</div>`;
-                    h += fsc.slice(0,3).map(s => `<button class="w-full text-left p-2.5 bg-[var(--bg-surface-solid)] border border-[var(--border-solid)] rounded-xl flex justify-between items-center btn-tap mb-1" onpointerdown="XLFeedback.play('tap')" onclick="UI.switchTab('schedule'); UI.closeModal('modal-search')"><div><div class="font-bold text-xs">${s.m}</div><div class="text-[9px] opacity-70">${s.g||'-'}</div></div><span class="text-[9px] bg-[var(--theme-accent-glow)] text-[var(--theme-accent)] px-2 py-0.5 rounded font-bold">${s.d}</span></button>`).join('');
-                    count++;
-                }
-
-                c.innerHTML = count ? h : '<div class="p-6 text-center text-xs opacity-50 font-bold border border-dashed border-[var(--border-solid)] rounded-xl mt-2">Hasil tidak ditemukan.</div>';
             },
 
             requestNotification() {
@@ -1487,13 +1829,13 @@
             }
         };
 
-        // Keyboard Bindings
+        // Keyboard Bindings for Smart Features
         document.addEventListener('keydown', e => {
-            if((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); UI.showModal('modal-search'); }
+            if((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); SmartSearch.open(); }
             if(e.key === 'Escape' && UI.m.length > 0) { e.preventDefault(); UI.closeModal(UI.m[UI.m.length-1]); }
         });
 
-        // Initialize Audio Context on user pointerdown
+        // Initialize Audio Context on user pointerdown to respect browser policy
         document.body.addEventListener('pointerdown', () => XLFeedback.init(), {once: true});
 
         // Initialize App
